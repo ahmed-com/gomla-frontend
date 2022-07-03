@@ -2,11 +2,11 @@
   <p>{{ $t('hello') }}</p>
 </template>
 
-<script>
+<script lang="ts">
 import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: 'HelloI18n'
+  name: 'HelloI18n',
 })
 </script>
 
