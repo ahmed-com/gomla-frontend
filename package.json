@@ -1,0 +1,33 @@
+{
+  "name": "jomletna",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "serve": "vite preview",
+    "build": "vite build",
+    "dev": "vite",
+    "i18n:report": "vue-cli-service i18n:report --src \"./src/**/*.?(js|vue)\" --locales \"./src/locales/**/*.json\"",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@mdi/font": "5.9.55",
+    "roboto-fontface": "*",
+    "vue": "^3.2.25",
+    "vue-i18n": "^9.1.0",
+    "vue-router": "^4.0.16",
+    "vuetify": "^3.0.0-beta.0",
+    "webfontloader": "^1.0.0"
+  },
+  "devDependencies": {
+    "@intlify/vue-i18n-loader": "^3.0.0",
+    "@types/webfontloader": "^1.0.0",
+    "@vitejs/plugin-vue": "^2.3.3",
+    "@vue/cli-plugin-router": "~4.5.9",
+    "typescript": "^4.5.4",
+    "vite": "^2.9.9",
+    "vite-plugin-vuetify": "^1.0.0-alpha.0",
+    "vue-cli-plugin-i18n": "~2.3.1",
+    "vue-cli-plugin-vuetify": "~2.5.1",
+    "vue-tsc": "^0.34.7"
+  }
+}
