@@ -1,15 +1,35 @@
 <template>
 	<v-app>
-		<Layout>
-			<HelloWorld></HelloWorld>
-		</Layout>
+		<BaseLayout>
+			<template  #header>
+				<TestHeader v-if="true"></TestHeader>
+			</template>
+
+			<template #left-drawer>
+				<TestLeftDrawer v-if="true"></TestLeftDrawer>
+			</template>
+
+			<template #right-drawer>
+				<TestLeftDrawer v-if="true"></TestLeftDrawer>
+			</template>
+
+			<template #default>
+				<HelloWorld></HelloWorld>
+			</template>
+
+			<template #footer>
+				<TestFooter></TestFooter>
+			</template>
+		</BaseLayout>
 	</v-app>
 </template>
 
 <script setup lang="ts">
-	import Layout from './layout/Layout.vue';
-import HelloWorld from './components/HelloWorld.vue';
-
+	import BaseLayout from './layout/BaseLayout.vue';
+	import TestHeader from './layout/TestHeader.vue';
+	import TestFooter from './layout/TestFooter.vue';
+	import TestLeftDrawer from './layout/TestLeftDrawer.vue';
+	import HelloWorld from './components/HelloWorld.vue';
 </script>
 
 <script lang="ts">
