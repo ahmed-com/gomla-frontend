@@ -2,23 +2,23 @@
 	<v-app>
 		<BaseLayout>
 			<template  #header>
-				<TestHeader v-if="true"></TestHeader>
+				<router-view name="header"></router-view>
 			</template>
 
 			<template #left-drawer>
-				<TestLeftDrawer v-if="true"></TestLeftDrawer>
+				<router-view name="leftDrawer"></router-view>
 			</template>
 
 			<template #right-drawer>
-				<TestLeftDrawer v-if="true"></TestLeftDrawer>
+				<router-view name="rightDrawer"></router-view>
 			</template>
 
 			<template #default>
-				<HelloWorld></HelloWorld>
+				<router-view name="main"></router-view>
 			</template>
 
 			<template #footer>
-				<TestFooter></TestFooter>
+				<router-view name="footer"></router-view>
 			</template>
 		</BaseLayout>
 	</v-app>
@@ -26,10 +26,6 @@
 
 <script setup lang="ts">
 	import BaseLayout from './layout/BaseLayout.vue';
-	import TestHeader from './layout/TestHeader.vue';
-	import TestFooter from './layout/TestFooter.vue';
-	import TestLeftDrawer from './layout/TestLeftDrawer.vue';
-	import HelloWorld from './components/HelloWorld.vue';
 </script>
 
 <script lang="ts">
