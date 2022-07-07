@@ -92,6 +92,7 @@
 	.v-main__wrap {
 		display: flex;
 		height: 100%;
+		min-height: 70vh;
 	}
 
 	.v-layout {
