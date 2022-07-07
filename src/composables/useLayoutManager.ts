@@ -1,4 +1,4 @@
-import { computed, ref, useSlots } from "vue";
+import { computed, CSSProperties, ref, useSlots } from "vue";
 import { useDisplay } from 'vuetify';
 import { useLayout } from "vuetify";
 
@@ -23,14 +23,15 @@ const contentStyle = ref();
 const hasLeftDrawer = ref<boolean>(false);
 const hasRightDrawer = ref<boolean>(false);
 
-const desktopDrawerStyle = computed(()=>({
+const desktopDrawerStyle = computed<CSSProperties>(()=>({
     top: `${headerSize.value}px`,
     left: '0px',
     position: 'sticky',
     "align-self": 'flex-start',
     'margin-top': "0px",
     'margin-bottom': "0px",
-    height: `calc(100vh - ${headerSize.value}px)`
+    height: `calc(100vh - ${headerSize.value}px)`,
+    transform: "none"
 }))
 
 

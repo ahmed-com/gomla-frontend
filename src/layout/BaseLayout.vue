@@ -27,7 +27,9 @@
 				</div>
 			</Transition>
 		</template>
-		<slot></slot>
+		<div class="flex-grow-1">
+			<slot></slot>
+		</div>
 	</v-main>
 
 	<v-footer name="footer" :order="footerOrder" app absolute class="pa-0">
@@ -93,6 +95,8 @@
 		display: flex;
 		height: 100%;
 		min-height: 70vh;
+		width: 100%;
+		flex-wrap: wrap;
 	}
 
 	.v-layout {
