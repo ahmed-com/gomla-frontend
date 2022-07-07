@@ -27,7 +27,7 @@
 				</div>
 			</Transition>
 		</template>
-		<div class="flex-grow-1">
+		<div class="flex-grow-1 slide-sibling">
 			<slot></slot>
 		</div>
 	</v-main>
@@ -75,17 +75,23 @@
 
 <style scoped>
 	.slide-enter-active,
-	.slide-leave-active{
+	.slide-leave-active,
+	.slide-enter-active + .slide-sibling,
+	.slide-leave-active + .slide-sibling{
 		transition: all 300ms ease-out;
 	}
 
 	.slide-enter-from,
-	.slide-leave-to {
-		transform: translateX(-100%);
+	.slide-leave-to,
+	.slide-enter-from + .slide-sibling,
+	.slide-leave-to + .slide-sibling {
+		transform: translateX(-200px);
 	}
 
 	.slide-enter-to,
-	.slide-leave-from{
+	.slide-leave-from,
+	.slide-enter-to + .slide-sibling,
+	.slide-leave-from + .slide-sibling{
 		transform: translateX(0px);
 	}
 </style>
