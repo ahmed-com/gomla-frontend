@@ -74,11 +74,15 @@
 </script>
 
 <style scoped>
-	.slide-enter-active,
+	
 	.slide-leave-active,
-	.slide-enter-active + .slide-sibling,
 	.slide-leave-active + .slide-sibling{
-		transition: all 300ms ease-out;
+		transition: transform 300ms ease-in;
+	}
+
+	.slide-enter-active,
+	.slide-enter-active + .slide-sibling{
+		transition: transform 300ms cubic-bezier(0,1,0,1);
 	}
 
 	.slide-enter-from,

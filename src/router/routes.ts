@@ -16,7 +16,7 @@ const extractSearchToProps: FunctionMode = (route) => ({
 
 const routes: RouteRecordRaw[] = [
 	{
-		path: '/deal/:dealId',
+		path: '/deals/:dealId',
 		components: {
 			main: DealView,
 			leftDrawer: TestLeftDrawer,
@@ -26,7 +26,7 @@ const routes: RouteRecordRaw[] = [
 		},
 		children: [
 			{
-				path: '/',
+				path: '',
 				name: 'Deal',
 				component: Info,
 				alias: 'info',
