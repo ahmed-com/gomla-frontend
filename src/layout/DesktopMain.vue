@@ -17,14 +17,6 @@
 			<slot></slot>
 		</div>
 	</v-main>
-    <!-- <div class="the-container">
-        <div class="the-drawer">
-            <slot name="drawer"></slot>
-        </div>
-        <div class="the-main">
-            <slot></slot>
-        </div>
-    </div> -->
 </template>
 
 <script setup lang="ts">
@@ -50,24 +42,28 @@
 
 	.slide-leave-active,
 	.slide-leave-active + .slide-sibling{
-		transition: transform 300ms ease-in;
+		transition: transform 300ms ease-out;
 	}
 
 	.slide-enter-active,
-	.slide-enter-active + .slide-sibling{
-		transition: transform 300ms cubic-bezier(0,1,0,1);
+	.slide-enter-active {
+		transition: width 300ms ease-out;
 	}
 
-	.slide-enter-from,
+    .slide-enter-from{
+        width: 0px;
+    }
+
+    .slide-enter-to{
+        width: v-bind('drawerSize');
+    }
+
 	.slide-leave-to,
-	.slide-enter-from + .slide-sibling,
 	.slide-leave-to + .slide-sibling {
 		transform: translateX(v-bind('drawerSizeInverted'));
 	}
 
-	.slide-enter-to,
 	.slide-leave-from,
-	.slide-enter-to + .slide-sibling,
 	.slide-leave-from + .slide-sibling{
 		transform: translateX(0px);
 	}
