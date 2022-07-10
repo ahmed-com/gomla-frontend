@@ -1,8 +1,13 @@
 <template>
 	<v-app>
 		<BaseLayout>
-			<template  #header>
-				<router-view name="header"></router-view>
+			<template  #header="{layoutName}">
+				<router-view name="header" v-slot="{Component}">
+					<component
+						:is="Component"
+						:layoutName="layoutName"
+					></component>
+				</router-view>
 			</template>
 
 			<template #left-drawer>
