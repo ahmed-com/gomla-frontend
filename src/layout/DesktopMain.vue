@@ -79,7 +79,7 @@
 		height: 100%;
 		min-height: 70vh;
 		width: 100%;
-		flex-wrap: wrap;
+		flex-wrap: nowrap;
 	}
 
 	.v-layout {
