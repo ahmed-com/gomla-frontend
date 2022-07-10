@@ -1,67 +1,53 @@
 <template>
-	<div>
-		<div>
-			<router-link :to="{ name: 'Deal', params: { dealId } }">
-				Info
-			</router-link>
-			<router-link :to="{ name: 'DealDiscussion', params: { dealId } }">
-				Discussion
-			</router-link>
-		</div>
-		<router-view v-slot="{ Component, route }">
-			<Transition
-				:name="route.name === 'Deal' ? 'fade-left' : 'fade-right'"
-				mode="default"
-			>
-				<!-- <keep-alive>
-					<suspense> -->
-						<!-- <template #default> -->
-							<component
-								:is="Component"
-								:key="route.path"
-								:someProp="dealId"
-							></component>
-						<!-- </template> -->
-						<!-- <template #fallback> Loading... </template> -->
-					<!-- </suspense>
-				</keep-alive> -->
-			</Transition>
-		</router-view>
-	</div>
+    <v-card>
+    <v-toolbar color="primary">
+      <v-app-bar-nav-icon></v-app-bar-nav-icon>
+
+      <v-toolbar-title>Page title</v-toolbar-title>
+
+      <v-spacer></v-spacer>
+
+      <v-btn icon>
+        <v-icon>mdi-magnify</v-icon>
+      </v-btn>
+
+      <v-btn icon>
+        <v-icon>mdi-dots-vertical</v-icon>
+      </v-btn>
+
+      <template v-slot:extension>
+        <v-tabs
+          v-model="model"
+          centered
+        >
+          <v-tab
+            v-for="i in 3"
+            :key="i"
+            :value="i"
+          >
+            Item {{ i }}
+          </v-tab>
+        </v-tabs>
+      </template>
+    </v-toolbar>
+
+    <v-window v-model="model">
+      <v-window-item
+        v-for="i in 3"
+        :key="i"
+        :value="i"
+      >
+        <v-card>
+          <v-card-text v-text="text"></v-card-text>
+        </v-card>
+      </v-window-item>
+    </v-window>
+  </v-card>
 </template>
 
 <script setup lang="ts">
-	const { dealId } = defineProps<{ dealId: string }>();
+    import { ref } from 'vue';
+
+    const model = ref('tab-2')
+    const text = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
 </script>
-
-<style scoped>
-    .fade-right-enter-active,
-    .fade-right-leave-active,
-    .fade-left-enter-active,
-    .fade-left-leave-active{
-        transition: transform 300ms ease-out;
-    }
-
-    .fade-left-enter-active,
-    .fade-right-enter-active{
-        position: relative;
-        top: -250px;
-    }
-
-    .fade-right-enter-from,
-    .fade-left-leave-to{
-        transform: translateX(100%);
-    }
-
-    .fade-left-enter-from,
-    .fade-right-leave-to{
-        transform: translateX(-100%);
-    }
-
-    .fade-right-enter-to,
-    .fade-right-enter-to,
-    .fade-left-leave-from,
-    .fade-left-leave-from{
-        transform: translateX(0px);
-    }
-</style>
