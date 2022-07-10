@@ -6,6 +6,7 @@ import TestLeftDrawer from '../layout/TestLeftDrawer.vue';
 import Chat from '../views/DealView/Chat.vue';
 import DealView from '../views/DealView/Index.vue';
 import Info from '../views/DealView/Info.vue';
+import TestViewVue from '../views/TestView.vue';
 
 type FunctionMode = (to: RouteLocationNormalized) => Record<string, any>;
 const extractSearchToProps: FunctionMode = (route) => ({
@@ -40,6 +41,19 @@ const routes: RouteRecordRaw[] = [
 		props: {main: true, leftDrawer: true},
 		beforeEnter: T,
 	},
+
+	{
+		path: '/test',
+		components: {
+			main: TestViewVue,
+			leftDrawer: TestLeftDrawer,
+			rightDrawer: TestLeftDrawer,
+			header: TestHeader,
+			footer: TestFooter
+		},
+		props: {main: true, leftDrawer: true},
+		beforeEnter: T
+	}
 ];
 
 export default routes;
