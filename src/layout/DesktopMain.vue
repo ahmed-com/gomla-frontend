@@ -28,26 +28,26 @@
 </template>
 
 <script setup lang="ts">
+    import { thunkify } from 'ramda';
+    import { computed, onMounted, onUnmounted, watch } from 'vue';
+    import { useRoute } from 'vue-router';
     import useLayoutManager from '../composables/useLayoutManager';
-
-    const {hasLeftDrawer, leftDrawer, desktopDrawerStyle} = useLayoutManager()
 
     const { drawerLayoutName } = defineProps<{drawerLayoutName: string}>()
 
-    /** steps :
-     * get the value of the headerSize, footerSize, rightDrawerSize from the layoutManager
-     * use these values as the paddings for the-container
-     * bind the right padding of the-container to the rightDrawer and transition that padding
-     * make the-drawer sticky 
-     * use the top value as the top style prop for the-drawer
-     * make the drawer height calc(100vh - top)
-     * 
-     * 
-    */
+    const {hasLeftDrawer, leftDrawer, desktopDrawerStyle, calculateLeftDrawerSize, leftDrawerSize} = useLayoutManager()
+    const calculate = thunkify(calculateLeftDrawerSize)(drawerLayoutName);
+    onMounted(calculate)
+	watch(() => useRoute()?.name, calculate);
+    onUnmounted(calculate)
+
+    const drawerSizeInverted = computed(()=>`-${leftDrawerSize.value}px`)
+    const drawerSize = computed(()=>`${leftDrawerSize.value}px`)
     
 </script>
 
 <style scoped>
+
 	.slide-leave-active,
 	.slide-leave-active + .slide-sibling{
 		transition: transform 300ms ease-in;
@@ -62,7 +62,7 @@
 	.slide-leave-to,
 	.slide-enter-from + .slide-sibling,
 	.slide-leave-to + .slide-sibling {
-		transform: translateX(-200px);
+		transform: translateX(v-bind('drawerSizeInverted'));
 	}
 
 	.slide-enter-to,
@@ -71,6 +71,7 @@
 	.slide-leave-from + .slide-sibling{
 		transform: translateX(0px);
 	}
+    
 </style>
 
 <style>
