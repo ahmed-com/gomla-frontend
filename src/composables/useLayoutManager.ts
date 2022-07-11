@@ -30,9 +30,9 @@ function calculateLayout(
 	calculateHasRightDrawer(slotNames.rightDrawerSlotName);
 
     if(layoutNames?.headerName) calculateHeaderSize(layoutNames.headerName);
-    if(layoutNames?.leftDrawerName) calculateHeaderSize(layoutNames.leftDrawerName);
-    if(layoutNames?.rightDrawerName) calculateHeaderSize(layoutNames.rightDrawerName);
-    if(layoutNames?.footerName) calculateHeaderSize(layoutNames.footerName);
+    if(layoutNames?.leftDrawerName) calculateLeftDrawerSize(layoutNames.leftDrawerName);
+    if(layoutNames?.rightDrawerName) calculateRightDrawerSize(layoutNames.rightDrawerName);
+    if(layoutNames?.footerName) calculateFooterSize(layoutNames.footerName);
 }
 
 const leftDrawer = ref<boolean>(false);
