@@ -27,6 +27,10 @@ const routes: RouteRecordRaw[] = [
 			header: TestHeader,
 			footer: TestFooter,
 		},
+		meta: {
+			hasLeftDrawer: true,
+			hasRightDrawer: false
+		},
 		children: [
 			{
 				path: '',
