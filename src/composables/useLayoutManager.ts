@@ -58,6 +58,8 @@ const desktopDrawerStyle = computed<CSSProperties>(() => ({
 	transform: 'none',
 }));
 
+const minContentHeight = computed<string>(()=> `calc(100vh - ${headerSize.value}px)`);
+
 const calculateHasLeftDrawer = (slotName: string) =>
 	(hasLeftDrawer.value = typeof useSlots()?.[slotName]?.()?.[0].type === 'object');
 const calculateHasRightDrawer = (slotName: string) =>
@@ -85,6 +87,7 @@ export default () => ({
 	footerOrder,
 	hasLeftDrawer,
 	hasRightDrawer,
+	minContentHeight,
 	calculateHasLeftDrawer,
 	calculateHasRightDrawer,
 	calculateHeaderSize,

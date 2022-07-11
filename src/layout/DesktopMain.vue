@@ -27,7 +27,7 @@
 
     const { drawerLayoutName } = defineProps<{drawerLayoutName: string}>()
 
-    const {hasLeftDrawer, leftDrawer, desktopDrawerStyle, calculateLeftDrawerSize, leftDrawerSize} = useLayoutManager()
+    const {hasLeftDrawer, leftDrawer, desktopDrawerStyle, calculateLeftDrawerSize, leftDrawerSize, minContentHeight} = useLayoutManager()
     const calculate = thunkify(calculateLeftDrawerSize)(drawerLayoutName);
     onMounted(calculate)
 	watch(() => useRoute()?.name, calculate);
@@ -74,7 +74,7 @@
 	.v-main__wrap {
 		display: flex;
 		height: 100%;
-		min-height: 70vh;
+		min-height: v-bind('minContentHeight');
 		width: 100%;
 		flex-wrap: nowrap;
 	}

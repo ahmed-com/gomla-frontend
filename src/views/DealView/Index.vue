@@ -1,53 +1,99 @@
 <template>
-    <v-card>
-    <v-toolbar color="primary">
-      <v-app-bar-nav-icon></v-app-bar-nav-icon>
+	<v-card min-height="100%">
+		<v-tabs v-model="currentRoute.name" background-color="secondary">
+			<v-tab
+        v-for="tab in tabs"
+        :key="tab.text"
+				selected-class="bg-primary"
+				:value="tab.route.name"
+				:to="tab.route"
+			>
+				{{tab.text}}
+			</v-tab>
+		</v-tabs>
 
-      <v-toolbar-title>Page title</v-toolbar-title>
-
-      <v-spacer></v-spacer>
-
-      <v-btn icon>
-        <v-icon>mdi-magnify</v-icon>
-      </v-btn>
-
-      <v-btn icon>
-        <v-icon>mdi-dots-vertical</v-icon>
-      </v-btn>
-
-      <template v-slot:extension>
-        <v-tabs
-          v-model="model"
-          centered
-        >
-          <v-tab
-            v-for="i in 3"
-            :key="i"
-            :value="i"
-          >
-            Item {{ i }}
-          </v-tab>
-        </v-tabs>
-      </template>
-    </v-toolbar>
-
-    <v-window v-model="model">
-      <v-window-item
-        v-for="i in 3"
-        :key="i"
-        :value="i"
-      >
-        <v-card>
-          <v-card-text v-text="text"></v-card-text>
-        </v-card>
-      </v-window-item>
-    </v-window>
-  </v-card>
+		<div class="container-wrapper">
+			<router-view v-slot="{ Component, route }">
+				<Transition :name="transitionName" mode="default">
+								<div :key="route.path" class="route-wrapper">
+									<component
+										:is="Component"
+										:key="route.path"
+										:someProp="dealId"
+										:dealId="dealId"
+									></component>
+								</div>
+				</Transition>
+			</router-view>
+		</div>
+	</v-card>
 </template>
 
 <script setup lang="ts">
-    import { ref } from 'vue';
+	import { computed, ref } from '@vue/reactivity';
+  import {  findIndex, gt} from 'ramda';
+  import { watch } from 'vue';
+  import { useRoute } from 'vue-router';
 
-    const model = ref('tab-2')
-    const text = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
+  interface Tab{
+    text: string,
+    route: any
+  }
+
+	const { dealId } = defineProps<{ dealId: string }>();
+	const currentRoute = useRoute();
+
+  const tabs = computed<Tab[]>(()=>[
+    {text: 'Info', route: {name: 'Deal', params: {dealId}}},
+    {text: 'Discussion', route: {name: 'DealDiscussion', params: {dealId}}}
+  ]);
+  const transitionName = ref<string>('')
+
+  watch(()=> currentRoute.name,(to,from)=>{
+    const toIndex = findIndex((tab: Tab)=> tab.route.name == to, tabs.value);
+    const fromIndex = findIndex((tab: Tab)=> tab.route.name == from, tabs.value);
+    const isLeft = gt(toIndex, fromIndex);
+    transitionName.value = `slide-${isLeft ? 'left' : 'right'}`
+  } );
+
 </script>
+
+<style scoped>
+	.container-wrapper {
+		width: 100%;
+		min-height: 100%;
+		position: relative;
+	}
+
+	.route-wrapper {
+		width: 100%;
+	}
+
+	.slide-left-enter-active,
+	.slide-left-leave-active,
+  .slide-right-enter-active,
+  .slide-right-leave-active {
+		transition: all 300ms ease-out;
+		position: absolute;
+	}
+	.slide-left-enter-to,
+  .slide-right-leave-from {
+		position: absolute;
+		right: 0%;
+	}
+	.slide-left-enter-from,
+  .slide-right-leave-to {
+		position: absolute;
+		right: -100%;
+	}
+	.slide-left-leave-to,
+  .slide-right-enter-from {
+		position: absolute;
+		left: -100%;
+	}
+	.slide-left-leave-from,
+  .slide-right-enter-to {
+		position: absolute;
+		left: 0%;
+	}
+</style>
