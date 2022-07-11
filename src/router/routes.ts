@@ -57,6 +57,10 @@ const routes: RouteRecordRaw[] = [
 			main: Dashboard,
 			rightDrawer: TestLeftDrawer,
 			header: TestHeader
+		},
+		meta: {
+			hasRightDrawer: true,
+			hasLeftDrawer: false
 		}
 	}
 ];
