@@ -5,8 +5,10 @@ import TestHeader from '../layout/TestHeader.vue';
 import TestLeftDrawer from '../layout/TestLeftDrawer.vue';
 import Chat from '../views/DealView/Chat.vue';
 import DealView from '../views/DealView/Index.vue';
+import Dashboard from '../views/Dashboard.vue';
 import Info from '../views/DealView/Info.vue';
-import TestViewVue from '../views/TestView.vue';
+import ifAuth from './ifAuth.guard'
+import ifNotAuth from './ifNotAuth.guard'
 
 type FunctionMode = (to: RouteLocationNormalized) => Record<string, any>;
 const extractSearchToProps: FunctionMode = (route) => ({
@@ -43,16 +45,15 @@ const routes: RouteRecordRaw[] = [
 	},
 
 	{
-		path: '/test',
+		path: '/deals',
+		alias: '/user',
+		name: 'Dashboard',
+		beforeEnter: ifAuth,
 		components: {
-			main: TestViewVue,
-			leftDrawer: TestLeftDrawer,
+			main: Dashboard,
 			rightDrawer: TestLeftDrawer,
-			header: TestHeader,
-			footer: TestFooter
-		},
-		props: {main: true, leftDrawer: true},
-		beforeEnter: T
+			header: TestHeader
+		}
 	}
 ];
 
