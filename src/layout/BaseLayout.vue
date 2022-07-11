@@ -40,10 +40,12 @@
 
 <script setup lang="ts">
 	import { thunkify } from 'ramda';
-	import { watch } from 'vue';
+	import { ref, watch } from 'vue';
 	import { useRoute } from 'vue-router';
 	import useLayoutManager from '../composables/useLayoutManager';
 	import DesktopMain from './DesktopMain.vue';
+
+	const route = useRoute();
 
 	const _HEADER_NAME_ = 'header';
 	const _LEFT_DRAWER_NAME_ = 'left-drawer';
@@ -55,13 +57,14 @@
 	const _RIGHT_DRAWER_SLOT_NAME_ = 'right-drawer';
 	const _FOOTER_SLOT_NAME_ = 'footer';
 
+	const hasLeftDrawer = ref(true)
+	const hasRightDrawer = ref(true)
+
 	const {
 		isDesktop,
 		leftDrawer,
 		rightDrawer,
 		footerOrder,
-		hasLeftDrawer,
-		hasRightDrawer,
 		calculateLayout,
 	} = useLayoutManager();
 	const calculate = thunkify(calculateLayout)(
@@ -77,6 +80,10 @@
 
 	calculate();
 	watch(() => useRoute()?.name, calculate);
+	watch(()=> route.name, ()=> {
+		hasLeftDrawer.value = !!route?.meta?.hasLeftDrawer || false;
+		hasRightDrawer.value = !!route?.meta?.hasRightDrawer || false;
+	})
 </script>
 
 <script lang="ts">

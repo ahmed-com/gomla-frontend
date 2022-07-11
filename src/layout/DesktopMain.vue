@@ -21,16 +21,20 @@
 
 <script setup lang="ts">
     import { thunkify } from 'ramda';
-    import { computed, onMounted, onUnmounted, watch } from 'vue';
+    import { computed, onMounted, onUnmounted, watch, ref } from 'vue';
     import { useRoute } from 'vue-router';
     import useLayoutManager from '../composables/useLayoutManager';
 
+	const route = useRoute();
+	const hasLeftDrawer = ref(true);
+
     const { drawerLayoutName } = defineProps<{drawerLayoutName: string}>()
 
-    const {hasLeftDrawer, leftDrawer, desktopDrawerStyle, calculateLeftDrawerSize, leftDrawerSize, minContentHeight} = useLayoutManager()
+    const { leftDrawer, desktopDrawerStyle, calculateLeftDrawerSize, leftDrawerSize, minContentHeight} = useLayoutManager()
     const calculate = thunkify(calculateLeftDrawerSize)(drawerLayoutName);
     onMounted(calculate)
 	watch(() => useRoute()?.name, calculate);
+	watch(()=> route.name, ()=> hasLeftDrawer.value = !!route?.meta?.hasLeftDrawer || false)
     onUnmounted(calculate)
 
     const drawerSizeInverted = computed(()=>`-${leftDrawerSize.value}px`)

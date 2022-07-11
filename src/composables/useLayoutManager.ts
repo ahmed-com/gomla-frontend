@@ -16,7 +16,7 @@ function initLayout() {
 }
 
 function calculateLayout(
-	slotNames: { leftDrawerSlotName: string; rightDrawerSlotName: string },
+	_: { leftDrawerSlotName: string; rightDrawerSlotName: string },
 	layoutNames?: {
 		headerName?: string;
 		leftDrawerName?: string;
@@ -25,9 +25,6 @@ function calculateLayout(
 	}
 ) {
 	if (!initialized) initLayout();
-
-	calculateHasLeftDrawer(slotNames.leftDrawerSlotName);
-	calculateHasRightDrawer(slotNames.rightDrawerSlotName);
 
     if(layoutNames?.headerName) calculateHeaderSize(layoutNames.headerName);
     if(layoutNames?.leftDrawerName) calculateLeftDrawerSize(layoutNames.leftDrawerName);
@@ -60,10 +57,6 @@ const desktopDrawerStyle = computed<CSSProperties>(() => ({
 
 const minContentHeight = computed<string>(()=> `calc(100vh - ${headerSize.value}px)`);
 
-const calculateHasLeftDrawer = (slotName: string) =>
-	(hasLeftDrawer.value = typeof useSlots()?.[slotName]?.()?.[0].type === 'object');
-const calculateHasRightDrawer = (slotName: string) =>
-	(hasRightDrawer.value = typeof useSlots()?.[slotName]?.()?.[0].type === 'object');
 const calculateHeaderSize = (key: string) =>
 	(headerSize.value = useLayout().getLayoutItem(key)?.size || 0);
 const calculateLeftDrawerSize = (key: string) =>
@@ -85,11 +78,7 @@ export default () => ({
 	desktopDrawerStyle,
 	contentStyle,
 	footerOrder,
-	hasLeftDrawer,
-	hasRightDrawer,
 	minContentHeight,
-	calculateHasLeftDrawer,
-	calculateHasRightDrawer,
 	calculateHeaderSize,
 	calculateLeftDrawerSize,
 	calculateRightDrawerSize,
