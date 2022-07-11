@@ -8,7 +8,7 @@
 				:value="tab.route.name"
 				:to="tab.route"
 			>
-				{{tab.text}}
+				{{$t(tab.text)}}
 			</v-tab>
 		</v-tabs>
 
@@ -44,8 +44,8 @@
 	const currentRoute = useRoute();
 
   const tabs = computed<Tab[]>(()=>[
-    {text: 'Info', route: {name: 'Deal', params: {dealId}}},
-    {text: 'Discussion', route: {name: 'DealDiscussion', params: {dealId}}}
+    {text: 'nested.msg1', route: {name: 'Deal', params: {dealId}}},
+    {text: 'nested.msg2', route: {name: 'DealDiscussion', params: {dealId}}}
   ]);
   const transitionName = ref<string>('')
 
