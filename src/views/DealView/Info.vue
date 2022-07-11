@@ -3,6 +3,8 @@
         the deal info
         dealId: {{dealId}}
         someProp: {{someProp}}
+        <br>
+        <router-link :to="{name:'Dashboard'}"> Dashboard </router-link>
     </v-sheet>
 </template>
 
