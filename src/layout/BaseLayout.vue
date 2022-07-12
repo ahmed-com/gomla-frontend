@@ -1,5 +1,5 @@
 <template>
-	<slot :name="_HEADER_SLOT_NAME_" :layoutName="_HEADER_NAME_"></slot>
+	<slot :name="_HEADER_SLOT_NAME_" :layoutName="_HEADER_NAME_" :hasLeftDrawer="hasLeftDrawer" :hasRightDrawer="hasRightDrawer"></slot>
 
 	<template v-if="!isDesktop && hasLeftDrawer">
 		<v-navigation-drawer :name="_LEFT_DRAWER_NAME_" app v-model="leftDrawer">
