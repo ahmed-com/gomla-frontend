@@ -53,7 +53,7 @@ const routes: RouteRecordRaw[] = [
 			rightDrawer: TestLeftDrawer,
 			header: TestHeader
 		},
-	}
+	},
 ];
 
 export default routes;
