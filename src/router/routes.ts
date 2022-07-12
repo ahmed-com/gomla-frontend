@@ -12,7 +12,6 @@ import Home from '../views/Home.vue';
 
 import ifAuth from './ifAuth.guard'
 import ifNotAuth from './ifNotAuth.guard'
-import MapRightSidebarVue from '../layout/MapRightSidebar.vue';
 
 type FunctionMode = (to: RouteLocationNormalized) => Record<string, any>;
 const extractSearchToProps: FunctionMode = (route) => ({
@@ -29,7 +28,7 @@ const routes: RouteRecordRaw[] = [
 			header: MainHeader,
 			footer: MainFooter,
 			leftDrawer: MainLeftSidebar,
-			rightDrawer: MapRightSidebarVue,
+			rightDrawer: MapRightSidebar,
 			main: ()=> import('../views/Search.vue')
 		},
 		beforeEnter: T,
@@ -188,7 +187,8 @@ const routes: RouteRecordRaw[] = [
 		path: '/redirect/:encodedRoute',
 		alias: '/redirect',
 		name: 'Redirect',
-		component: ()=> import('../views/Redirect.vue')
+		component: ()=> import('../views/Redirect.vue'),
+		beforeEnter: T
 	},
 
 	{
