@@ -34,7 +34,7 @@
     const calculate = thunkify(calculateLeftDrawerSize)(drawerLayoutName);
     onMounted(calculate)
 	watch(() => useRoute()?.name, calculate);
-	watch(()=> route.name, ()=> hasLeftDrawer.value = !!route?.meta?.hasLeftDrawer || false)
+	watch(()=> route.name, ()=> hasLeftDrawer.value = !!route?.matched?.[0]?.components?.leftDrawer || false)
     onUnmounted(calculate)
 
     const drawerSizeInverted = computed(()=>`-${leftDrawerSize.value}px`)

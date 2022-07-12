@@ -23,13 +23,8 @@ const routes: RouteRecordRaw[] = [
 		components: {
 			main: DealView,
 			leftDrawer: TestLeftDrawer,
-			rightDrawer: TestLeftDrawer,
 			header: TestHeader,
 			footer: TestFooter,
-		},
-		meta: {
-			hasLeftDrawer: true,
-			hasRightDrawer: false
 		},
 		children: [
 			{
@@ -58,10 +53,6 @@ const routes: RouteRecordRaw[] = [
 			rightDrawer: TestLeftDrawer,
 			header: TestHeader
 		},
-		meta: {
-			hasRightDrawer: true,
-			hasLeftDrawer: false
-		}
 	}
 ];
 

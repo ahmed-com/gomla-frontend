@@ -81,8 +81,8 @@
 	calculate();
 	watch(() => useRoute()?.name, calculate);
 	watch(()=> route.name, ()=> {
-		hasLeftDrawer.value = !!route?.meta?.hasLeftDrawer || false;
-		hasRightDrawer.value = !!route?.meta?.hasRightDrawer || false;
+		hasLeftDrawer.value = !!route?.matched?.[0]?.components?.leftDrawer || false;
+		hasRightDrawer.value = !!route?.matched?.[0]?.components?.rightDrawer || false;
 	})
 </script>
 
