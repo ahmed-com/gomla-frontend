@@ -3,12 +3,12 @@ import { RouteLocationNormalized, RouteRecordRaw } from 'vue-router';
 import TestFooter from '../layout/TestFooter.vue';
 import TestHeader from '../layout/TestHeader.vue';
 import TestLeftDrawer from '../layout/TestLeftDrawer.vue';
-import Chat from '../views/DealView/Chat.vue';
-import DealView from '../views/DealView/Index.vue';
-import Dashboard from '../views/Dashboard.vue';
-import Info from '../views/DealView/Info.vue';
 import ifAuth from './ifAuth.guard'
 import ifNotAuth from './ifNotAuth.guard'
+const Chat = ()=> import('../views/DealView/Chat.vue');
+const DealView = ()=> import('../views/DealView/Index.vue');
+const Dashboard = ()=> import('../views/Dashboard.vue');
+const Info = ()=> import('../views/DealView/Info.vue');
 
 type FunctionMode = (to: RouteLocationNormalized) => Record<string, any>;
 const extractSearchToProps: FunctionMode = (route) => ({
