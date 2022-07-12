@@ -13,13 +13,6 @@ import Home from '../views/Home.vue';
 import ifAuth from './ifAuth.guard'
 import ifNotAuth from './ifNotAuth.guard'
 
-type FunctionMode = (to: RouteLocationNormalized) => Record<string, any>;
-const extractSearchToProps: FunctionMode = (route) => ({
-	term: route.query.term,
-	lat: route.query.lat,
-	lng: route.query.lng,
-});
-
 const routes: RouteRecordRaw[] = [
 	{
 		path: '/search',
@@ -32,7 +25,7 @@ const routes: RouteRecordRaw[] = [
 			main: ()=> import('../views/Search.vue')
 		},
 		beforeEnter: T,
-		props: {main: extractSearchToProps, rightDrawer: extractSearchToProps}
+		props: {main:true, rightDrawer: true}
 	},
 
 	{
