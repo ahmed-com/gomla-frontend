@@ -187,7 +187,9 @@ const routes: RouteRecordRaw[] = [
 		path: '/redirect/:encodedRoute',
 		alias: '/redirect',
 		name: 'Redirect',
-		component: ()=> import('../views/Redirect.vue'),
+		components: {
+			main: ()=> import('../views/Redirect.vue')
+		},
 		beforeEnter: T
 	},
 
