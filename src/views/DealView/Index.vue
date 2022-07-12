@@ -2,27 +2,27 @@
 	<v-card min-height="100%">
 		<v-tabs v-model="currentRoute.name" background-color="secondary">
 			<v-tab
-        v-for="tab in tabs"
-        :key="tab.text"
+				v-for="tab in tabs"
+				:key="tab.text"
 				selected-class="bg-primary"
 				:value="tab.route.name"
 				:to="tab.route"
 			>
-				{{$t(tab.text)}}
+				{{ $t(tab.text) }}
 			</v-tab>
 		</v-tabs>
 
 		<div class="container-wrapper">
 			<router-view v-slot="{ Component, route }">
 				<Transition :name="transitionName" mode="default">
-								<div :key="route.path" class="route-wrapper">
-									<component
-										:is="Component"
-										:key="route.path"
-										:someProp="dealId"
-										:dealId="dealId"
-									></component>
-								</div>
+					<div :key="route.path" class="route-wrapper">
+						<component
+							:is="Component"
+							:key="route.path"
+							:someProp="dealId"
+							:dealId="dealId"
+						></component>
+					</div>
 				</Transition>
 			</router-view>
 		</div>
@@ -31,31 +31,42 @@
 
 <script setup lang="ts">
 	import { computed, ref } from '@vue/reactivity';
-  import {  findIndex, gt} from 'ramda';
-  import { watch } from 'vue';
-  import { useRoute } from 'vue-router';
+	import { findIndex, gt } from 'ramda';
+	import { watch } from 'vue';
+	import { useRoute } from 'vue-router';
 
-  interface Tab{
-    text: string,
-    route: any
-  }
+	interface Tab {
+		text: string;
+		route: any;
+	}
 
 	const { dealId } = defineProps<{ dealId: string }>();
 	const currentRoute = useRoute();
 
-  const tabs = computed<Tab[]>(()=>[
-    {text: 'nested.msg1', route: {name: 'Deal', params: {dealId}}},
-    {text: 'nested.msg2', route: {name: 'DealDiscussion', params: {dealId}}}
-  ]);
-  const transitionName = ref<string>('')
+	const tabs = computed<Tab[]>(() => [
+		{ text: 'nested.msg1', route: { name: 'Deal', params: { dealId } } },
+		{
+			text: 'nested.msg2',
+			route: { name: 'DealDiscussion', params: { dealId } },
+		},
+	]);
+	const transitionName = ref<string>('');
 
-  watch(()=> currentRoute.name,(to,from)=>{
-    const toIndex = findIndex((tab: Tab)=> tab.route.name == to, tabs.value);
-    const fromIndex = findIndex((tab: Tab)=> tab.route.name == from, tabs.value);
-    const isLeft = gt(toIndex, fromIndex);
-    transitionName.value = `slide-${isLeft ? 'left' : 'right'}`
-  } );
-
+	watch(
+		() => currentRoute.name,
+		(to, from) => {
+			const toIndex = findIndex(
+				(tab: Tab) => tab.route.name == to,
+				tabs.value
+			);
+			const fromIndex = findIndex(
+				(tab: Tab) => tab.route.name == from,
+				tabs.value
+			);
+			const isLeft = gt(toIndex, fromIndex);
+			transitionName.value = `slide-${isLeft ? 'left' : 'right'}`;
+		}
+	);
 </script>
 
 <style scoped>
@@ -71,28 +82,28 @@
 
 	.slide-left-enter-active,
 	.slide-left-leave-active,
-  .slide-right-enter-active,
-  .slide-right-leave-active {
+	.slide-right-enter-active,
+	.slide-right-leave-active {
 		transition: all 300ms ease-out;
 		position: absolute;
 	}
 	.slide-left-enter-to,
-  .slide-right-leave-from {
+	.slide-right-leave-from {
 		position: absolute;
 		right: 0%;
 	}
 	.slide-left-enter-from,
-  .slide-right-leave-to {
+	.slide-right-leave-to {
 		position: absolute;
 		right: -100%;
 	}
 	.slide-left-leave-to,
-  .slide-right-enter-from {
+	.slide-right-enter-from {
 		position: absolute;
 		left: -100%;
 	}
 	.slide-left-leave-from,
-  .slide-right-enter-to {
+	.slide-right-enter-to {
 		position: absolute;
 		left: 0%;
 	}
