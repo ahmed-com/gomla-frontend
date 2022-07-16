@@ -41,8 +41,8 @@ const footerSize = ref<number>(0);
 const footerOrder = ref<-1 | 0>(0);
 const isDesktop = ref<boolean>(false);
 const contentStyle = ref();
-const hasLeftDrawer = ref<boolean>(false);
-const hasRightDrawer = ref<boolean>(false);
+const hasLeftDrawer = ref<boolean>(true);
+const hasRightDrawer = ref<boolean>(true);
 
 const desktopDrawerStyle = computed<CSSProperties>(() => ({
 	top: `${headerSize.value}px`,
@@ -79,6 +79,10 @@ export default () => ({
 	contentStyle,
 	footerOrder,
 	minContentHeight,
+	hasLeftDrawer,
+	hasRightDrawer,
+	setLeftDrawer: (x: boolean) => hasLeftDrawer.value = x,
+	setRightDrawer: (x: boolean) => hasRightDrawer.value = x,
 	calculateHeaderSize,
 	calculateLeftDrawerSize,
 	calculateRightDrawerSize,

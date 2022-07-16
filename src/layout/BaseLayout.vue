@@ -5,7 +5,7 @@
 </script>
 
 <template>
-	<slot :name="_HEADER_SLOT_NAME_" :layoutName="_HEADER_NAME_" :hasLeftDrawer="hasLeftDrawer" :hasRightDrawer="hasRightDrawer"></slot>
+	<slot :name="_HEADER_SLOT_NAME_" :layoutName="_HEADER_NAME_" ></slot>
 
 	<template v-if="!isDesktop && hasLeftDrawer">
 		<v-navigation-drawer :name="_LEFT_DRAWER_NAME_" app v-model="leftDrawer">
@@ -63,15 +63,16 @@
 	const _RIGHT_DRAWER_SLOT_NAME_ = 'right-drawer';
 	const _FOOTER_SLOT_NAME_ = 'footer';
 
-	const hasLeftDrawer = ref(true)
-	const hasRightDrawer = ref(true)
-
 	const {
 		isDesktop,
 		leftDrawer,
 		rightDrawer,
 		footerOrder,
 		calculateLayout,
+		hasLeftDrawer,
+		hasRightDrawer,
+		setLeftDrawer,
+		setRightDrawer
 	} = useLayoutManager();
 	const calculate = thunkify(calculateLayout)(
 		{
@@ -87,7 +88,7 @@
 	calculate();
 	watch(() => useRoute()?.name, calculate);
 	watch(()=> route.name, ()=> {
-		hasLeftDrawer.value = !!route?.matched?.[0]?.components?.leftDrawer || false;
-		hasRightDrawer.value = !!route?.matched?.[0]?.components?.rightDrawer || false;
+		setLeftDrawer(!!route?.matched?.[0]?.components?.leftDrawer || false)
+		setRightDrawer(!!route?.matched?.[0]?.components?.rightDrawer || false)
 	})
 </script>

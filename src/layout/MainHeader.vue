@@ -19,9 +19,9 @@
     import { thunkify } from "ramda";
     import { onMounted, onUnmounted } from "vue";
     import useLayoutManager from "../composables/useLayoutManager";
-    const { toggleLeftDrawer, calculateHeaderSize, toggleRightDrawer } = useLayoutManager();
+    const { toggleLeftDrawer, calculateHeaderSize, toggleRightDrawer, hasLeftDrawer, hasRightDrawer } = useLayoutManager();
 
-    const { layoutName } = defineProps<{layoutName: string, hasLeftDrawer: boolean, hasRightDrawer: boolean}>()
+    const { layoutName } = defineProps<{layoutName: string}>()
     
     const calculate = thunkify(calculateHeaderSize)(layoutName)
     onMounted(calculate);

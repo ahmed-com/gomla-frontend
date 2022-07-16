@@ -5,7 +5,7 @@
 </script>
 
 <template>
-    <v-app-bar order="-1" density="compact" :name="layoutName" fixed color="primary" app>
+    <v-app-bar order="-1" density="compact" :name="layoutName" absolute color="primary" app>
         <v-app-bar-nav-icon v-if="hasLeftDrawer" @click="toggleLeftDrawer"></v-app-bar-nav-icon>
 
         <v-toolbar-title>Application {{layoutName}}</v-toolbar-title>
@@ -19,9 +19,9 @@
     import { thunkify } from "ramda";
     import { onMounted, onUnmounted } from "vue";
     import useLayoutManager from "../composables/useLayoutManager";
-    const { toggleLeftDrawer, calculateHeaderSize, toggleRightDrawer } = useLayoutManager();
+    const { toggleLeftDrawer, calculateHeaderSize, toggleRightDrawer, hasLeftDrawer, hasRightDrawer } = useLayoutManager();
 
-    const { layoutName } = defineProps<{layoutName: string, hasLeftDrawer: boolean, hasRightDrawer: boolean}>()
+    const { layoutName } = defineProps<{layoutName: string}>()
     
     const calculate = thunkify(calculateHeaderSize)(layoutName)
     onMounted(calculate);
