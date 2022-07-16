@@ -1,3 +1,9 @@
+<script lang="ts">
+	export default {
+		name: 'Deal',
+	};
+</script>
+
 <template>
 	<v-card min-height="100%">
 		<v-tabs v-model="currentRoute.name" background-color="secondary">

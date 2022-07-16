@@ -1,3 +1,9 @@
+<script lang="ts">
+	export default {
+		name: 'App',
+	};
+</script>
+
 <template>
 	<v-app>
 		<BaseLayout>
@@ -31,10 +37,4 @@
 
 <script setup lang="ts">
 	import BaseLayout from './layout/BaseLayout.vue';
-</script>
-
-<script lang="ts">
-	export default {
-		name: 'App',
-	};
 </script>

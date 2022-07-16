@@ -1,3 +1,9 @@
+<script lang="ts">
+	export default {
+		name: 'Layout',
+	};
+</script>
+
 <template>
 	<slot :name="_HEADER_SLOT_NAME_" :layoutName="_HEADER_NAME_" :hasLeftDrawer="hasLeftDrawer" :hasRightDrawer="hasRightDrawer"></slot>
 
@@ -84,10 +90,4 @@
 		hasLeftDrawer.value = !!route?.matched?.[0]?.components?.leftDrawer || false;
 		hasRightDrawer.value = !!route?.matched?.[0]?.components?.rightDrawer || false;
 	})
-</script>
-
-<script lang="ts">
-	export default {
-		name: 'Layout',
-	};
 </script>

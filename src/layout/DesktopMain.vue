@@ -1,3 +1,9 @@
+<script lang="ts">
+	export default {
+		name: 'DesktopMain',
+	};
+</script>
+
 <template>
 	<v-main :style="{'padding-left': '0px','padding-right': '0px'}">
 		<template v-if="hasLeftDrawer">
