@@ -14,7 +14,7 @@
 				:value="tab.route.name"
 				:to="tab.route"
 			>
-				{{ $t(tab.text) }}
+				{{ t(tab.text) }}
 			</v-tab>
 		</v-tabs>
 
@@ -40,6 +40,9 @@
 	import { findIndex, gt } from 'ramda';
 	import { watch } from 'vue';
 	import { useRoute } from 'vue-router';
+	import { useI18n } from 'vue-i18n'
+
+	const { t } = useI18n();
 
 	interface Tab {
 		text: string;
