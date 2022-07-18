@@ -29,8 +29,10 @@
     import { thunkify } from 'ramda';
     import { computed, onMounted, onUnmounted, watch } from 'vue';
     import { useRoute } from 'vue-router';
+	import { useRtl } from 'vuetify/lib/framework.mjs';
     import useLayoutManager from '../composables/useLayoutManager';
 
+	const { isRtl } = useRtl();
     const { drawerLayoutName } = defineProps<{drawerLayoutName: string}>()
 
     const { leftDrawer, desktopDrawerStyle, calculateLeftDrawerSize, leftDrawerSize, minContentHeight, hasLeftDrawer, setLeftDrawer} = useLayoutManager()
@@ -39,7 +41,7 @@
 	watch(() => useRoute()?.name, calculate);
     onUnmounted(calculate)
 
-    const drawerSizeInverted = computed(()=>`-${leftDrawerSize.value}px`)
+    const drawerSizeInverted = computed(()=>`${isRtl.value ? '': '-'}${leftDrawerSize.value}px`)
     const drawerSize = computed(()=>`${leftDrawerSize.value}px`)
     
 </script>
