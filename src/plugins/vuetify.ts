@@ -10,9 +10,17 @@ import {createVueI18nAdapter } from 'vuetify/locale/adapters/vue-i18n'
 
 import i18n from './i18n'
 import { useI18n } from 'vue-i18n'
+import { darkTheme, lightTheme } from '../themes'
 
 export default createVuetify({
   components,
   // directives,
-  locale: createVueI18nAdapter({ i18n, useI18n})
+  locale: createVueI18nAdapter({ i18n, useI18n}),
+  theme: {
+    defaultTheme: 'lightTheme',
+    themes: {
+      darkTheme,
+      lightTheme
+    }
+  }
 })
