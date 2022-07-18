@@ -1,4 +1,4 @@
-// TO-DO : migrate this composable to a pinia store
+// TODO : migrate this composable to a pinia store
 import { computed, CSSProperties, ref, useSlots } from 'vue';
 import { useDisplay } from 'vuetify';
 import { useLayout } from 'vuetify';
@@ -27,10 +27,12 @@ function calculateLayout(
 ) {
 	if (!initialized) initLayout();
 
-    if(layoutNames?.headerName) calculateHeaderSize(layoutNames.headerName);
-    if(layoutNames?.leftDrawerName) calculateLeftDrawerSize(layoutNames.leftDrawerName);
-    if(layoutNames?.rightDrawerName) calculateRightDrawerSize(layoutNames.rightDrawerName);
-    if(layoutNames?.footerName) calculateFooterSize(layoutNames.footerName);
+	if (layoutNames?.headerName) calculateHeaderSize(layoutNames.headerName);
+	if (layoutNames?.leftDrawerName)
+		calculateLeftDrawerSize(layoutNames.leftDrawerName);
+	if (layoutNames?.rightDrawerName)
+		calculateRightDrawerSize(layoutNames.rightDrawerName);
+	if (layoutNames?.footerName) calculateFooterSize(layoutNames.footerName);
 }
 
 const leftDrawer = ref<boolean>(false);
@@ -56,7 +58,9 @@ const desktopDrawerStyle = computed<CSSProperties>(() => ({
 	transform: 'none',
 }));
 
-const minContentHeight = computed<string>(()=> `calc(100vh - ${headerSize.value}px)`);
+const minContentHeight = computed<string>(
+	() => `calc(100vh - ${headerSize.value}px)`
+);
 
 const calculateHeaderSize = (key: string) =>
 	(headerSize.value = useLayout().getLayoutItem(key)?.size || 0);
@@ -82,8 +86,8 @@ export default () => ({
 	minContentHeight,
 	hasLeftDrawer,
 	hasRightDrawer,
-	setLeftDrawer: (x: boolean) => hasLeftDrawer.value = x,
-	setRightDrawer: (x: boolean) => hasRightDrawer.value = x,
+	setLeftDrawer: (x: boolean) => (hasLeftDrawer.value = x),
+	setRightDrawer: (x: boolean) => (hasRightDrawer.value = x),
 	calculateHeaderSize,
 	calculateLeftDrawerSize,
 	calculateRightDrawerSize,
