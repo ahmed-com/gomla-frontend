@@ -10,8 +10,8 @@ const pinia = createPinia();
 loadFonts();
 
 createApp(App)
-  .use(pinia)
   .use(i18n)
   .use(vuetify)
   .use(router)
+  .use(pinia)
   .mount('#app');
