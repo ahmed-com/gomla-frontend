@@ -42,19 +42,15 @@
 	import { useRoute } from 'vue-router';
 	import { useI18n } from 'vue-i18n'
 	import { useRtl } from 'vuetify/lib/framework.mjs';
+import { NavigationTab } from '../../types/NavigationTab.type';
 
 	const { t } = useI18n();
 	const { isRtl } = useRtl();
 
-	interface Tab {
-		text: string;
-		route: any;
-	}
-
 	const { dealId } = defineProps<{ dealId: string }>();
 	const currentRoute = useRoute();
 
-	const tabs = computed<Tab[]>(() => [
+	const tabs = computed<NavigationTab[]>(() => [
 		{ text: 'nested.msg1', route: { name: 'Deal', params: { dealId } } },
 		{
 			text: 'nested.msg2',
@@ -67,11 +63,11 @@
 		() => currentRoute.name,
 		(to, from) => {
 			const toIndex = findIndex(
-				(tab: Tab) => tab.route.name == to,
+				(tab: NavigationTab) => tab.route.name == to,
 				tabs.value
 			);
 			const fromIndex = findIndex(
-				(tab: Tab) => tab.route.name == from,
+				(tab: NavigationTab) => tab.route.name == from,
 				tabs.value
 			);
 			const isLeft = isRtl.value ? lt(toIndex, fromIndex) : gt(toIndex, fromIndex);
