@@ -1,3 +1,4 @@
+// TO-DO : migrate this composable to a pinia store
 import { computed, CSSProperties, ref, useSlots } from 'vue';
 import { useDisplay } from 'vuetify';
 import { useLayout } from 'vuetify';

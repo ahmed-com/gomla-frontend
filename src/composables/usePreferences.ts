@@ -1,3 +1,4 @@
+// TO-DO : migrate this composable to a pinia store
 import { LocalStorage } from "../enums/localStorage.enum"
 import { useI18n } from "vue-i18n";
 import { useTheme } from "vuetify/lib/framework.mjs";
