@@ -6,13 +6,8 @@ import themesObj from '../themes';
 import currenciesObj from '../data/supported-currencies.json';
 import languagesObj from '../data/supported-languages.json';
 import { ref, watchEffect } from 'vue';
-import { find, propEq, type } from 'ramda';
-
-type Language = {
-	name: string;
-	native_name: string;
-	value: string;
-};
+import { find, propEq } from 'ramda';
+import { Language } from '../types/Language.type';
 
 export const usePreferences = () => {
 	const { global } = useTheme();
