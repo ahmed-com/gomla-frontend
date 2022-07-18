@@ -37,12 +37,14 @@
 
 <script setup lang="ts">
 	import { computed, ref } from '@vue/reactivity';
-	import { findIndex, gt } from 'ramda';
+	import { findIndex, gt, lt } from 'ramda';
 	import { watch } from 'vue';
 	import { useRoute } from 'vue-router';
 	import { useI18n } from 'vue-i18n'
+	import { useRtl } from 'vuetify/lib/framework.mjs';
 
 	const { t } = useI18n();
+	const { isRtl } = useRtl();
 
 	interface Tab {
 		text: string;
@@ -72,7 +74,7 @@
 				(tab: Tab) => tab.route.name == from,
 				tabs.value
 			);
-			const isLeft = gt(toIndex, fromIndex);
+			const isLeft = isRtl.value ? lt(toIndex, fromIndex) : gt(toIndex, fromIndex);
 			transitionName.value = `slide-${isLeft ? 'left' : 'right'}`;
 		}
 	);
