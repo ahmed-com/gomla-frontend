@@ -5,7 +5,7 @@
 </script>
 
 <template>
-	<div>
+	<div class="background-texture fill-height">
 		{{t('homeMsg')}}
 		<br>
 		<router-link :to="{ name: 'Search' }">go to search</router-link>
@@ -22,3 +22,9 @@
 	
 	const toggleLocales = ()=> z.locale.value = z.locale.value === "en" ? "ar" : "en"
 </script>
+
+<style>
+	.background-texture{
+		background-image: var(--v-texture);
+	}
+</style>
