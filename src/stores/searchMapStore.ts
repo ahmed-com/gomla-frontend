@@ -6,8 +6,6 @@ import { MapMarker } from "../types/MapMarker.type";
 import highlightIconUrl from '../assets/map-marker-icon.png';
 import { shortenText } from "../utils/shortenText";
 
-console.log(highlightIconUrl)
-
 const highlightIcon: Leaflet.Icon = Leaflet.icon({
     iconUrl: highlightIconUrl,
     iconSize: [35, 95],
@@ -33,6 +31,7 @@ export const useSearchMapStore = defineStore("searchMap",()=>{
                     '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
             }
         ).addTo(map);
+        // map.on("load", ()=> setTimeout(()=> map?.invalidateSize(),1))
         if(view) map.setView(view,13);
         if(markers.length) setMarkers(markers)
     }

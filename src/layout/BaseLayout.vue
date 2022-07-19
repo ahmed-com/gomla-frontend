@@ -20,6 +20,7 @@
 			app
 			v-model="rightDrawer"
 			location="right"
+			:width="rightDrawerSize"
 		>
 			<slot :name="_RIGHT_DRAWER_SLOT_NAME_"></slot>
 		</v-navigation-drawer>
@@ -72,7 +73,8 @@
 		hasLeftDrawer,
 		hasRightDrawer,
 		setLeftDrawer,
-		setRightDrawer
+		setRightDrawer,
+		rightDrawerSize
 	} = useLayoutManager();
 	const calculate = thunkify(calculateLayout)(
 		{

@@ -71,8 +71,11 @@ const calculateRightDrawerSize = (key: string) =>
 const calculateFooterSize = (key: string) =>
 	(footerSize.value = useLayout().getLayoutItem(key)?.size || 0);
 
+const setRightDrawerSize = (n: number) => rightDrawerSize.value = n;
+
 export default () => ({
 	calculateLayout,
+	setRightDrawerSize,
 	leftDrawer,
 	rightDrawer,
 	isDesktop,

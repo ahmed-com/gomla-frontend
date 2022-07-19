@@ -5,15 +5,21 @@
 </script>
 
 <template>
-<v-card height="100%" max-height="100%" color="secondary">
-	<div id="map-id"></div>
+<v-card class="h-screen" color="secondary">
+	<div id="map-id" class="h-screen"></div>
 </v-card>
 </template>
 
 <script setup lang="ts">
+import 'leaflet/dist/leaflet.css'
 import { onMounted, onUnmounted } from 'vue';
 import { useSearchMapStore } from '../stores/searchMapStore';
+import useLayoutManager from '../composables/useLayoutManager'
+
 const { setMap, removeMap } = useSearchMapStore();
+const { setRightDrawerSize } = useLayoutManager()
+
+setRightDrawerSize(400)
 
 onMounted(()=> setMap('map-id'));
 onUnmounted(removeMap);
