@@ -45,16 +45,20 @@ export const useSearchMapStore = defineStore("searchMap",()=>{
 
     const setMarkers = (ms: MapMarker[])=> {
         markersLayer.clearLayers()
+        let markerIsHighlighted = false;
         ms.forEach(m=>{
             const marker: Leaflet.Marker = Leaflet.marker(m.position);
             marker.bindTooltip(shortenText(m.description))
             markersLayer.addLayer(marker);
             if(!m.isHighlighted) return;
+            markerIsHighlighted = true;
             marker.setIcon(highlightIcon)
             marker.bindPopup(shortenText(m.description))
             marker.openPopup()
             map?.panTo(m.position);
-        })
+        });
+        if(markerIsHighlighted) return;
+        if(view) map?.panTo(view,{animate: true})
     }
 
     return {
