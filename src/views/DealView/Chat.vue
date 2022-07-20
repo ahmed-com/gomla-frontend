@@ -5,8 +5,13 @@
 </script>
 
 <template>
-    <v-sheet height="250" color="red">
+    <div class="bg-red">
         the deal chat
         <router-link :to="{name : 'Home'}">go to home</router-link>
-    </v-sheet>
+        <chat-footer></chat-footer>
+    </div>
 </template>
+
+<script setup lang="ts">
+    import ChatFooter from '../../components/ChatFooter.vue';
+</script>
