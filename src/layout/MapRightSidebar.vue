@@ -5,8 +5,8 @@
 </script>
 
 <template>
-<v-card class="h-screen" color="secondary">
-	<div id="map-id" class="h-screen"></div>
+<v-card :height="desktopDrawerStyle.height" color="secondary">
+	<div id="map-id" class="h-100"></div>
 </v-card>
 </template>
 
@@ -17,7 +17,7 @@ import { useSearchMapStore } from '../stores/searchMapStore';
 import useLayoutManager from '../composables/useLayoutManager'
 
 const { setMap, removeMap } = useSearchMapStore();
-const { setRightDrawerSize } = useLayoutManager()
+const { setRightDrawerSize, desktopDrawerStyle } = useLayoutManager()
 
 setRightDrawerSize(400)
 
