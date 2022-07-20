@@ -5,7 +5,7 @@
 </script>
 
 <template>
-	<div>Redirect</div>
+	<div class="flex-grow-1">Redirect</div>
 </template>
 
 <script setup lang="ts">

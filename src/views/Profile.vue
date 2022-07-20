@@ -5,7 +5,7 @@
 </script>
 
 <template>
-	<div>Profile</div>
+	<div class="flex-grow-1">Profile</div>
 </template>
 
 <script setup lang="ts">

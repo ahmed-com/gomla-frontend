@@ -5,7 +5,7 @@
 </script>
 
 <template>
-	<div>
+	<div class="flex-grow-1">
 		{{view}} <v-btn @click="resetView"> reset </v-btn>
 		<router-link :to="{ name: 'Dashboard' }"> go to Dashboard</router-link>
 		<div v-for="deal in deals">

@@ -5,7 +5,7 @@
 </script>
 
 <template>
-	<div>Privacy Policy</div>
+	<div class="flex-grow-1">Privacy Policy</div>
 </template>
 
 <script setup lang="ts">

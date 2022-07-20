@@ -5,7 +5,7 @@
 </script>
 
 <template>
-	<div class="background-texture h-100">
+	<div class="background-texture h-100 flex-grow-1">
 		{{t('homeMsg')}}
 		<br>
 		<router-link :to="{ name: 'Search' }">go to search</router-link>

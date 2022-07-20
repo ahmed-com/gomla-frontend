@@ -5,7 +5,7 @@
 </script>
 
 <template>
-	<div>Contact Us</div>
+	<div  class="flex-grow-1">Contact Us</div>
 </template>
 
 <script setup lang="ts">

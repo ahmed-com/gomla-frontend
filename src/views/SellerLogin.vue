@@ -5,7 +5,7 @@
 </script>
 
 <template>
-	<div>Seller Login</div>
+	<div class="flex-grow-1">Seller Login</div>
 </template>
 
 <script setup lang="ts">

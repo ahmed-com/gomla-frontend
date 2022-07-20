@@ -5,7 +5,7 @@
 </script>
 
 <template>
-	<v-card min-height="100%" flat>
+	<v-card min-height="100%" flat class="flex-grow-1">
 		<v-tabs v-model="currentRoute.name" background-color="secondary">
 			<v-tab
 				v-for="tab in tabs"

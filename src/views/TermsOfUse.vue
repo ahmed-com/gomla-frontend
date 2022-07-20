@@ -5,7 +5,7 @@
 </script>
 
 <template>
-	<div>Terms of Use</div>
+	<div class="flex-grow-1">Terms of Use</div>
 </template>
 
 <script setup lang="ts">
