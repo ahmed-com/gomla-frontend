@@ -2,7 +2,8 @@ import axios from 'axios'
 import { GeoPoint } from '../types/GeoPoint.type';
 
 const API_KEY: string = import.meta.env.VITE_LOCATIONIQ_ACCESS_TOKEN;
-const BASE_URL: string = 'https://us1.locationiq.com/v1/reverse'
+const REGION: string = import.meta.env.VITE_LOCATIONIQ_REGION;
+const BASE_URL: string = `https://${REGION}.locationiq.com/v1/search`;
 
 export const addressToLocation = async (p: GeoPoint): Promise<string>=>{
     const q: URLSearchParams = new URLSearchParams();
