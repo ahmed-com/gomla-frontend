@@ -20,7 +20,7 @@ const highlightIcon: Leaflet.Icon = Leaflet.icon({
 export const useSearchMapStore = defineStore("searchMap",()=>{
     let map: (Leaflet.Map | null) = null;
     let view: (GeoPoint | null) = null;
-    let markers: MapMarker[] = [];
+    let markersLayer: Leaflet.LayerGroup = Leaflet.layerGroup();
     
     const setMap = (id: string) => {
         map = Leaflet.map(id);
@@ -31,9 +31,8 @@ export const useSearchMapStore = defineStore("searchMap",()=>{
                     '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
             }
         ).addTo(map);
-        // map.on("load", ()=> setTimeout(()=> map?.invalidateSize(),1))
-        if(view) map.setView(view,13);
-        if(markers.length) setMarkers(markers)
+        markersLayer.addTo(map)
+        if(view) map.setView(view,8);
     }
 
     const removeMap = ()=> map = null
@@ -41,16 +40,15 @@ export const useSearchMapStore = defineStore("searchMap",()=>{
     const setView = (p: GeoPoint) => {
         view = p;
         if(!map) return;
-        map.setView(p,13, {animate: true});
+        map.setView(p,8, {animate: true});
     }
 
     const setMarkers = (ms: MapMarker[])=> {
-        markers = ms;
-        if(!map) return;
+        markersLayer.clearLayers()
         ms.forEach(m=>{
             const marker: Leaflet.Marker = Leaflet.marker(m.position);
             marker.bindTooltip(shortenText(m.description))
-            marker.addTo(map!)
+            markersLayer.addLayer(marker);
             if(!m.isHighlighted) return;
             marker.setIcon(highlightIcon)
             marker.bindPopup(shortenText(m.description))
