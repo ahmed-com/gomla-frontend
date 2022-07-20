@@ -50,7 +50,7 @@
 
 	.slide-leave-active,
 	.slide-leave-active + .slide-sibling{
-		transition: transform 300ms ease-out;
+		transition: width 300ms ease-out;
 	}
 
 	.slide-enter-active,
@@ -68,12 +68,12 @@
 
 	.slide-leave-to,
 	.slide-leave-to + .slide-sibling {
-		transform: translateX(v-bind('drawerSizeInverted'));
+		width: 0;
 	}
 
 	.slide-leave-from,
 	.slide-leave-from + .slide-sibling{
-		transform: translateX(0px);
+		width: v-bind('drawerSize');
 	}
     
 </style>
