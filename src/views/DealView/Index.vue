@@ -5,20 +5,23 @@
 </script>
 
 <template>
-	<v-card min-height="100%" flat class="flex-grow-1">
-		<v-tabs v-model="currentRoute.name" background-color="secondary">
-			<v-tab
-				v-for="tab in tabs"
-				:key="tab.text"
-				selected-class="bg-primary"
-				:value="tab.route.name"
-				:to="tab.route"
-			>
-				{{ t(tab.text) }}
-			</v-tab>
-		</v-tabs>
+	<v-card min-height="100%" max-height="50vh" flat class="flex-grow-1 overflow-auto">
+		<div class="tabs-container w-100 tab-height">
+			<v-tabs v-model="currentRoute.name" background-color="secondary" class="tab-height">
+				<v-tab
+					v-for="tab in tabs"
+					:key="tab.text"
+					selected-class="bg-primary"
+					:value="tab.route.name"
+					:to="tab.route"
+					class="tab-height"
+				>
+					{{ t(tab.text) }}
+				</v-tab>
+			</v-tabs>
+		</div>
 
-		<div class="container-wrapper">
+		<div class="container-wrapper margin-for-tabs">
 			<router-view v-slot="{ Component, route }">
 				<Transition :name="transitionName" mode="default">
 					<div :key="route.path" class="route-wrapper">
@@ -42,7 +45,11 @@
 	import { useRoute } from 'vue-router';
 	import { useI18n } from 'vue-i18n'
 	import { useRtl } from 'vuetify/lib/framework.mjs';
-import { NavigationTab } from '../../types/NavigationTab.type';
+	import { NavigationTab } from '../../types/NavigationTab.type';
+	import useLayoutManager from '../../composables/useLayoutManager';
+
+	const { headerSize } = useLayoutManager()
+	const tabsTopValue = computed(()=> `${headerSize.value}px`);
 
 	const { t } = useI18n();
 	const { isRtl } = useRtl();
@@ -76,7 +83,21 @@ import { NavigationTab } from '../../types/NavigationTab.type';
 	);
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+	@import '../../styles/variables';
+	.tabs-container{
+		position: fixed;
+		top: v-bind('tabsTopValue');
+		z-index: 1;
+	}
+
+	.tab-height{
+		height: $tab-height;
+	}
+
+	.margin-for-tabs{
+		margin-top: $tab-height;
+	}
 	.container-wrapper {
 		width: 100%;
 		min-height: 100%;
