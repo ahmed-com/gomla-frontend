@@ -26,6 +26,6 @@
     top: 0 !important;
 }
 
-.background-texture{
+.bg-texture{
     background-image: var(--v-texture);
 }
