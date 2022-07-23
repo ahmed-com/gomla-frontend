@@ -5,7 +5,7 @@
 </script>
 
 <template>
-	<v-card min-height="100%" max-height="50vh" flat class="flex-grow-1 overflow-auto bg-texture">
+	<v-card min-height="100%" flat class="flex-grow-1 overflow-auto bg-texture">
 		<div class="tabs-container w-100 tab-height">
 			<v-tabs v-model="currentRoute.name" background-color="secondary" class="tab-height">
 				<v-tab
