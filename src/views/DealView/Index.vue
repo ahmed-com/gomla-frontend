@@ -124,7 +124,7 @@
 
 	.active-identifier {
 		z-index: -1;
-		transition: all 100ms ease-in-out;
+		transition: all 300ms ease-in-out;
 	}
 	.tabs-container {
 		position: fixed;
