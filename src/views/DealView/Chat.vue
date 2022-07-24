@@ -21,7 +21,7 @@
 </template>
 
 <script setup lang="ts">
-	import { computed, onMounted, ref } from 'vue';
+	import { computed, onMounted, onUnmounted, ref } from 'vue';
     import ChatFooter from '../../components/ChatFooter.vue';
 	import { useMessages } from '../../stores/useMessages';
     import useLayoutManager from '../../composables/useLayoutManager';
@@ -41,7 +41,13 @@
             childList: true,
             subtree: true
         })
-    })
+    });
+
+	onMounted(()=>{
+		document.getElementById('msg-8')?.scrollIntoView()
+	})
+
+	onUnmounted(()=>mutationObserver.disconnect());
 </script>
 
 <style scoped lang="scss">
