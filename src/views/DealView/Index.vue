@@ -10,7 +10,11 @@
 			class="tabs-container w-100 tab-height bg-secondary d-flex flex-row"
 		>
 			<div
-				class="position-absolute position-left-0 h-100 bg-primary active-identifier"
+				class="position-absolute h-100 bg-primary active-identifier"
+				:class="{
+					'position-right-0': isRtl,
+					'position-left-0': !isRtl
+				}"
 				:style="activeIdentifierStyle"
 			></div>
 			<div
@@ -92,7 +96,7 @@
 
 		return {
 			width: `${activeWidth}px`,
-			transform: `translateX(${activeTranslation}px)`,
+			transform: `translateX(${isRtl.value ? '-': ''}${activeTranslation}px)`,
 		};
 	});
 
