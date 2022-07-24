@@ -5,17 +5,17 @@
 </script>
 
 <template>
-	<div ref="chatContainer" class="padding-for-footer max-screen overflow-y-auto">
+	<div ref="chatContainer" class="padding-for-footer max-screen overflow-y-auto scrollbar-hidden">
 		the deal chat
 		<router-link :to="{ name: 'Home' }">go to home</router-link>
-		<div
-			v-for="message in messages"
-			:key="message.id"
-			:id="`msg-${message.id}`"
-			class="pa-4 ma-4 bg-blue"
-		>
-			{{ message.content }}
-		</div>
+			<div
+				v-for="message in messages"
+				:key="message.id"
+				:id="`msg-${message.id}`"
+				class="pa-4 ma-4 bg-blue"
+			>
+				{{ message.content }}
+			</div>
 		<chat-footer></chat-footer>
 	</div>
 </template>
@@ -31,7 +31,10 @@
 
     const computedHeaderSize = computed(()=> `${headerSize.value}px`)
 
-    const mutationCallback: MutationCallback = (_: MutationRecord[]) => chatContainer.value!.scrollTop = chatContainer.value!.scrollHeight;
+    const mutationCallback: MutationCallback = (_: MutationRecord[]) => chatContainer.value!.scrollTo({
+		top: chatContainer.value!.scrollHeight,
+		behavior: 'smooth'
+	});
     const mutationObserver = new MutationObserver(mutationCallback)
 
     const chatContainer = ref<HTMLElement | null>(null)
@@ -43,9 +46,9 @@
         })
     });
 
-	onMounted(()=>{
-		document.getElementById('msg-8')?.scrollIntoView()
-	})
+	// onMounted(()=>{
+	// 	document.getElementById('msg-8')?.scrollIntoView(); // move this into the new-messages-divider component
+	// })
 
 	onUnmounted(()=>mutationObserver.disconnect());
 </script>
