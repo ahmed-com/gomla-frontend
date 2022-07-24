@@ -15,6 +15,8 @@
 				class="pa-4 ma-4 bg-blue"
 			>
 				{{ message.content }}
+				<br v-if="message.attachment">
+				<img v-if="message.attachment" :src="message.attachment">
 			</div>
 		<chat-footer></chat-footer>
 	</div>
