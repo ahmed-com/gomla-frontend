@@ -104,6 +104,11 @@ const routes: RouteRecordRaw[] = [
 				component: ()=> import('../views/DealView/Chat.vue'),
                 name: 'DealDiscussion'
 			},
+			{
+				path: 'meetup',
+				component: ()=> import('../views/DealView/Meetup.vue'),
+                name: 'DealMeetup'
+			},
 		],
 		props: {main: true, leftDrawer: true},
 		beforeEnter: T,

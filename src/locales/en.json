@@ -2,7 +2,8 @@
   "message": "hello i18n !!",
   "nested": {
     "msg1": "message 1",
-    "msg2": "message 2"
+    "msg2": "message 2",
+    "msg3": "message 3"
   },
   "homeMsg": "Home"
 }

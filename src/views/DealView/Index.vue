@@ -78,6 +78,10 @@
 			text: t('nested.msg2'),
 			route: { name: 'DealDiscussion', params: { dealId } },
 		},
+		{
+			text: t('nested.msg3'),
+			route: { name: 'DealMeetup', params: { dealId } },
+		},
 	]);
 	const transitionName = ref<string>('');
 	const tabsElements = ref<HTMLElement[]>([]);
