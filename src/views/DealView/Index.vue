@@ -31,7 +31,7 @@
 						'text-primary': currentRoute.name != tab.route.name,
 					}"
 				>
-					{{ t(tab.text) }}
+					{{ tab.text }}
 				</router-link>
 			</div>
 		</div>
@@ -73,9 +73,9 @@
 	const currentRoute = useRoute();
 
 	const tabs = computed<NavigationTab[]>(() => [
-		{ text: 'nested.msg1', route: { name: 'Deal', params: { dealId } } },
+		{ text: t('nested.msg1'), route: { name: 'Deal', params: { dealId } } },
 		{
-			text: 'nested.msg2',
+			text: t('nested.msg2'),
 			route: { name: 'DealDiscussion', params: { dealId } },
 		},
 	]);
