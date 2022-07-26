@@ -10,7 +10,7 @@
 			class="tabs-container w-100 tab-height bg-secondary d-flex flex-row"
 		>
 			<div
-				class="position-absolute h-100 bg-primary active-identifier"
+				class="position-absolute h-100 bg-primary active-identifier transition-all"
 				:class="{
 					'position-right-0': isRtl,
 					'position-left-0': !isRtl
@@ -21,11 +21,11 @@
 				v-for="tab in tabs"
 				:key="tab.text"
 				ref="tabsElements"
-				class="px-4 h-100 bg-transparent d-flex align-center"
+				class="h-100 bg-transparent"
 			>
 				<router-link
 					:to="tab.route"
-					class="text-decoration-none font-weight-bold"
+					class="d-flex align-center px-4 h-100 text-decoration-none font-weight-bold transition-all"
 					:class="{
 						'text-secondary': currentRoute.name == tab.route.name,
 						'text-primary': currentRoute.name != tab.route.name,
@@ -128,6 +128,9 @@
 
 	.active-identifier {
 		z-index: -1;
+	}
+
+	.transition-all{
 		transition: all 300ms ease-in-out;
 	}
 	.tabs-container {
