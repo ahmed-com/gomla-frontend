@@ -53,10 +53,6 @@
         })
     });
 
-	// onMounted(()=>{
-	// 	document.getElementById('msg-8')?.scrollIntoView(); // move this into the new-messages-divider component
-	// })
-
 	onUnmounted(()=>mutationObserver.disconnect());
 
 	const onIntersect = (index: number) => (isIntersecting: boolean) => (index === messages.length - 1) ? showFAB.value = !isIntersecting : undefined;

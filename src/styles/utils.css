@@ -38,6 +38,10 @@
     bottom: 100px !important;
 }
 
+.flex-basis-100 {
+    flex-basis: 100%;
+}
+
 .bg-texture{
     background-image: var(--v-texture);
 }
