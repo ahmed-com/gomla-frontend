@@ -19,13 +19,13 @@
 				<br v-if="message.attachment">
 				<img v-if="message.attachment" :src="message.attachment">
 			</div>
-		<scroll-btn :showFAB="showFAB" @click="scrollToBottom"></scroll-btn>
+		<scroll-btn :showFAB="showFAB" @click="scrollToBottom('smooth')"></scroll-btn>
 		<chat-footer></chat-footer>
 	</div>
 </template>
 
 <script setup lang="ts">
-	import { computed, onMounted, onUnmounted, ref, watchEffect } from 'vue';
+	import { computed, onMounted, onUnmounted, ref } from 'vue';
     import ChatFooter from '../../components/ChatFooter.vue';
 	import { useMessages } from '../../stores/useMessages';
     import useLayoutManager from '../../composables/useLayoutManager';
@@ -36,12 +36,12 @@
 
 	const showFAB = ref<boolean>(false);
     const computedHeaderSize = computed(()=> `${headerSize.value}px`);
-	const scrollToBottom = ()=> chatContainer.value!.scrollTo({
+	const scrollToBottom = (behavior: ScrollBehavior)=> chatContainer.value!.scrollTo({
 		top: chatContainer.value!.scrollHeight,
-		behavior: 'smooth'
+		behavior
 	});
 
-    const mutationCallback: MutationCallback = (_: MutationRecord[]) => scrollToBottom();
+    const mutationCallback: MutationCallback = (_: MutationRecord[]) => !showFAB.value && scrollToBottom('smooth');
     const mutationObserver = new MutationObserver(mutationCallback)
 
     const chatContainer = ref<HTMLElement | null>(null)
