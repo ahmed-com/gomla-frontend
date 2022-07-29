@@ -15,7 +15,7 @@ const getRandomMessage = (): GroupMessage => ({
 export const useMessages = defineStore('useMessage',()=>{
     const messages = ref<GroupMessage[]>([
         {
-            id: 14 + '',
+            id: 0 + '',
             content: `the content of id: ${0}`,
             attachment: coinFlip() ? 'https://picsum.photos/350/165?random' : null
         },
@@ -85,7 +85,7 @@ export const useMessages = defineStore('useMessage',()=>{
             attachment: coinFlip() ? 'https://picsum.photos/350/165?random' : null
         },
         {
-            id: 0 + '',
+            id: 14 + '',
             content: `the content of id: ${14}`,
             attachment: coinFlip() ? 'https://picsum.photos/350/165?random' : null
         },

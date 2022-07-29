@@ -18,12 +18,24 @@
     right: 0 !important;
 }
 
+.position-left-2{
+    left: 100px !important;
+}
+
+.position-right-2{
+    right: 100px !important;
+}
+
 .position-bottom-0{
     bottom: 0 !important;
 }
 
 .position-top-0{
     top: 0 !important;
+}
+
+.position-bottom-2{
+    bottom: 100px !important;
 }
 
 .bg-texture{

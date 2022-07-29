@@ -9,34 +9,39 @@
 		the deal chat
 		<router-link :to="{ name: 'Home' }">go to home</router-link>
 			<div
-				v-for="message in messages"
+				v-for="(message, i) in messages"
 				:key="message.id"
 				:id="`msg-${message.id}`"
 				class="pa-4 ma-4 bg-blue"
+				v-intersect="onIntersect(i)"
 			>
 				{{ message.content }}
 				<br v-if="message.attachment">
 				<img v-if="message.attachment" :src="message.attachment">
 			</div>
+		<scroll-btn :showFAB="showFAB" @click="scrollToBottom"></scroll-btn>
 		<chat-footer></chat-footer>
 	</div>
 </template>
 
 <script setup lang="ts">
-	import { computed, onMounted, onUnmounted, ref } from 'vue';
+	import { computed, onMounted, onUnmounted, ref, watchEffect } from 'vue';
     import ChatFooter from '../../components/ChatFooter.vue';
 	import { useMessages } from '../../stores/useMessages';
     import useLayoutManager from '../../composables/useLayoutManager';
+	import ScrollBtn from '../../components/ScrollBtn.vue';
 
 	const { messages } = useMessages();
     const { headerSize } = useLayoutManager()
 
-    const computedHeaderSize = computed(()=> `${headerSize.value}px`)
-
-    const mutationCallback: MutationCallback = (_: MutationRecord[]) => chatContainer.value!.scrollTo({
+	const showFAB = ref<boolean>(false);
+    const computedHeaderSize = computed(()=> `${headerSize.value}px`);
+	const scrollToBottom = ()=> chatContainer.value!.scrollTo({
 		top: chatContainer.value!.scrollHeight,
 		behavior: 'smooth'
 	});
+
+    const mutationCallback: MutationCallback = (_: MutationRecord[]) => scrollToBottom();
     const mutationObserver = new MutationObserver(mutationCallback)
 
     const chatContainer = ref<HTMLElement | null>(null)
@@ -53,6 +58,8 @@
 	// })
 
 	onUnmounted(()=>mutationObserver.disconnect());
+
+	const onIntersect = (index: number) => (isIntersecting: boolean) => (index === messages.length - 1) ? showFAB.value = !isIntersecting : undefined;
 </script>
 
 <style scoped lang="scss">
