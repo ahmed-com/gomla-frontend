@@ -17,8 +17,9 @@
 			>
 				{{ message.content }}
 				<br v-if="message.attachment">
-				<img v-if="message.attachment" :src="message.attachment">
+				<v-img :eager="true" v-if="message.attachment" :src="message.attachment"></v-img>
 			</div>
+			<new-messages-divider :showDivider="true"></new-messages-divider>
 		<scroll-btn :showFAB="showFAB" @click="scrollToBottom('smooth')"></scroll-btn>
 		<chat-footer></chat-footer>
 	</div>
@@ -30,6 +31,7 @@
 	import { useMessages } from '../../stores/useMessages';
     import useLayoutManager from '../../composables/useLayoutManager';
 	import ScrollBtn from '../../components/ScrollBtn.vue';
+	import NewMessagesDivider from '../../components/NewMessagesDivider.vue';
 
 	const { messages } = useMessages();
     const { headerSize } = useLayoutManager()
@@ -42,7 +44,7 @@
 	});
 
     const mutationCallback: MutationCallback = (_: MutationRecord[]) => !showFAB.value && scrollToBottom('smooth');
-    const mutationObserver = new MutationObserver(mutationCallback)
+    const mutationObserver = new MutationObserver(mutationCallback) 
 
     const chatContainer = ref<HTMLElement | null>(null)
 

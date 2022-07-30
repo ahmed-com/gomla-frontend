@@ -5,5 +5,10 @@
     "msg2": "message 2",
     "msg3": "message 3"
   },
-  "homeMsg": "Home"
+  "homeMsg": "Home",
+  "components": {
+    "NewMessagesDivider": {
+      "msg": "New Messages"
+    }
+  }
 }

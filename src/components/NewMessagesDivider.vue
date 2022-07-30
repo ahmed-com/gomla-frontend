@@ -6,9 +6,11 @@
 
 <template>
     <div class="d-flex align-center" ref="divider">
-    <v-divider></v-divider>
-    <div class="bg-info rounded-pill pa-2 mx-2 flex-grow-0 flex-shrink-0 "> {{t('components.NewMessagesDivider.msg')}} </div>
-    <v-divider></v-divider>
+    <template v-if="showDivider">
+        <v-divider></v-divider>
+        <div class="bg-info rounded-pill pa-2 mx-2 flex-grow-0 flex-shrink-0 "> {{t('components.NewMessagesDivider.msg')}} </div>
+        <v-divider></v-divider>
+    </template>
     </div>
 </template>
 
@@ -18,6 +20,7 @@ import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
 const divider = ref<HTMLElement | null>(null);
+const { showDivider } = defineProps<{showDivider: boolean}>();
 
 onMounted(()=>divider.value!.scrollIntoView());
 </script>
