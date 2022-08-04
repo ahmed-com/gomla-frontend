@@ -1,6 +1,7 @@
 import { UseFetchOptions } from "@vueuse/core";
 import { computed, Ref } from "vue";
 import { useLocationIQ } from "../composables/useLocationIQ";
+import { useDebouncedRefHistory } from '@vueuse/core';
 
 type Response = Array<{
 	lat: string,
@@ -9,6 +10,7 @@ type Response = Array<{
 }>
 
 export const autoCompleteAddress = ( address: Ref<string>, useFetchOptions: UseFetchOptions ) => {
-	const url = computed<string>(()=>`autocomplete?q=${address.value}`)
+	const {last} = useDebouncedRefHistory(address,{capacity: 1, debounce: 300})
+	const url = computed<string>(()=>`autocomplete?q=${last.value.snapshot}`)
 	return useLocationIQ<Response>(url, useFetchOptions);
 }
