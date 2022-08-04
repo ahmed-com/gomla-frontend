@@ -4,9 +4,9 @@ import { GeoPoint } from '../types/GeoPoint.type';
 
 const API_KEY: string = import.meta.env.VITE_LOCATIONIQ_ACCESS_TOKEN;
 const REGION: string = import.meta.env.VITE_LOCATIONIQ_REGION;
-const BASE_URL: string = `https://${REGION}.locationiq.com/v1/search`;
+const BASE_URL: string = `https://${REGION}.locationiq.com/v1/autocomplete`;
 
-export const addressToLocations = async (
+export const autoCompleteAddress = async (
 	address: string
 ): Promise<(GeoPoint & { display_name: string })[]> => {
 	const q: URLSearchParams = new URLSearchParams();
