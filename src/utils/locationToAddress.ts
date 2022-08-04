@@ -1,17 +1,13 @@
-import axios from 'axios'
-import { GeoPoint } from '../types/GeoPoint.type';
+import { UseFetchOptions } from "@vueuse/core";
+import { computed, Ref } from "vue";
+import { useLocationIQ } from "../composables/useLocationIQ";
+import { GeoPoint } from "../types/GeoPoint.type";
 
-const API_KEY: string = import.meta.env.VITE_LOCATIONIQ_ACCESS_TOKEN;
-const REGION: string = import.meta.env.VITE_LOCATIONIQ_REGION;
-const BASE_URL: string = `https://${REGION}.locationiq.com/v1/reverse`;
+type Response = {
+    display_name: string
+}
 
-export const locationToAddress = async (p: GeoPoint): Promise<string>=>{
-    const q: URLSearchParams = new URLSearchParams();
-    q.append('key',API_KEY);
-    q.append('lat', p.lat + '');
-    q.append('lon', p.lng + '');
-    q.append('format', 'json');
-    const url: string = `${BASE_URL}?${q.toString()}`;
-    const { data } = await axios.get(url)
-    return data.display_name;
+export const addressToLocations = ( p: Ref<GeoPoint>, useFetchOptions: UseFetchOptions ) => {
+	const url = computed<string>(()=>`reverse?lat=${p.value.lat}&lon=${p.value.lng}`)
+	return useLocationIQ<Response>(url, useFetchOptions);
 }
