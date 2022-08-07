@@ -1,14 +1,17 @@
 <script lang="ts">
 	export default {
-		name: 'MainSearchBar',
+		name: 'MainDesktopSearchBar',
 	};
 </script>
 
 <template>
-	<div class="container">
-		<label id="service-label" class="label" for="service-input">{{
-			searchLabel
-		}}</label>
+	<div class="the-container">
+		<label
+			id="service-label"
+			class="label rounded-s-xl"
+			for="service-input"
+			>{{ searchLabel }}</label
+		>
 		<span id="service-typeahead" class="typeahead">{{
 			computedSearchTypeahead
 		}}</span>
@@ -53,7 +56,7 @@
 			@blur="showAddressSuggestions = false"
 			autocomplete="off"
 			:placeholder="addressPlaceholder"
-			v-model="computedAddress"
+			v-model="computedAddress.description"
 		/>
 		<div id="location-suggestions-container">
 			<ul
@@ -71,19 +74,22 @@
 				</li>
 			</ul>
 		</div>
-		<button id="search-btn" class="primary" @click="emit('submit')">
-			<img width="20px" :src="searchIcon" alt="" />
+		<button
+			id="search-btn"
+			class="bg-primary rounded-e-xl"
+			@click="emit('submit')"
+		>
+			<img width="20" :src="searchIcon" alt="" />
 		</button>
 	</div>
 </template>
 
 <script setup lang="ts">
-	import { computed, Ref, ref } from 'vue';
-	import { GeoPoint } from '../types/GeoPoint.type.js';
+	import { computed, Ref, ref, toRefs, watch } from 'vue';
 	import searchIcon from '../assets/magnifying.svg';
 	import { Address } from '../types/Address.type';
 
-	type props = {
+	type Props = {
 		searchTerm: string;
 		address: Address;
 		searchPlaceholder: string;
@@ -96,6 +102,17 @@
 		addressLabel: string | undefined;
 	};
 
+	const props: Props = withDefaults(defineProps<Props>(), {
+			searchTerm: '',
+			address: () => ({ description: '' }),
+			searchPlaceholder: '',
+			addressPlaceholder: '',
+			searchTypeahead: '',
+			addressTypeahead: '',
+			searchSuggestions: () => [],
+			addressSuggestions: () => [],
+		})
+
 	const {
 		searchTerm,
 		address,
@@ -106,17 +123,8 @@
 		searchSuggestions,
 		addressSuggestions,
 		searchTypeahead,
-		addressTypeahead
-	} = withDefaults(defineProps<props>(), {
-		searchTerm: '',
-		address: ()=> ({description: ''}),
-		searchPlaceholder: '',
-		addressPlaceholder: '',
-		searchTypeahead: '',
-		addressTypeahead: '',
-		searchSuggestions: ()=>([]),
-		addressSuggestions: ()=>([]),
-	})
+		addressTypeahead,
+	} = toRefs(props);
 
 	const emit = defineEmits<{
 		(event: 'update:searchTerm', searchTerm: string): void;
@@ -128,31 +136,42 @@
 	const showSearchSuggestions: Ref<boolean> = ref<boolean>(false);
 
 	const computedSearchTypeahead = computed<string>(() => {
-		if (!searchTypeahead.toLowerCase().startsWith(searchTerm.toLowerCase()))
-			return '';
-		return (
-			searchTerm +
-			searchTypeahead.slice(searchTerm.length, searchTypeahead.length)
-		);
-	});
-	const computedAddressTypeahead = computed<string>(() => {
+		if(!searchTerm.value) return '';
 		if (
-			!addressTypeahead
+			!searchTypeahead
+				.value
 				.toLowerCase()
-				.startsWith(address.description.toLowerCase())
+				.startsWith(searchTerm.value.toLowerCase())
 		)
 			return '';
 		return (
-			address.description +
-			addressTypeahead.slice(
-				address.description.length,
-				addressTypeahead.length
+			searchTerm.value +
+			searchTypeahead.value.slice(
+				searchTerm.value.length,
+				searchTypeahead.value.length
+			)
+		);
+	});
+	const computedAddressTypeahead = computed<string>(() => {
+		if(!address.value.description) return '';
+		if (
+			!addressTypeahead
+				.value
+				.toLowerCase()
+				.startsWith(address.value.description.toLowerCase())
+		)
+			return '';
+		return (
+			address.value.description +
+			addressTypeahead.value.slice(
+				address.value.description.length,
+				addressTypeahead.value.length
 			)
 		);
 	});
 	const computedSearchTerm = computed<string>({
 		get() {
-			return searchTerm;
+			return searchTerm.value;
 		},
 
 		set(value: string) {
@@ -161,7 +180,7 @@
 	});
 	const computedAddress = computed<Address>({
 		get() {
-			return address;
+			return address.value;
 		},
 
 		set(value: Address) {
@@ -171,7 +190,7 @@
 </script>
 
 <style scoped>
-	.container {
+	.the-container {
 		display: inline-grid;
 		grid-template-columns: auto 1fr 1px auto 1fr auto;
 	}
