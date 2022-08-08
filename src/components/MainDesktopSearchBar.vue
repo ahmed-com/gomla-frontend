@@ -5,10 +5,10 @@
 </script>
 
 <template>
-	<div class="the-container">
+	<div class="the-container" >
 		<label
 			id="service-label"
-			class="label rounded-s-xl"
+			class="label rounded-s"
 			for="service-input"
 			>{{ searchLabel }}</label
 		>
@@ -20,7 +20,7 @@
 			id="service-input"
 			class="input"
 			@focus="showSearchSuggestions = true"
-			@blur="showSearchSuggestions = false"
+			@blur="hideSearchSuggestions"
 			autocomplete="off"
 			:placeholder="searchPlaceholder"
 			v-model="computedSearchTerm"
@@ -35,7 +35,7 @@
 					v-for="suggestion in searchSuggestions"
 					:key="suggestion"
 					class="service-suggestion"
-					@click="computedSearchTerm = suggestion"
+					@click="setSearchTerm(suggestion)"
 				>
 					{{ suggestion }}
 				</li>
@@ -53,7 +53,7 @@
 			id="location-input"
 			class="input"
 			@focus="showAddressSuggestions = true"
-			@blur="showAddressSuggestions = false"
+			@blur="hideAddressSuggestions"
 			autocomplete="off"
 			:placeholder="addressPlaceholder"
 			v-model="computedAddress.description"
@@ -68,7 +68,7 @@
 					v-for="suggestion in addressSuggestions"
 					:key="suggestion.description"
 					class="location-suggestion"
-					@click="computedAddress = suggestion"
+					@click="setAddress(suggestion)"
 				>
 					{{ suggestion.description }}
 				</li>
@@ -76,7 +76,7 @@
 		</div>
 		<button
 			id="search-btn"
-			class="bg-primary rounded-e-xl"
+			class="bg-primary rounded-e"
 			@click="emit('submit')"
 		>
 			<img width="20" :src="searchIcon" alt="" />
@@ -85,7 +85,7 @@
 </template>
 
 <script setup lang="ts">
-	import { computed, Ref, ref, toRefs, watch } from 'vue';
+	import { computed, nextTick, Ref, ref, toRefs } from 'vue';
 	import searchIcon from '../assets/magnifying.svg';
 	import { Address } from '../types/Address.type';
 
@@ -187,6 +187,13 @@
 			emit('update:address', value);
 		},
 	});
+
+	const setSearchTerm = (value: string)=> computedSearchTerm.value = value;
+	const setAddress = (value: Address)=>  computedAddress.value = value;
+
+	// FIXME: this is a race condition
+	const hideSearchSuggestions = ()=> setTimeout(()=>showSearchSuggestions.value = false,200);
+	const hideAddressSuggestions = ()=> setTimeout(()=>showAddressSuggestions.value = false,200);
 </script>
 
 <style scoped>

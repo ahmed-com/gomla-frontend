@@ -22,12 +22,12 @@
 
 <script setup lang="ts">
     import { ref, watch } from 'vue';
-import { Address } from '../../types/Address.type';
-import MainDesktopSearchBar from '../MainDesktopSearchBar.vue';
+    import { Address } from '../../types/Address.type';
+    import MainDesktopSearchBar from '../MainDesktopSearchBar.vue';
 
     const address = ref<Address>({description: ''})
     const searchTerm = ref<string>('')
-    const searchSuggestions = ref<string[]>([])
+    const searchSuggestions = ref<string[]>(['something 0','something 1','something 2','something 3','something 4',])
     const addressSuggestions = ref<Address[]>([])
     const searchTypeadead = ref<string>('restaurant')
     const addressTypeahead = ref<string>('')
