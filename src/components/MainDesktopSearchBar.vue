@@ -5,7 +5,7 @@
 </script>
 
 <template>
-	<div class="the-container" >
+	<form @submit.prevent="emit('submit')" class="the-container" >
 		<label
 			id="service-label"
 			class="label rounded-s"
@@ -77,11 +77,11 @@
 		<button
 			id="search-btn"
 			class="bg-primary rounded-e"
-			@click="emit('submit')"
+			type="submit"
 		>
 			<img width="20" :src="searchIcon" alt="" />
 		</button>
-	</div>
+	</form>
 </template>
 
 <script setup lang="ts">
