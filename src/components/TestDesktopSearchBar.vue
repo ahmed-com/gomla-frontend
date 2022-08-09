@@ -14,7 +14,7 @@
 			<label
 				v-if="searchLabel"
 				for="search-input"
-				class="grid-row-1 grid-column-1 d-flex align-center text-grey-darken-2 px-2 font-weight-bold"
+				class="grid-row-1 grid-column-1 d-flex align-center text-grey-darken-2 px-4 font-weight-bold"
 			>
 				{{ searchLabel }}
 			</label>
@@ -25,6 +25,13 @@
 			<input
 				type="text"
 				@focus="showSearchSuggestions = true"
+				@keydown.tab="onSearchTabbed"
+				@keydown.up.prevent="
+					setActiveSearchSuggestion(activeSearchSuggestion - 1)
+				"
+				@keydown.down.prevent="
+					setActiveSearchSuggestion(activeSearchSuggestion + 1)
+				"
 				class="grid-row-1 grid-column-2 bg-transparent text-black"
 				autocomplete="off"
 				:placeholder="searchPlaceholder"
@@ -33,30 +40,37 @@
 			/>
 			<div class="h-0 grid-row-2 grid-column-1-3">
 				<ul
-                    class="bg-background w-100 pa-4 rounded-b list-style-none"
+					class="bg-background w-100 pa-4 rounded-b list-style-none"
 					v-if="!!searchSuggestions.length && showSearchSuggestions"
 				>
-					<li
-						v-for="suggestion in searchSuggestions"
+					<v-hover
+						v-for="(suggestion, index) in searchSuggestions"
 						:key="suggestion"
-						class="cursor-pointer pa-2 rounded"
-						@click="setSearchTerm(suggestion)"
+                        @update:model-value="p => hoverSearchSuggestion(index)(p)"
+                        v-slot="{props}"
 					>
-						{{ suggestion }}
-					</li>
+						<li
+							class="cursor-pointer pa-2 rounded"
+							:class="{
+								'bg-primary': activeSearchSuggestion === index,
+							}"
+							@click="setSearchTerm(suggestion)"
+                            v-bind="props"
+						>
+							{{ suggestion }}
+						</li>
+					</v-hover>
 				</ul>
 			</div>
 		</div>
 		<div class="grid-row-1 grid-column-2 bg-grey">
 			<v-divider vertical></v-divider>
 		</div>
-		<div
-			class="grid-row-1 grid-column-3 input-grid bg-background"
-		>
+		<div class="grid-row-1 grid-column-3 input-grid bg-background">
 			<label
 				v-if="addressLabel"
 				for="search-input"
-				class="grid-row-1 grid-column-1 d-flex align-center text-grey-darken-2 px-2 font-weight-bold"
+				class="grid-row-1 grid-column-1 d-flex align-center text-grey-darken-2 px-4 font-weight-bold"
 			>
 				{{ addressLabel }}
 			</label>
@@ -71,7 +85,7 @@
 </template>
 
 <script lang="ts" setup>
-	import { computed, Ref, ref, toRefs } from 'vue';
+	import { computed, ref, toRefs } from 'vue';
 	import searchIcon from '../assets/magnifying.svg';
 	import { Address } from '../types/Address.type';
 
@@ -118,8 +132,12 @@
 		(event: 'submit'): void;
 	}>();
 
-	const showAddressSuggestions: Ref<boolean> = ref<boolean>(false);
-	const showSearchSuggestions: Ref<boolean> = ref<boolean>(false);
+	const showAddressSuggestions = ref<boolean>(false);
+	const showSearchSuggestions = ref<boolean>(false);
+	const activeSearchSuggestion = ref<number>(searchSuggestions.value.length);
+	const activeAddressSuggestion = ref<number>(
+		addressSuggestions.value.length
+	);
 
 	const computedSearchTypeahead = computed<string>(() => {
 		if (!searchTerm.value) return '';
@@ -175,8 +193,47 @@
 	const setSearchTerm = (value: string) => (computedSearchTerm.value = value);
 	const setAddress = (value: Address) => (computedAddress.value = value);
 
-	const hideSearchSuggestions = () => (showSearchSuggestions.value = false);
-	const hideAddressSuggestions = () => (showAddressSuggestions.value = false);
+	const hideSearchSuggestions = () => {
+		showSearchSuggestions.value = false;
+		activeSearchSuggestion.value = searchSuggestions.value.length;
+	};
+	const hideAddressSuggestions = () => {
+		showAddressSuggestions.value = false;
+		activeAddressSuggestion.value = addressSuggestions.value.length;
+	};
+
+	const onSearchTabbed = () => {
+		if (computedSearchTypeahead.value)
+			computedSearchTerm.value = computedSearchTypeahead.value;
+		if (showSearchSuggestions.value) hideSearchSuggestions();
+	};
+	const onAddressTabbed = () => {
+		if (computedAddressTypeahead.value)
+			computedAddress.value = {
+				description: computedAddressTypeahead.value,
+			};
+		if (showAddressSuggestions.value) hideAddressSuggestions();
+	};
+
+	const setActiveSearchSuggestion = (n: number) => {
+		let activeIndex: number = n;
+		if (n > searchSuggestions.value.length) activeIndex = 0;
+		if (n < 0) activeIndex = searchSuggestions.value.length;
+		activeSearchSuggestion.value = activeIndex;
+		if (activeIndex === searchSuggestions.value.length) return;
+		computedSearchTerm.value = searchSuggestions.value[activeIndex];
+	};
+	const setActiveAddressSuggestion = (n: number) => {
+		let activeIndex: number = n;
+		if (n > addressSuggestions.value.length) activeIndex = 0;
+		if (n < 0) activeIndex = addressSuggestions.value.length;
+		activeAddressSuggestion.value = activeIndex;
+		if (activeIndex === addressSuggestions.value.length) return;
+		computedAddress.value = addressSuggestions.value[activeIndex];
+	};
+
+    const hoverSearchSuggestion = (i: number) => (p: boolean) => activeSearchSuggestion.value = p ? i : searchSuggestions.value.length;
+    const hoverAddressSuggestion = (i: number) => (p: boolean) => activeAddressSuggestion.value = p ? i : addressSuggestions.value.length;
 </script>
 
 <style scoped>
