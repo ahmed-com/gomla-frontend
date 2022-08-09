@@ -19,24 +19,24 @@
 
 	type Props = {
 		text: string;
-		start: number | undefined;
-		end: number | undefined;
-		match: string | undefined;
+		start?: number;
+		end?: number;
+		match?: string;
 	};
 
 	const props: Props = defineProps<Props>();
 	const { text, start, end, match } = toRefs<Props>(props);
 
 	const startIndex = computed<number>(() => {
-		if (start.value !== undefined) return start.value;
-		if (match.value === undefined) return 0;
-		return text.value.indexOf(match.value);
+		if (start?.value !== undefined) return start?.value;
+		if (match?.value === undefined) return 0;
+		return text.value.indexOf(match?.value);
 	});
 
 	const endIndex = computed<number>(() => {
-		if (end.value !== undefined) return end.value;
-		if (match.value === undefined) return text.value.length;
-		return startIndex.value + match.value.length;
+		if (end?.value !== undefined) return end?.value;
+		if (match?.value === undefined) return text.value.length;
+		return startIndex.value + match?.value.length;
 	});
 
 	const part_1 = computed<string>(() =>
@@ -69,6 +69,6 @@
 	.marked {
 		margin-right: -0.2em;
 		margin-left: -0.2em;
-		color: transparent;
+		color: transparent !important;
 	}
 </style>
