@@ -5,7 +5,7 @@
 </script>
 
 <template>
-	<form @submit.prevent="emit('submit')" class="main-grid">
+	<form @submit.prevent="emit('submit')" class="main-grid elevation-6">
 		<div
 			class="grid-row-1 grid-column-1 input-grid rounded-ts pt-2 bg-background"
 			:class="{ 'rounded-bs': !showSearchSuggestions }"
@@ -41,7 +41,7 @@
 			<div class="h-0 grid-row-2 grid-column-1-3">
 			<v-scroll-y-transition>
 				<ul
-					class="bg-background w-100 pa-4 rounded-b list-style-none overflow-y-auto scrollbar-hidden suggestions-list"
+					class="bg-background w-100 pa-4 rounded-b list-style-none overflow-y-auto scrollbar-hidden suggestions-list elevation-compliment-6"
 					v-if="!!searchSuggestions.length && showSearchSuggestions"
 				>
 					<v-hover
@@ -99,7 +99,7 @@
 			<div class="h-0 grid-row-2 grid-column-1-3">
 			<v-scroll-y-transition>
 				<ul
-					class="bg-background w-100 pa-4 rounded-b list-style-none overflow-y-auto scrollbar-hidden suggestions-list"
+					class="bg-background w-100 pa-4 rounded-b list-style-none overflow-y-auto scrollbar-hidden suggestions-list elevation-compliment-6"
 					v-if="!!addressSuggestions.length && showAddressSuggestions"
 				>
 					<v-hover
