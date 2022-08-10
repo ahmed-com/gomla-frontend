@@ -39,8 +39,9 @@
 				id="search-input"
 			/>
 			<div class="h-0 grid-row-2 grid-column-1-3">
+			<v-scroll-y-transition>
 				<ul
-					class="bg-background w-100 pa-4 rounded-b list-style-none overflow-y-auto scrollbar-primary suggestions-list"
+					class="bg-background w-100 pa-4 rounded-b list-style-none overflow-y-auto scrollbar-hidden suggestions-list"
 					v-if="!!searchSuggestions.length && showSearchSuggestions"
 				>
 					<v-hover
@@ -61,6 +62,7 @@
 						</li>
 					</v-hover>
 				</ul>
+			</v-scroll-y-transition>
 			</div>
 		</div>
 		<div class="grid-row-1 grid-column-2 bg-grey">
