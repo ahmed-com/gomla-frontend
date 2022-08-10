@@ -57,6 +57,15 @@
     scrollbar-width: none;  /* Firefox */
 }
 
+.scrollbar-primary::-webkit-scrollbar{
+    width: 8px;
+}
+
+.scrollbar-primary::-webkit-scrollbar-thumb{
+    border-radius: 100vw;
+    background-color: rgb(var(--v-theme-primary));
+}
+
 .grid-row-1{
     grid-row: 1 !important;
 }

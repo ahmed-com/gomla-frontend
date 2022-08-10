@@ -5,7 +5,7 @@
 </script>
 
 <template>
-    <v-app-bar order="-1" density="prominent" :name="layoutName" absolute color="secondary" app>
+    <v-app-bar class="overflow-visible" order="-1" density="prominent" :name="layoutName" absolute color="secondary" app>
         <v-app-bar-nav-icon v-if="hasLeftDrawer" @click="toggleLeftDrawer"></v-app-bar-nav-icon>
         <main-search-form></main-search-form>
         <v-spacer></v-spacer>

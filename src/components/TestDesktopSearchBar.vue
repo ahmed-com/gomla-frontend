@@ -40,7 +40,7 @@
 			/>
 			<div class="h-0 grid-row-2 grid-column-1-3">
 				<ul
-					class="bg-background w-100 pa-4 rounded-b list-style-none"
+					class="bg-background w-100 pa-4 rounded-b list-style-none overflow-y-auto scrollbar-primary suggestions-list"
 					v-if="!!searchSuggestions.length && showSearchSuggestions"
 				>
 					<v-hover
@@ -50,7 +50,7 @@
                         v-slot="{props}"
 					>
 						<li
-							class="cursor-pointer pa-2 rounded"
+							class="cursor-pointer pa-2 rounded overflow-x-hidden"
 							:class="{
 								'bg-primary': activeSearchSuggestion === index,
 							}"
@@ -249,5 +249,9 @@
 
 	input[type='text']:focus-visible {
 		outline: none;
+	}
+
+	.suggestions-list{
+		max-height: 300px;
 	}
 </style>

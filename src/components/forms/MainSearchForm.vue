@@ -6,7 +6,7 @@
 
 <template>
     <test-desktop-search-bar 
-        class="w-100"
+        class="w-75"
         v-model:address="address"
         v-model:searchTerm="searchTerm"
         address-placeholder="Location"
@@ -28,7 +28,7 @@
 
     const address = ref<Address>({description: ''})
     const searchTerm = ref<string>('')
-    const searchSuggestions = ref<string[]>(['something 0',])
+    const searchSuggestions = ref<string[]>(['something 1', 'something 2', 'something 3', 'something 4', 'something 5', 'something 6'])
     const addressSuggestions = ref<Address[]>([])
     const searchTypeadead = ref<string>('restaurant')
     const addressTypeahead = ref<string>('')
