@@ -5,7 +5,7 @@
 </script>
 
 <template>
-    <test-desktop-search-bar 
+    <main-desktop-search-bar 
         class="w-75"
         v-model:address="address"
         v-model:searchTerm="searchTerm"
@@ -18,13 +18,13 @@
         search-label="Deal"
         address-label="Address"
         @submit="onSubmit"
-    ></test-desktop-search-bar>
+    ></main-desktop-search-bar>
 </template>
 
 <script setup lang="ts">
     import { ref, watch } from 'vue';
     import { Address } from '../../types/Address.type';
-    import TestDesktopSearchBar from '../TestDesktopSearchBar.vue';
+    import MainDesktopSearchBar from '../MainDesktopSearchBar.vue';
 
     const address = ref<Address>({description: ''})
     const searchTerm = ref<string>('')
