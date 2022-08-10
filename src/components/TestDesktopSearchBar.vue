@@ -19,7 +19,7 @@
 				{{ searchLabel }}
 			</label>
 			<span
-				class="grid-row-1 grid-column-2 d-flex align-center text-grey-lighten-1"
+				class="grid-row-1 grid-column-2 d-flex align-center text-grey-lighten-1 px-2"
 				>{{ computedSearchTypeahead }}</span
 			>
 			<input
@@ -32,7 +32,7 @@
 				@keydown.down.prevent="
 					setActiveSearchSuggestion(activeSearchSuggestion + 1)
 				"
-				class="grid-row-1 grid-column-2 bg-transparent text-black"
+				class="grid-row-1 grid-column-2 bg-transparent text-black px-2"
 				autocomplete="off"
 				:placeholder="searchPlaceholder"
 				v-model="computedSearchTerm"
