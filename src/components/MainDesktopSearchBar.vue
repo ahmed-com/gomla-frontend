@@ -285,7 +285,8 @@ import MarkableText from './MarkableText.vue';
     const hoverAddressSuggestion = (i: number) => (p: boolean) => activeAddressSuggestion.value = p ? i : addressSuggestions.value.length;
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+	@import '../styles/_variables.scss';
 	.main-grid {
 		display: inline-grid;
 		grid-template-columns: 1fr 1px 1fr auto;
@@ -301,6 +302,6 @@ import MarkableText from './MarkableText.vue';
 	}
 
 	.suggestions-list{
-		max-height: 300px;
+		max-height: $autocomplete-max-height;
 	}
 </style>
