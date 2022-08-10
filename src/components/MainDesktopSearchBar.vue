@@ -19,7 +19,7 @@
 				{{ searchLabel }}
 			</label>
 			<span
-				class="grid-row-1 grid-column-2 d-flex align-center text-grey-lighten-1 px-2"
+				class="grid-row-1 grid-column-2 d-flex align-center text-grey px-2"
 				>{{ computedSearchTypeahead }}</span
 			>
 			<input
@@ -58,7 +58,7 @@
 							@click="setSearchTerm(suggestion)"
                             v-bind="props"
 						>
-							{{ suggestion }}
+							<markable-text :text="suggestion" :match="computedSearchTerm"></markable-text>
 						</li>
 					</v-hover>
 				</ul>
@@ -77,7 +77,7 @@
 				{{ addressLabel }}
 			</label>
 			<span
-				class="grid-row-1 grid-column-2 d-flex align-center text-grey-lighten-1 px-2"
+				class="grid-row-1 grid-column-2 d-flex align-center text-grey px-2"
 				>{{ computedAddressTypeahead }}</span
 			>
 			<input
@@ -116,7 +116,7 @@
 							@click="setAddress(suggestion)"
                             v-bind="props"
 						>
-							{{ suggestion.description }}
+							<markable-text :text="suggestion.description" :match="computedAddress.description"></markable-text>
 						</li>
 					</v-hover>
 				</ul>
@@ -136,6 +136,7 @@
 	import { computed, ref, toRefs } from 'vue';
 	import searchIcon from '../assets/magnifying.svg';
 	import { Address } from '../types/Address.type';
+import MarkableText from './MarkableText.vue';
 
 	type Props = {
 		searchTerm: string;
