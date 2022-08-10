@@ -68,14 +68,60 @@
 		<div class="grid-row-1 grid-column-2 bg-grey">
 			<v-divider vertical></v-divider>
 		</div>
-		<div class="grid-row-1 grid-column-3 input-grid bg-background">
+		<div class="grid-row-1 grid-column-3 pt-2 input-grid bg-background" v-click-outside="hideAddressSuggestions">
 			<label
 				v-if="addressLabel"
-				for="search-input"
+				for="address-input"
 				class="grid-row-1 grid-column-1 d-flex align-center text-grey-darken-2 px-4 font-weight-bold"
 			>
 				{{ addressLabel }}
 			</label>
+			<span
+				class="grid-row-1 grid-column-2 d-flex align-center text-grey-lighten-1 px-2"
+				>{{ computedAddressTypeahead }}</span
+			>
+			<input
+				type="text"
+				@focus="showAddressSuggestions = true"
+				@keydown.tab="onAddressTabbed"
+				@keydown.up.prevent="
+					setActiveAddressSuggestion(activeAddressSuggestion - 1)
+				"
+				@keydown.down.prevent="
+					setActiveAddressSuggestion(activeAddressSuggestion + 1)
+				"
+				class="grid-row-1 grid-column-2 bg-transparent text-black px-2"
+				autocomplete="off"
+				:placeholder="addressPlaceholder"
+				v-model="computedAddress.description"
+				id="address-input"
+			/>
+			<div class="h-0 grid-row-2 grid-column-1-3">
+			<v-scroll-y-transition>
+				<ul
+					class="bg-background w-100 pa-4 rounded-b list-style-none overflow-y-auto scrollbar-hidden suggestions-list"
+					v-if="!!addressSuggestions.length && showAddressSuggestions"
+				>
+					<v-hover
+						v-for="(suggestion, index) in addressSuggestions"
+						:key="suggestion.description"
+                        @update:model-value="p => hoverAddressSuggestion(index)(p)"
+                        v-slot="{props}"
+					>
+						<li
+							class="cursor-pointer pa-2 rounded overflow-x-hidden"
+							:class="{
+								'bg-primary': activeAddressSuggestion === index,
+							}"
+							@click="setAddress(suggestion)"
+                            v-bind="props"
+						>
+							{{ suggestion.description }}
+						</li>
+					</v-hover>
+				</ul>
+			</v-scroll-y-transition>
+			</div>
 		</div>
 		<button
 			type="submit"
@@ -193,7 +239,7 @@
 	});
 
 	const setSearchTerm = (value: string) => (computedSearchTerm.value = value);
-	const setAddress = (value: Address) => (computedAddress.value = value);
+	const setAddress = ({description, point}: Address) => (computedAddress.value = {description, point});
 
 	const hideSearchSuggestions = () => {
 		showSearchSuggestions.value = false;
@@ -223,7 +269,7 @@
 		if (n < 0) activeIndex = searchSuggestions.value.length;
 		activeSearchSuggestion.value = activeIndex;
 		if (activeIndex === searchSuggestions.value.length) return;
-		computedSearchTerm.value = searchSuggestions.value[activeIndex];
+		setSearchTerm(searchSuggestions.value[activeIndex]);
 	};
 	const setActiveAddressSuggestion = (n: number) => {
 		let activeIndex: number = n;
@@ -231,7 +277,7 @@
 		if (n < 0) activeIndex = addressSuggestions.value.length;
 		activeAddressSuggestion.value = activeIndex;
 		if (activeIndex === addressSuggestions.value.length) return;
-		computedAddress.value = addressSuggestions.value[activeIndex];
+		setAddress(addressSuggestions.value[activeIndex]);
 	};
 
     const hoverSearchSuggestion = (i: number) => (p: boolean) => activeSearchSuggestion.value = p ? i : searchSuggestions.value.length;

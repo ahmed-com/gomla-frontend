@@ -29,7 +29,7 @@
     const address = ref<Address>({description: ''})
     const searchTerm = ref<string>('')
     const searchSuggestions = ref<string[]>(['something 1', 'something 2', 'something 3', 'something 4', 'something 5', 'something 6'])
-    const addressSuggestions = ref<Address[]>([])
+    const addressSuggestions = ref<Address[]>([{description: 'some address', point: {lat: 40, lng: 30}}])
     const searchTypeadead = ref<string>('restaurant')
     const addressTypeahead = ref<string>('')
 
