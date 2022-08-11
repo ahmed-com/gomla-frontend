@@ -39,36 +39,56 @@
 				id="search-input"
 			/>
 			<div class="h-0 grid-row-2 grid-column-1-3">
-			<v-scroll-y-transition>
-				<ul
-					class="bg-background w-100 pa-4 rounded-b list-style-none overflow-y-auto scrollbar-hidden suggestions-list elevation-compliment-6"
-					v-if="!!searchSuggestions.length && showSearchSuggestions"
-				>
-					<v-hover
-						v-for="(suggestion, index) in searchSuggestions"
-						:key="suggestion"
-                        @update:model-value="p => hoverSearchSuggestion(index)(p)"
-                        v-slot="{props}"
+				<v-scroll-y-transition>
+					<div
+						class="bg-background w-100 pa-4 rounded-b overflow-y-auto scrollbar-hidden suggestions-list elevation-compliment-6"
+						v-if="computedShowSearchSuggestions"
 					>
-						<li
-							class="cursor-pointer pa-2 rounded overflow-x-hidden"
-							:class="{
-								'bg-primary': activeSearchSuggestion === index,
-							}"
-							@click="setSearchTerm(suggestion)"
-                            v-bind="props"
+						<div
+							v-if="isSearchSuggestionsLoading"
+							class="center-grid w-100 py-4"
 						>
-							<markable-text :text="suggestion" :match="computedSearchTerm"></markable-text>
-						</li>
-					</v-hover>
-				</ul>
-			</v-scroll-y-transition>
+							<v-progress-circular
+								color="primary"
+								indeterminate
+							></v-progress-circular>
+						</div>
+						<ul class="list-style-none" v-else>
+							<v-hover
+								v-for="(suggestion, index) in searchSuggestions"
+								:key="suggestion"
+								@update:model-value="
+									(p) => hoverSearchSuggestion(index)(p)
+								"
+								v-slot="{ props }"
+							>
+								<li
+									class="cursor-pointer pa-2 rounded overflow-x-hidden"
+									:class="{
+										'bg-primary':
+											activeSearchSuggestion === index,
+									}"
+									@click="setSearchTerm(suggestion)"
+									v-bind="props"
+								>
+									<markable-text
+										:text="suggestion"
+										:match="computedSearchTerm"
+									></markable-text>
+								</li>
+							</v-hover>
+						</ul>
+					</div>
+				</v-scroll-y-transition>
 			</div>
 		</div>
 		<div class="grid-row-1 grid-column-2 bg-grey">
 			<v-divider vertical></v-divider>
 		</div>
-		<div class="grid-row-1 grid-column-3 pt-2 input-grid bg-background position-relative" v-click-outside="hideAddressSuggestions">
+		<div
+			class="grid-row-1 grid-column-3 pt-2 input-grid bg-background position-relative"
+			v-click-outside="hideAddressSuggestions"
+		>
 			<label
 				v-if="addressLabel"
 				for="address-input"
@@ -96,39 +116,68 @@
 				v-model="computedAddress.description"
 				id="address-input"
 			/>
-			<v-btn icon="mdi-crosshairs-gps" size="x-small" class="grid-row-1 grid-column-2 position-absolute position-right-0 ma-1"></v-btn>
+			<v-btn
+				icon="mdi-crosshairs-gps"
+				size="x-small"
+				class="grid-row-1 grid-column-2 position-absolute position-right-0 ma-1"
+			></v-btn>
 			<div class="h-0 grid-row-2 grid-column-1-3">
-			<v-scroll-y-transition>
-				<ul
-					class="bg-background w-100 pa-4 rounded-b list-style-none overflow-y-auto scrollbar-hidden suggestions-list elevation-compliment-6"
-					v-if="!!addressSuggestions.length && showAddressSuggestions"
-				>
-					<v-hover
-						v-for="(suggestion, index) in addressSuggestions"
-						:key="suggestion.description"
-                        @update:model-value="p => hoverAddressSuggestion(index)(p)"
-                        v-slot="{props}"
+				<v-scroll-y-transition>
+					<div
+						class="bg-background w-100 pa-4 rounded-b overflow-y-auto scrollbar-hidden suggestions-list elevation-compliment-6"
+						v-if="computedShowAddressSuggestions"
 					>
-						<li
-							class="cursor-pointer pa-2 rounded overflow-x-hidden"
-							:class="{
-								'bg-primary': activeAddressSuggestion === index,
-							}"
-							@click="setAddress(suggestion)"
-                            v-bind="props"
+						<div
+							v-if="isAddressSuggestionsLoading"
+							class="center-grid w-100 py-4"
 						>
-							<markable-text :text="suggestion.description" :match="computedAddress.description"></markable-text>
-						</li>
-					</v-hover>
-				</ul>
-			</v-scroll-y-transition>
+							<v-progress-circular
+								color="primary"
+								indeterminate
+							></v-progress-circular>
+						</div>
+						<ul class="list-style-none" v-else>
+							<v-hover
+								v-for="(
+									suggestion, index
+								) in addressSuggestions"
+								:key="suggestion.description"
+								@update:model-value="
+									(p) => hoverAddressSuggestion(index)(p)
+								"
+								v-slot="{ props }"
+							>
+								<li
+									class="cursor-pointer pa-2 rounded overflow-x-hidden"
+									:class="{
+										'bg-primary':
+											activeAddressSuggestion === index,
+									}"
+									@click="setAddress(suggestion)"
+									v-bind="props"
+								>
+									<markable-text
+										:text="suggestion.description"
+										:match="computedAddress.description"
+									></markable-text>
+								</li>
+							</v-hover>
+						</ul>
+					</div>
+				</v-scroll-y-transition>
 			</div>
 		</div>
 		<button
 			type="submit"
 			class="px-5 py-3 grid-row-1 grid-column-4 bg-primary rounded-e"
 		>
-			<img width="20" :src="searchIcon" alt="" />
+			<v-progress-circular
+				size="25"
+				indeterminate
+				color="secondary"
+				v-if="isSubmitting"
+			></v-progress-circular>
+			<img v-else width="20" :src="searchIcon" alt="" />
 		</button>
 	</form>
 </template>
@@ -137,7 +186,7 @@
 	import { computed, ref, toRefs } from 'vue';
 	import searchIcon from '../assets/magnifying.svg';
 	import { Address } from '../types/Address.type';
-import MarkableText from './MarkableText.vue';
+	import MarkableText from './MarkableText.vue';
 
 	type Props = {
 		searchTerm: string;
@@ -148,6 +197,9 @@ import MarkableText from './MarkableText.vue';
 		addressTypeahead: string;
 		searchSuggestions: string[];
 		addressSuggestions: Address[];
+		isSearchSuggestionsLoading: boolean;
+		isAddressSuggestionsLoading: boolean;
+		isSubmitting: boolean;
 		searchLabel?: string;
 		addressLabel?: string;
 	};
@@ -159,6 +211,9 @@ import MarkableText from './MarkableText.vue';
 		addressPlaceholder: '',
 		searchTypeahead: '',
 		addressTypeahead: '',
+		isAddressSuggestionsLoading: false,
+		isSearchSuggestionsLoading: false,
+		isSubmitting: false,
 		searchSuggestions: () => [],
 		addressSuggestions: () => [],
 	});
@@ -174,6 +229,9 @@ import MarkableText from './MarkableText.vue';
 		addressSuggestions,
 		searchTypeahead,
 		addressTypeahead,
+		isSubmitting,
+		isSearchSuggestionsLoading,
+		isAddressSuggestionsLoading,
 	} = toRefs(props);
 
 	const emit = defineEmits<{
@@ -221,6 +279,18 @@ import MarkableText from './MarkableText.vue';
 			)
 		);
 	});
+	const computedShowSearchSuggestions = computed<boolean>(
+		() =>
+			showSearchSuggestions.value &&
+			(isSearchSuggestionsLoading.value ||
+				!!searchSuggestions.value.length)
+	);
+	const computedShowAddressSuggestions = computed<boolean>(
+		() =>
+			showAddressSuggestions.value &&
+			(isAddressSuggestionsLoading.value ||
+				!!addressSuggestions.value.length)
+	);
 	const computedSearchTerm = computed<string>({
 		get() {
 			return searchTerm.value;
@@ -241,7 +311,8 @@ import MarkableText from './MarkableText.vue';
 	});
 
 	const setSearchTerm = (value: string) => (computedSearchTerm.value = value);
-	const setAddress = ({description, point}: Address) => (computedAddress.value = {description, point});
+	const setAddress = ({ description, point }: Address) =>
+		(computedAddress.value = { description, point });
 
 	const hideSearchSuggestions = () => {
 		showSearchSuggestions.value = false;
@@ -282,8 +353,12 @@ import MarkableText from './MarkableText.vue';
 		setAddress(addressSuggestions.value[activeIndex]);
 	};
 
-    const hoverSearchSuggestion = (i: number) => (p: boolean) => activeSearchSuggestion.value = p ? i : searchSuggestions.value.length;
-    const hoverAddressSuggestion = (i: number) => (p: boolean) => activeAddressSuggestion.value = p ? i : addressSuggestions.value.length;
+	const hoverSearchSuggestion = (i: number) => (p: boolean) =>
+		(activeSearchSuggestion.value = p ? i : searchSuggestions.value.length);
+	const hoverAddressSuggestion = (i: number) => (p: boolean) =>
+		(activeAddressSuggestion.value = p
+			? i
+			: addressSuggestions.value.length);
 </script>
 
 <style scoped lang="scss">
@@ -302,7 +377,7 @@ import MarkableText from './MarkableText.vue';
 		outline: none;
 	}
 
-	.suggestions-list{
+	.suggestions-list {
 		max-height: $autocomplete-max-height;
 	}
 </style>
