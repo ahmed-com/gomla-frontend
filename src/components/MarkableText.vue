@@ -6,7 +6,7 @@
 
 <template>
 	<span class="the-component">
-		<span class="markable"
+		<span v-if="isMarkable" class="markable"
 			>{{ part_1 }} <mark class="marked bg-mark">{{ marked }}</mark>
 			{{ part_2 }}
 		</span>
@@ -48,6 +48,12 @@
 	const marked = computed<string>(() =>
 		text.value.slice(startIndex.value, endIndex.value)
 	);
+	const isMarkable = computed<boolean>(()=> {
+		if(start?.value !== undefined && start.value < 0) return false;
+		if(end?.value !== undefined && end.value > text.value.length) return false;
+		if(match?.value !== undefined && match.value.length > text.value.length) return false;
+		return true;
+	})
 </script>
 
 <style scoped>

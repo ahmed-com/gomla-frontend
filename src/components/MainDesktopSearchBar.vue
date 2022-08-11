@@ -68,7 +68,7 @@
 		<div class="grid-row-1 grid-column-2 bg-grey">
 			<v-divider vertical></v-divider>
 		</div>
-		<div class="grid-row-1 grid-column-3 pt-2 input-grid bg-background" v-click-outside="hideAddressSuggestions">
+		<div class="grid-row-1 grid-column-3 pt-2 input-grid bg-background position-relative" v-click-outside="hideAddressSuggestions">
 			<label
 				v-if="addressLabel"
 				for="address-input"
@@ -96,6 +96,7 @@
 				v-model="computedAddress.description"
 				id="address-input"
 			/>
+			<v-btn icon="mdi-crosshairs-gps" size="x-small" class="grid-row-1 grid-column-2 position-absolute position-right-0 ma-1"></v-btn>
 			<div class="h-0 grid-row-2 grid-column-1-3">
 			<v-scroll-y-transition>
 				<ul
