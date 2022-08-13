@@ -104,7 +104,8 @@
 			<v-btn
 				icon="mdi-crosshairs-gps"
 				size="x-small"
-				class="grid-row-1 grid-column-2 position-absolute position-right-0 ma-1"
+				class="bg-background grid-row-1 grid-column-2 position-absolute position-right-0 ma-1"
+				color="primary"
 			></v-btn>
 			<div class="h-0 grid-row-2 grid-column-1-3">
 				<v-scroll-y-transition>

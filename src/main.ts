@@ -7,6 +7,7 @@ import router from './router';
 import i18n from './plugins/i18n';
 
 import './styles/utils.css'
+import './styles/reset.css'
 
 const pinia = createPinia();
 loadFonts();
