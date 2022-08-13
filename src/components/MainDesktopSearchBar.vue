@@ -18,9 +18,10 @@
 			>
 				{{ searchLabel }}
 			</label>
-			<span class="grid-row-1 grid-column-2 d-flex align-center text-grey px-2">{{
-				computedSearchTypeahead
-			}}</span>
+			<span
+				class="grid-row-1 grid-column-2 d-flex align-center text-grey px-2 white-space-nowrap overflow-x-hidden"
+				>{{ computedSearchTypeahead }}</span
+			>
 			<input
 				type="text"
 				@focus="showSearchSuggestions = true"
@@ -56,6 +57,7 @@
 									}"
 									@click="setSearchTerm(suggestion)"
 									v-bind="props"
+									ref="searchSuggestionsEls"
 								>
 									<markable-text :text="suggestion" :match="computedSearchTerm"></markable-text>
 								</li>
@@ -79,9 +81,10 @@
 			>
 				{{ addressLabel }}
 			</label>
-			<span class="grid-row-1 grid-column-2 d-flex align-center text-grey px-2">{{
-				computedAddressTypeahead
-			}}</span>
+			<span
+				class="grid-row-1 grid-column-2 d-flex align-center text-grey px-2 white-space-nowrap overflow-x-hidden"
+				>{{ computedAddressTypeahead }}</span
+			>
 			<input
 				type="text"
 				@focus="showAddressSuggestions = true"
@@ -116,12 +119,13 @@
 								v-slot="{ props }"
 							>
 								<li
-									class="cursor-pointer pa-2 rounded overflow-x-hidden"
+									class="cursor-pointer pa-2 rounded overflow-x-hidden white-space-nowrap"
 									:class="{
 										'bg-primary': activeAddressSuggestion === index,
 									}"
 									@click="setAddress(suggestion)"
 									v-bind="props"
+									ref="addressSuggestionsEls"
 								>
 									<markable-text
 										:text="suggestion.description"
@@ -146,6 +150,8 @@
 	import searchIcon from '../assets/magnifying.svg';
 	import { Address } from '../types/Address.type';
 	import MarkableText from './MarkableText.vue';
+	import { scrollIntoView } from '../utils/scrollIntoView';
+	import componentsConfig from '../config/components.config.json';
 
 	type Props = {
 		searchTerm: string;
@@ -203,14 +209,17 @@
 	const showSearchSuggestions = ref<boolean>(false);
 	const activeSearchSuggestion = ref<number>(searchSuggestions.value.length);
 	const activeAddressSuggestion = ref<number>(addressSuggestions.value.length);
+	const searchSuggestionsEls = ref<null | HTMLElement[]>([]);
+	const addressSuggestionsEls = ref<null | HTMLElement[]>([]);
 
 	const computedSearchTypeahead = computed<string>(() => {
-		if (!searchTerm.value) return '';
+		if (!searchTerm.value || searchTerm.value.length >= componentsConfig.typeadheadMaxLength) return '';
 		if (!searchTypeahead.value.toLowerCase().startsWith(searchTerm.value.toLowerCase())) return '';
 		return searchTerm.value + searchTypeahead.value.slice(searchTerm.value.length, searchTypeahead.value.length);
 	});
 	const computedAddressTypeahead = computed<string>(() => {
-		if (!address.value.description) return '';
+		if (!address.value.description || address.value.description.length >= componentsConfig.typeadheadMaxLength)
+			return '';
 		if (!addressTypeahead.value.toLowerCase().startsWith(address.value.description.toLowerCase())) return '';
 		return (
 			address.value.description +
@@ -272,6 +281,7 @@
 		if (n < 0) activeIndex = searchSuggestions.value.length;
 		activeSearchSuggestion.value = activeIndex;
 		if (activeIndex === searchSuggestions.value.length) return;
+		scrollIntoView(searchSuggestionsEls.value![activeIndex], { behavior: 'auto', block: 'end', inline: 'nearest' });
 		setSearchTerm(searchSuggestions.value[activeIndex]);
 	};
 	const setActiveAddressSuggestion = (n: number) => {
@@ -280,6 +290,11 @@
 		if (n < 0) activeIndex = addressSuggestions.value.length;
 		activeAddressSuggestion.value = activeIndex;
 		if (activeIndex === addressSuggestions.value.length) return;
+		scrollIntoView(addressSuggestionsEls.value![activeIndex], {
+			behavior: 'auto',
+			block: 'end',
+			inline: 'nearest',
+		});
 		setAddress(addressSuggestions.value[activeIndex]);
 	};
 

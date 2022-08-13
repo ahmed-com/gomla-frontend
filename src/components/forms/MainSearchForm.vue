@@ -25,16 +25,17 @@
 </template>
 
 <script setup lang="ts">
-	import { computed, ref } from 'vue';
+	import { computed, ref, watchEffect } from 'vue';
 	import { Address } from '../../types/Address.type';
 	import MainDesktopSearchBar from '../MainDesktopSearchBar.vue';
 	import { autoCompleteAddress } from '../../utils/autoCompleteAddress';
+	import { any, propEq } from 'ramda';
 
 	const address = ref<Address>({ description: '' });
 	const searchTerm = ref<string>('');
+	const incompleteAddress = ref<string>('');
 
-	const { data, isFetching: isAddressSuggestionsLoading } =
-		autoCompleteAddress(address, { refetch: true });
+	const { data, isFetching: isAddressSuggestionsLoading } = autoCompleteAddress(incompleteAddress, { refetch: true });
 	const addressSuggestions = computed<Address[]>(
 		() =>
 			data.value?.map?.((res) => ({
@@ -45,6 +46,14 @@
 				},
 			})) || []
 	);
+	const isAddressComplete = computed<boolean>(() =>
+		any(propEq('description', address.value.description), addressSuggestions.value)
+	);
+
+	watchEffect(() => {
+		if (!isAddressComplete.value) incompleteAddress.value = address.value.description;
+	});
+
 	const searchSuggestions = ref<string[]>([
 		'كلام عربي',
 		'something 2',
@@ -52,6 +61,11 @@
 		'something 4',
 		'something 5',
 		'something 6',
+		'another something 2',
+		'another something 3',
+		'another something 4',
+		'another something 5',
+		'another something 6',
 	]);
 	const searchTypeadead = ref<string>('restaurant');
 
