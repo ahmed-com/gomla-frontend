@@ -51,7 +51,7 @@
 								v-slot="{ props }"
 							>
 								<li
-									class="cursor-pointer pa-2 rounded overflow-x-hidden"
+									class="cursor-pointer pa-2 rounded overflow-x-hidden white-space-nowrap"
 									:class="{
 										'bg-primary': activeSearchSuggestion === index,
 									}"
