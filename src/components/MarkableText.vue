@@ -22,10 +22,11 @@
 		start?: number;
 		end?: number;
 		match?: string;
+		unmark?: boolean;
 	};
 
 	const props: Props = defineProps<Props>();
-	const { text, start, end, match } = toRefs<Props>(props);
+	const { text, start, end, match, unmark } = toRefs<Props>(props);
 
 	const startIndex = computed<number>(() => {
 		if (start?.value !== undefined) return start?.value;
@@ -49,6 +50,7 @@
 		text.value.slice(startIndex.value, endIndex.value)
 	);
 	const isMarkable = computed<boolean>(()=> {
+		if(unmark?.value) return false;
 		if(start?.value !== undefined && start.value < 0) return false;
 		if(end?.value !== undefined && end.value > text.value.length) return false;
 		if(match?.value !== undefined && match.value.length > text.value.length) return false;

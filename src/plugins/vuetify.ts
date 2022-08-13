@@ -18,6 +18,11 @@ export default createVuetify({
   locale: createVueI18nAdapter({ i18n, useI18n}),
   theme: {
     defaultTheme: import.meta.env.VITE_DEFAULT_THEME,
+    variations: {
+      colors: ['primary', 'secondary'],
+      lighten: 4,
+      darken: 2
+    },
     themes
   }
 })

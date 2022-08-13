@@ -53,13 +53,17 @@
 								<li
 									class="cursor-pointer pa-2 rounded overflow-x-hidden white-space-nowrap"
 									:class="{
-										'bg-primary': activeSearchSuggestion === index,
+										'bg-primary-lighten-3': activeSearchSuggestion === index,
 									}"
 									@click="setSearchTerm(suggestion)"
 									v-bind="props"
 									ref="searchSuggestionsEls"
 								>
-									<markable-text :text="suggestion" :match="computedSearchTerm"></markable-text>
+									<markable-text
+										:unmark="activeSearchSuggestion === index"
+										:text="suggestion"
+										:match="computedSearchTerm"
+									></markable-text>
 								</li>
 							</v-hover>
 						</ul>
@@ -121,13 +125,14 @@
 								<li
 									class="cursor-pointer pa-2 rounded overflow-x-hidden white-space-nowrap"
 									:class="{
-										'bg-primary': activeAddressSuggestion === index,
+										'bg-primary-lighten-3': activeAddressSuggestion === index,
 									}"
 									@click="setAddress(suggestion)"
 									v-bind="props"
 									ref="addressSuggestionsEls"
 								>
 									<markable-text
+										:unmark="activeAddressSuggestion === index"
 										:text="suggestion.description"
 										:match="computedAddress.description"
 									></markable-text>
