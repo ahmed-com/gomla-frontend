@@ -101,12 +101,13 @@
 				v-model="computedAddress.description"
 				id="address-input"
 			/>
-			<v-btn
-				icon="mdi-crosshairs-gps"
-				size="x-small"
-				class="bg-background grid-row-1 grid-column-2 position-absolute position-right-0 ma-1"
-				color="primary"
-			></v-btn>
+			<slot
+				name="address-inner-end"
+				:props="{
+					class: 'grid-row-1 grid-column-2 position-absolute position-right-0 ma-1',
+				}"
+			>
+			</slot>
 			<div class="h-0 grid-row-2 grid-column-1-3">
 				<v-scroll-y-transition>
 					<div
