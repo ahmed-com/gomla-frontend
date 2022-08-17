@@ -5,12 +5,12 @@
 </script>
 
 <template>
-	<span class="the-component">
-		<span v-if="isMarkable" class="markable"
-			>{{ part_1 }} <mark class="marked bg-mark">{{ marked }}</mark>
+	<span class="d-inline-grid">
+		<span v-if="isMarkable" class="grid-row-1 grid-column-1 no-pointer-events text-transparent white-space-pre"
+			>{{ part_1 }} <mark class="trimmed text-transparent bg-mark">{{ marked }}</mark>
 			{{ part_2 }}
 		</span>
-		<span class="shown">{{ text }}</span>
+		<span class="grid-row-1 grid-column-1">{{ text }}</span>
 	</span>
 </template>
 
@@ -59,24 +59,11 @@
 </script>
 
 <style scoped>
-	.the-component {
-		display: inline-grid;
+	.text-transparent{
+		color: transparent !important;
 	}
-
-	.markable {
-		color: transparent;
-		pointer-events: none;
-	}
-
-	.markable,
-	.shown {
-		grid-row: 1;
-		grid-column: 1;
-	}
-
-	.marked {
+	.trimmed {
 		margin-right: -0.2em;
 		margin-left: -0.2em;
-		color: transparent !important;
 	}
 </style>

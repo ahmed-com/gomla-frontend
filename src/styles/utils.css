@@ -119,3 +119,11 @@
     white-space: nowrap !important;
     text-overflow: ellipsis !important;
 }
+
+.white-space-pre{
+    white-space: pre !important;
+}
+
+.d-inline-grid{
+    display: inline-grid !important;
+}
