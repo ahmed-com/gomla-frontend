@@ -22,10 +22,20 @@ export default {
         @import="importData"
     >
         <template #create-btn="props">
-            <v-btn v-bind="props">Create</v-btn>
+          <v-tooltip location="top">
+            <template #activator="{ props }">
+              <v-btn class="d-inline bg-primary mx-2" icon="mdi-table-plus"  v-bind="props"></v-btn>
+            </template>
+            <span>Create</span>
+          </v-tooltip>
         </template>
         <template #filter-btn="props">
-            <v-btn v-bind="props">Filter</v-btn>
+          <v-tooltip location="bottom">
+            <template #activator="{ props }">
+              <v-btn class="d-inline bg-primary mx-2" icon="mdi-filter"  v-bind="props"></v-btn>
+            </template>
+            <span>Filter</span>
+          </v-tooltip>
         </template>
     </data-table>
 </template>

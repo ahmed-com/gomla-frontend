@@ -5,10 +5,13 @@ export default {
 </script>
 
 <template>
-  <v-btn density="compact" class="d-inline mx-2" color="primary">
-    <v-icon>mdi-upload</v-icon>
-    {{ t('components.DataTable.import') }}
-  </v-btn>
+  <v-tooltip location="top">
+    <template #activator="{ props }">
+      <v-btn v-bind="props" icon="mdi-upload" class="d-inline mx-2" color="primary">
+      </v-btn>
+    </template>
+    <span>{{ t('components.DataTable.import') }}</span>
+  </v-tooltip>
 </template>
 
 <script setup lang="ts">

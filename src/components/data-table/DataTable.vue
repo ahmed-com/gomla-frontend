@@ -22,8 +22,8 @@ export default {
             type="text">
         </div>
         <div>
-          <export-x-l-s-x :page-table="pageTable" :filename="props.title"></export-x-l-s-x>
-          <print-table :page-table="pageTable"></print-table>
+          <export-x-l-s-x :page-table="pageTable" :filename="props.title" :disabled="loadingError || isLoading"></export-x-l-s-x>
+          <print-table :page-table="pageTable" :disabled="loadingError || isLoading"></print-table>
           <slot class="d-inline mx-2" color="primary" name="filter-btn"></slot>
         </div>
       </div>

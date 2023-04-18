@@ -5,10 +5,13 @@ export default {
 </script>
 
 <template>
-    <v-btn density="compact" :disabled="!pageTable" class="d-inline mx-2" color="primary" @click="exportXLSX">
-        <v-icon>mdi-download</v-icon>
-        {{ t('components.DataTable.export') }}
-    </v-btn>
+    <v-tooltip location="bottom">
+        <template #activator="{ props }">
+            <v-btn v-bind="props" :disabled="!pageTable" icon="mdi-download" class="d-inline mx-2" color="primary">
+            </v-btn>
+        </template>
+        <span>{{ t('components.DataTable.export') }}</span>
+    </v-tooltip>
 </template>
 
 <script setup lang="ts">

@@ -5,10 +5,13 @@ export default {
 </script>
 
 <template>
-  <v-btn density="compact" :disabled="!pageTable" class="d-inline mx-2" color="primary" @click="printTable">
-    <v-icon>mdi-printer</v-icon>
-    {{ t('components.DataTable.print') }}
-  </v-btn>
+  <v-tooltip location="bottom">
+    <template #activator="{ props }">
+      <v-btn v-bind="props" icon="mdi-printer" class="d-inline mx-2" color="primary" @click="printTable">
+      </v-btn>
+    </template>
+    <span>{{ t('components.DataTable.print') }}</span>
+  </v-tooltip>
 </template>
 
 <script setup lang="ts">
