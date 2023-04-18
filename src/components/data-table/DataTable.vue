@@ -18,7 +18,7 @@ export default {
       <div class="d-flex justify-space-between">
         <div class="text-h6">
           {{ t('components.DataTable.search') }}:
-          <input :disabled="!!loadingError || isLoading" class="bg-surface rounded-lg px-2" :placeholder="t('components.DataTable.typeHere')" v-model="props.searchTerm"
+          <input :disabled="!!loadingError" class="bg-surface rounded-lg px-2" :placeholder="t('components.DataTable.typeHere')" v-model="searchTerm"
             type="text">
         </div>
         <div>
@@ -28,7 +28,7 @@ export default {
         </div>
       </div>
     </div>
-    <v-progress-linear v-if="isLoading" height="8" indeterminate color="primary"></v-progress-linear>
+    <v-progress-linear v-if="props.isLoading" height="8" indeterminate color="primary"></v-progress-linear>
     <div class="rounded-b-lg pa-4 overflow-x-auto">
       <div v-if="props.isLoading" class="d-flex justify-center">
         <v-progress-circular indeterminate size="100" width="10" color="primary"></v-progress-circular>
@@ -70,9 +70,9 @@ export default {
     <div class="pa-4 d-flex justify-start">
       <label for="items-per-page" class="d-inline mt-4 text-primary-darken-1 font-weight-bold">
         {{ t('components.DataTable.itemsPerPage') }}
-        <input class="width-50" type="number" id="items-per-page" v-model="props.itemsPerPage">
+        <input class="width-50" type="number" id="items-per-page" v-model="itemsPerPage">
       </label>
-        <v-pagination v-model="props.currentPage" :length="paginationLenght" :total-visible="componentsConfig.paginationTotalVisible"></v-pagination>
+        <v-pagination rounded="circle" v-model="currentPage" :length="paginationLenght" :total-visible="componentsConfig.paginationTotalVisible"></v-pagination>
     </div>
   </div>
 </div>
@@ -80,7 +80,7 @@ export default {
 
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
-import { ref, computed, onBeforeMount } from 'vue';
+import { ref, computed, onBeforeMount, toRefs } from 'vue';
 import { SortBy } from '../../types/SortBy.type';
 import { TableHeader, TableRow } from '../../types/TableData.type';
 import componentsConfig from '../../config/components.config.json';
@@ -90,12 +90,11 @@ import ExportXLSX from './ExportXLSX.vue';
 import { HttpError } from '../../types/HttpError.type';
 
 const pageTable = ref<HTMLElement | null>(null);
-
 const { t } = useI18n();
 
-const props = defineProps<{
+type Props = {
   title: string;
-  pageData: Array<TableRow>;
+  pageData: TableRow[];
   itemsPerPage: number;
   searchTerm: string;
   currentPage: number;
@@ -106,9 +105,7 @@ const props = defineProps<{
   headers: TableHeader[];
   importTemplateHeaders: string[];
   loadingError: HttpError | null;
-}>();
-
-const paginationLenght = computed(() => Math.ceil(props.dataLength / props.itemsPerPage));
+};
 
 const emit = defineEmits<{
   (event: 'update:searchTerm', value: string): void;
@@ -117,6 +114,35 @@ const emit = defineEmits<{
   (event: 'update:sortBy', value: SortBy[]): void;
   (event: 'import', value: Array<any>): void;
 }>();
+
+const props: Props = withDefaults(defineProps<Props>(), {
+  title: '',
+  itemsPerPage: 10,
+  searchTerm: '',
+  currentPage: 1,
+  isLoading: false,
+  dataLength: 0,
+  loadingError: null,
+});
+
+const refProps = toRefs(props);
+
+const searchTerm = computed({
+  get: () => refProps.searchTerm.value,
+  set: (value: string) => emit('update:searchTerm', value),
+});
+
+const currentPage = computed({
+  get: () => refProps.currentPage.value,
+  set: (value: number) => emit('update:currentPage', value),
+});
+
+const itemsPerPage = computed({
+  get: () => refProps.itemsPerPage.value,
+  set: (value: number) => emit('update:itemsPerPage', value),
+});
+
+const paginationLenght = computed(() => Math.ceil(refProps.dataLength.value / refProps.itemsPerPage.value));
 
 </script>
 

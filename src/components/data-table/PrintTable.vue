@@ -13,6 +13,7 @@ export default {
 
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
+import { defineProps, onUnmounted } from 'vue';
 
 const { t } = useI18n();
 
@@ -59,5 +60,9 @@ function printTable(){
   hiddenFrame.style.height = "0";
   hiddenFrame.style.border = "none";
   document.body.appendChild(hiddenFrame);
+
+  onUnmounted(() => {
+    document.body.removeChild(hiddenFrame);
+  });
 }
 </script>

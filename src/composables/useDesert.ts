@@ -8,25 +8,23 @@ import { useDebouncedRefHistory } from "@vueuse/core";
 type Response = Array<Desert> & { total: number };
 
 export const useDeserts = (
-    filters: {
-        searchTerm: Ref<string>;
-        limit: Ref<number>;
-        offset: Ref<number>;
-        sortBy: Ref<SortBy[]>;
-    },
+    searchTerm: Ref<string>,
+    limit: Ref<number>,
+    offset: Ref<number>,
+    sortBy: Ref<SortBy[]>,
     useFetchOptions: UseFetchOptions
 ) => {
-    const { last } = useDebouncedRefHistory(filters.searchTerm, {
+    const { last } = useDebouncedRefHistory(searchTerm, {
         capacity: 1,
         debounce: 300,
     });
     const url = computed<string>(() => {
         const query = new URLSearchParams({
             q: last.value.snapshot,
-            _limit: filters.limit.value.toString(),
-            _start: filters.offset.value.toString(),
-            _sort: filters.sortBy.value.map((s) => s.field).join(","),
-            _order: filters.sortBy.value.map((s) => s.direction).join(",")
+            _limit: limit.value.toString(),
+            _start: offset.value.toString(),
+            _sort: sortBy.value.map((s) => s.field).join(","),
+            _order: sortBy.value.map((s) => s.direction).join(",")
         });
         return `deserts?${query.toString()}`;
     });

@@ -12,12 +12,12 @@ export default {
         v-model:search-term="searchTerm"
         v-model:sort-by="sortBy"
         :page-data="pageData"
-        :is-loading="false"
-        :data-length="data.total"
+        :is-loading="isFetching"
+        :data-length="data ? data.total : 0"
         :markable-fields="['name']"
         :import-template-headers="headers.map(header => header.text)"
         title="Deserts"
-        :loading-error="null"
+        :loading-error="error"
         :headers="headers"
         @import="importData"
     >
@@ -36,14 +36,22 @@ import DataTable from '../components/data-table/DataTable.vue';
 import { Desert } from '../types/Desert.type';
 import { SortBy } from '../types/SortBy.type';
 import { TableHeader, TableRow } from '../types/TableData.type';
+import { useDeserts } from '../composables/useDesert';
 
-const itemsPerPage = ref(10);
+const itemsPerPage = ref(5);
 const currentPage = ref(1);
 const searchTerm = ref('');
 const sortBy = ref<SortBy[]>([]);
-const data = ref<Desert[] & {total: number}>(Object.assign([], {total: 0}));
 
-const pageData = computed<TableRow[]>(()=> data.value.map((desert: Desert) => {
+const { data, error, isFetching } = useDeserts(
+  searchTerm,
+  itemsPerPage,
+  computed(() => (currentPage.value - 1) * itemsPerPage.value),
+  sortBy,
+  { immediate: true, refetch: true}
+);
+
+const pageData = computed<TableRow[]>(()=> data.value ? data.value.map((desert: Desert) => {
   return {
     id: desert.id,
     textData: [desert.name, desert.calories, desert.fat, desert.carbs, desert.protein, desert.iron],
@@ -61,7 +69,7 @@ const pageData = computed<TableRow[]>(()=> data.value.map((desert: Desert) => {
     ],
     view : (id: string | number) => console.log(id + ' View')
   }
-}));
+}) : []);
 
 const importData = (data: Desert[]) => {
   console.log(data);
