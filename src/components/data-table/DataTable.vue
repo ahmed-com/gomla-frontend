@@ -12,7 +12,7 @@ export default {
         <div>
           <slot class="d-inline mx-2" color="primary" name="create-btn">
           </slot>
-          <import-x-l-s-x :import-template-headers="props.importTemplateHeaders"></import-x-l-s-x>
+          <import-x-l-s-x :import-template-headers="props.importTemplateHeaders" :disabled="props.isLoading"></import-x-l-s-x>
         </div>
       </div>
       <div class="d-flex justify-space-between">
@@ -22,18 +22,25 @@ export default {
             type="text">
         </div>
         <div>
-          <export-x-l-s-x :page-table="pageTable" :filename="props.title" :disabled="loadingError || isLoading"></export-x-l-s-x>
-          <print-table :page-table="pageTable" :disabled="loadingError || isLoading"></print-table>
+          <export-x-l-s-x :page-table="pageTable" :filename="props.title" :disabled="!!props.loadingError || props.isLoading"></export-x-l-s-x>
+          <print-table :page-table="pageTable" :disabled="!!props.loadingError || props.isLoading"></print-table>
           <slot class="d-inline mx-2" color="primary" name="filter-btn"></slot>
         </div>
       </div>
     </div>
     <v-progress-linear v-if="props.isLoading" height="8" indeterminate color="primary"></v-progress-linear>
-    <div class="rounded-b-lg pa-4 overflow-x-auto">
-      <div v-if="props.isLoading" class="d-flex justify-center">
+    <div class="rounded-b-lg pa-4 overflow-x-auto position-relative">
+      <!-- <div v-if="props.isLoading" class="d-flex position-absolute w-100 justify-center">
         <v-progress-circular indeterminate size="100" width="10" color="primary"></v-progress-circular>
-      </div>
-      <div v-else-if="props.loadingError" class="d-flex align-center flex-column">
+      </div> -->
+      <v-overlay
+        v-model="props.isLoading"
+        contained
+        class="d-flex position-absolute w-100 justify-center align-center"
+      >
+      <v-progress-circular indeterminate size="100" width="10" color="primary"></v-progress-circular>
+      </v-overlay>
+      <div v-if="props.loadingError" class="d-flex align-center flex-column">
         <h2 class="text-h1 text-error">{{ loadingError?.status }}</h2>
         <h2 class="text-h3 text-error">{{ loadingError?.message }}</h2>
       </div>

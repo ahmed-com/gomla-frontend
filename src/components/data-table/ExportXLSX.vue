@@ -7,7 +7,7 @@ export default {
 <template>
     <v-tooltip location="bottom">
         <template #activator="{ props }">
-            <v-btn v-bind="props" :disabled="!pageTable" icon="mdi-download" class="d-inline mx-2" color="primary">
+            <v-btn v-bind="props" :disabled="!pageTable || disabled" icon="mdi-download" class="d-inline mx-2" color="primary">
             </v-btn>
         </template>
         <span>{{ t('components.DataTable.export') }}</span>
@@ -23,6 +23,7 @@ const { t } = useI18n();
 const props = defineProps<{
     pageTable: HTMLElement | null,
     filename: string,
+    disabled: boolean,
 }>();
 
 function exportXLSX(){

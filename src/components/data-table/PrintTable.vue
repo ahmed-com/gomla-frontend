@@ -7,7 +7,7 @@ export default {
 <template>
   <v-tooltip location="bottom">
     <template #activator="{ props }">
-      <v-btn v-bind="props" icon="mdi-printer" class="d-inline mx-2" color="primary" @click="printTable">
+      <v-btn v-bind="props" icon="mdi-printer" class="d-inline mx-2" color="primary" @click="printTable" :disabled="!pageTable || disabled">
       </v-btn>
     </template>
     <span>{{ t('components.DataTable.print') }}</span>
@@ -22,6 +22,7 @@ const { t } = useI18n();
 
 const props = defineProps<{
   pageTable: HTMLElement | null,
+  disabled: boolean,
 }>();
 
 function printTable(){

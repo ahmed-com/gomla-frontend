@@ -7,7 +7,7 @@ export default {
 <template>
   <v-tooltip location="top">
     <template #activator="{ props }">
-      <v-btn v-bind="props" icon="mdi-upload" class="d-inline mx-2" color="primary">
+      <v-btn v-bind="props" icon="mdi-upload" class="d-inline mx-2" color="primary" :disabled="disabled">
       </v-btn>
     </template>
     <span>{{ t('components.DataTable.import') }}</span>
@@ -21,5 +21,6 @@ const { t } = useI18n();
 
 const props = defineProps<{
   importTemplateHeaders: string[],
+  disabled: boolean,
 }>()
 </script>
