@@ -5,7 +5,7 @@
 </script>
 
 <template>
-	<v-main :style="{'padding-left': '0px','padding-right': '0px'}">
+	<v-main :style="{'padding-left': '0px','padding-right': '0px'}" class="bg-texture">
 		<template v-if="hasLeftDrawer">
 			<Transition name="slide">
 				<div v-if="leftDrawer">

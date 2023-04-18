@@ -1,24 +1,14 @@
 <script lang="ts">
 	export default {
-		name: 'Search',
-	};
+    name: "Search",
+};
 </script>
 
 <template>
 	<div class="flex-grow-1">
 		{{view}} <v-btn @click="resetView"> reset </v-btn>
 		<router-link :to="{ name: 'Dashboard' }"> go to Dashboard</router-link>
-		<div v-for="deal in deals">
-			<v-hover :key="deal.id" v-model="deal.isHighlighted" v-slot="{ props }">
-				<v-alert
-				v-bind="props"
-					class="ma-2"
-					type="info"
-					:elevation="deal.isHighlighted ? '6' : '2'"
-					>{{ deal.title }} </v-alert
-				>
-			</v-hover>
-		</div>
+		<order-list :orders="orderStore.orders"></order-list>
 	</div>
 </template>
 
@@ -26,8 +16,9 @@
 	import { useSearchMapStore } from '../stores/searchMapStore';
 	import { map, range } from 'ramda';
 	import { ref, watchEffect } from 'vue';
-	import { Deal } from '../types/Deal.type';
+	import { useOrderStore } from '../stores/orderStore';
 	import { GeoPoint } from '../types/GeoPoint.type';
+	import OrderList from '../components/OrderList.vue';
 
 	const { setView, setMarkers } = useSearchMapStore();
 
@@ -41,21 +32,21 @@
 		lng: -0.09
 	}
 
-	const deals = ref<(Deal & { isHighlighted: boolean })[]>([]);
+	const orderStore = useOrderStore()
 	const view = ref<GeoPoint>(startingPoint);
 
 	watchEffect(()=>setView(view.value));
-	watchEffect(()=>deals.value = map((n: number)=>({
+	watchEffect(()=>orderStore.orders = map((n: number)=>({
 		id: `${n}`,
-		title: `the title of the deal ${n}`,
+		title: `the title of the order ${n}`,
 		location: getRandomPoint(view.value),
 		isHighlighted: false
 	}))(range(1,21)))
 	watchEffect(()=>{
-		setMarkers(deals.value.map(d=>({
-			position: d.location,
-			description: d.title,
-			isHighlighted: d.isHighlighted
+		setMarkers(orderStore.orders.map(o=>({
+			position: o.location,
+			description: o.title,
+			isHighlighted: o.isHighlighted
 		})))
 	});
 

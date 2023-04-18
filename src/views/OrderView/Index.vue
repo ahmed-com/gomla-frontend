@@ -1,11 +1,11 @@
 <script lang="ts">
 	export default {
-		name: 'Deal',
+		name: 'Order',
 	};
 </script>
 
 <template>
-	<NavigationTabs :tabs="tabs" :someProp="dealId" :dealId="dealId"></NavigationTabs>
+	<NavigationTabs :tabs="tabs" :someProp="orderId" :orderId="orderId"></NavigationTabs>
 </template>
 
 <script setup lang="ts">
@@ -16,17 +16,17 @@
 
 	const { t } = useI18n();
 
-	const { dealId } = defineProps<{ dealId: string }>();
+	const { orderId } = defineProps<{ orderId: string }>();
 	
 	const tabs = computed<NavigationTab[]>(() => [
-		{ text: t('nested.msg1'), route: { name: 'Deal', params: { dealId } } },
+		{ text: t('nested.msg1'), route: { name: 'Order', params: { orderId } } },
 		{
 			text: t('nested.msg2'),
-			route: { name: 'DealDiscussion', params: { dealId } },
+			route: { name: 'OrderDiscussion', params: { orderId } },
 		},
 		{
 			text: t('nested.msg3'),
-			route: { name: 'DealMeetup', params: { dealId } },
+			route: { name: 'OrderMeetup', params: { orderId } },
 		},
 	]);
 </script>

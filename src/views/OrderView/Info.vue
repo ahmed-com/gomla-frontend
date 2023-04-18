@@ -1,13 +1,13 @@
 <script lang="ts">
 	export default {
-		name: 'DealInfo',
+		name: 'OrderInfo',
 	};
 </script>
 
 <template>
     <v-sheet height="250" color="blue">
-        the deal info
-        dealId: {{dealId}}
+        the order info
+        orderId: {{orderId}}
         someProp: {{someProp}}
         <br>
         <router-link :to="{name:'Search'}"> go to search </router-link>
@@ -15,5 +15,5 @@
 </template>
 
 <script setup lang="ts">
-    const {dealId, someProp} = defineProps<{dealId: string, someProp: string}>()
+    const {orderId, someProp} = defineProps<{orderId: string, someProp: string}>()
 </script>

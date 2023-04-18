@@ -8,8 +8,8 @@
 	<div>
 		<h1 class="flex-grow-1">
 			Dashboard welcome message "localized"
-			<router-link :to="{ name: 'Deal', params: { dealId: 'x' } }">
-				deal
+			<router-link :to="{ name: 'Order', params: { orderId: 'x' } }">
+				order
 			</router-link>
 		</h1>
 		<v-text-field variant="outlined" label="address" v-model="address"></v-text-field>

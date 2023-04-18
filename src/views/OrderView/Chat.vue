@@ -1,12 +1,12 @@
 <script lang="ts">
 	export default {
-		name: 'DealDiscussion',
+		name: 'OrderDiscussion',
 	};
 </script>
 
 <template>
 	<div ref="chatContainer" class="padding-for-footer max-screen overflow-y-auto scrollbar-hidden">
-		the deal chat
+		the order chat
 		<router-link :to="{ name: 'Home' }">go to home</router-link>
 		<div ref="messagesContainer">
 			<div

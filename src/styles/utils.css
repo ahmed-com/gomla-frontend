@@ -127,3 +127,11 @@
 .d-inline-grid{
     display: inline-grid !important;
 }
+
+.width-50{
+    width: 50px !important;
+}
+
+.max-width-75{
+    max-width: 75vw !important;
+}

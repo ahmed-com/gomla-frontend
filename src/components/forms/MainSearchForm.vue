@@ -18,7 +18,7 @@
 		:address-suggestions="addressSuggestions"
 		:search-typeahead="searchTypeadead"
 		:address-typeahead="addressSuggestions?.[0]?.description || ''"
-		search-label="Deal"
+		search-label="Order"
 		address-label="Address"
 		@submit="onSubmit"
 	>

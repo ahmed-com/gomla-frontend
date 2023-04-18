@@ -9,6 +9,11 @@
   "components": {
     "NewMessagesDivider": {
       "msg": "New Messages"
+    },
+    "DataTable":{
+      "search": "Search",
+      "typeHere": "Type here to search",
+      "itemsPerPage": "Items per page:"
     }
   }
 }

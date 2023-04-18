@@ -1,3 +1,4 @@
 {
-    "typeadheadMaxLength": 20
+    "typeadheadMaxLength": 20,
+    "paginationTotalVisible": 5
 }

@@ -323,10 +323,6 @@
 		grid-template-columns: auto 1fr;
 	}
 
-	input[type='text']:focus-visible {
-		outline: none;
-	}
-
 	.suggestions-list {
 		max-height: $autocomplete-max-height;
 	}

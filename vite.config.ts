@@ -27,9 +27,9 @@ export default defineConfig({
             './src/views/UserView/Index',
             './src/views/UserView/Info',
             './src/views/UserView/Chat',
-            './src/views/DealView/Index',
-            './src/views/DealView/Info',
-            './src/views/DealView/Chat',
+            './src/views/OrderView/Index',
+            './src/views/OrderView/Info',
+            './src/views/OrderView/Chat',
           ]
         }
       }

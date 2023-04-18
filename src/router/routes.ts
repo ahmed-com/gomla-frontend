@@ -86,28 +86,28 @@ const routes: RouteRecordRaw[] = [
 	},
 
 	{
-		path: '/deals/:dealId',
+		path: '/orders/:orderId',
 		components: {
-			main: ()=> import('../views/DealView/Index.vue'),
+			main: ()=> import('../views/OrderView/Index.vue'),
 			leftDrawer: MainLeftSidebar,
 			header: MainHeader,
 		},
 		children: [
 			{
 				path: '',
-				name: 'Deal',
-				component: ()=> import('../views/DealView/Info.vue'),
+				name: 'Order',
+				component: ()=> import('../views/OrderView/Info.vue'),
 				alias: 'info',
 			},
 			{
 				path: 'discussion',
-				component: ()=> import('../views/DealView/Chat.vue'),
-                name: 'DealDiscussion'
+				component: ()=> import('../views/OrderView/Chat.vue'),
+                name: 'OrderDiscussion'
 			},
 			{
 				path: 'meetup',
-				component: ()=> import('../views/DealView/Meetup.vue'),
-                name: 'DealMeetup'
+				component: ()=> import('../views/OrderView/Meetup.vue'),
+                name: 'OrderMeetup'
 			},
 		],
 		props: {main: true, leftDrawer: true},
@@ -115,7 +115,7 @@ const routes: RouteRecordRaw[] = [
 	},
 
 	{
-		path: '/deals',
+		path: '/orders',
 		alias: '/users',
 		name: 'Dashboard',
 		beforeEnter: ifAuth,
@@ -199,6 +199,20 @@ const routes: RouteRecordRaw[] = [
 			footer: MainFooter
 		},
 		beforeEnter: T
+	},
+
+	{
+		path: '/generic-crud',
+		name: 'Orders',
+		components: {
+			header: MainHeader,
+			footer: MainFooter,
+			leftDrawer: MainLeftSidebar,
+			rightDrawer: MapRightSidebar,
+			main: ()=> import('../views/Generic.vue')
+		},
+		beforeEnter: ifAuth,
+		props: {main:true, rightDrawer: true}
 	},
 
 	{
