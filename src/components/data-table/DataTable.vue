@@ -28,13 +28,10 @@ export default {
         </div>
       </div>
     </div>
-    <v-progress-linear v-if="props.isLoading" height="8" indeterminate color="primary"></v-progress-linear>
+    <v-progress-linear v-if="showLoader" height="8" indeterminate color="primary"></v-progress-linear>
     <div class="rounded-b-lg pa-4 overflow-x-auto position-relative">
-      <!-- <div v-if="props.isLoading" class="d-flex position-absolute w-100 justify-center">
-        <v-progress-circular indeterminate size="100" width="10" color="primary"></v-progress-circular>
-      </div> -->
       <v-overlay
-        v-model="props.isLoading"
+        v-model="showLoader"
         contained
         class="d-flex position-absolute w-100 justify-center align-center"
       >
@@ -46,33 +43,19 @@ export default {
       </div>
       <table v-else ref="pageTable" class="w-100">
         <tr>
-          <th class="text-primary pa-2">
-            Movie Title
-            <v-icon v-if="true" color="secondary" size="small">mdi-sort-alphabetical-ascending</v-icon>
+          <th v-for="header in props.headers" class="text-primary pa-2">
+            {{ header.text }}
+            <v-icon v-if="header.sortable" color="secondary" size="small">mdi-sort-alphabetical-ascending</v-icon>
             <v-icon v-else color="secondary" size="small">mdi-sort-alphabetical-descending</v-icon>
           </th>
-          <th class="pa-2 text-primary">Genre</th>
-          <th class="pa-2 text-primary">Year</th>
-          <th class="pa-2 text-primary">Gross</th>
         </tr>
-        <tr>
-          <td class="pa-2">Star Wars</td>
-          <td class="pa-2">Adventure, Sci-fi</td>
-          <td class="pa-2">1977</td>
-          <td class="pa-2">$460,935,665</td>
-        </tr>
-        <tr>
-          <td class="pa-2">Howard The Duck</td>
-          <td class="pa-2">"Comedy"</td>
-          <td class="pa-2">1986</td>
-          <td class="pa-2">$16,295,774</td>
-        </tr>
-        <tr>
-          <td class="pa-2">American Graffiti</td>
-          <td class="pa-2">Comedy, Drama</td>
-          <td class="pa-2">1973</td>
-          <td class="pa-2">$115,000,000</td>
-        </tr>
+        <TransitionGroup name="list">
+          <tr v-for="record in pageData" :key="record.id" class="pa-2">
+            <td v-for="(field, i) in record.textData" class="pa-2" :key="i">
+              {{ field }}
+            </td>
+          </tr>
+        </TransitionGroup>
       </table>
     <div class="pa-4 d-flex justify-start">
       <label for="items-per-page" class="d-inline mt-4 text-primary-darken-1 font-weight-bold">
@@ -95,6 +78,7 @@ import ImportXLSX from './ImportXLSX.vue';
 import PrintTable from './PrintTable.vue';
 import ExportXLSX from './ExportXLSX.vue';
 import { HttpError } from '../../types/HttpError.type';
+import { watchDebounced } from '@vueuse/shared';
 
 const pageTable = ref<HTMLElement | null>(null);
 const { t } = useI18n();
@@ -130,7 +114,14 @@ const props: Props = withDefaults(defineProps<Props>(), {
   isLoading: false,
   dataLength: 0,
   loadingError: null,
+  sortBy: () => [],
+  pageData: () => [],
+  markableFields: () => [],
+  headers: () => [],
+  importTemplateHeaders: () => [],
 });
+
+const showLoader = ref<boolean>(false);
 
 const refProps = toRefs(props);
 
@@ -149,12 +140,37 @@ const itemsPerPage = computed({
   set: (value: number) => emit('update:itemsPerPage', value),
 });
 
+const sortBy = computed({
+  get: () => refProps.sortBy.value,
+  set: (value: SortBy[]) => emit('update:sortBy', value),
+});
+
+watchDebounced(refProps.isLoading, (value) => {
+  showLoader.value = value;
+}, { debounce: 500 });
+
 const paginationLenght = computed(() => Math.ceil(refProps.dataLength.value / refProps.itemsPerPage.value));
 
 </script>
 
 <style scoped>
+.list-move, /* apply transition to moving elements */
+.list-enter-active,
+.list-leave-active {
+  transition: all 0.5s ease;
+}
 
+.list-enter-from,
+.list-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
+}
+
+/* ensure leaving items are taken out of layout flow so that moving
+   animations can be calculated correctly. */
+.list-leave-active {
+  position: absolute;
+}
 tr:nth-child(even) {
   background-color: rgb(var(--v-theme-secondary-lighten-3));
   color: rgb(var(--v-theme-surface));
