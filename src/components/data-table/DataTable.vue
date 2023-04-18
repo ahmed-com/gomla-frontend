@@ -18,7 +18,7 @@ export default {
       <div class="d-flex justify-space-between">
         <div class="text-h6">
           {{ t('components.DataTable.search') }}:
-          <input class="bg-surface rounded-lg px-2" :placeholder="t('components.DataTable.typeHere')" v-model="props.searchTerm"
+          <input :disabled="!!loadingError || isLoading" class="bg-surface rounded-lg px-2" :placeholder="t('components.DataTable.typeHere')" v-model="props.searchTerm"
             type="text">
         </div>
         <div>
@@ -28,8 +28,16 @@ export default {
         </div>
       </div>
     </div>
+    <v-progress-linear v-if="isLoading" height="8" indeterminate color="primary"></v-progress-linear>
     <div class="rounded-b-lg pa-4 overflow-x-auto">
-      <table ref="pageTable" class="w-100">
+      <div v-if="props.isLoading" class="d-flex justify-center">
+        <v-progress-circular indeterminate size="100" width="10" color="primary"></v-progress-circular>
+      </div>
+      <div v-else-if="props.loadingError" class="d-flex align-center flex-column">
+        <h2 class="text-h1 text-error">{{ loadingError?.status }}</h2>
+        <h2 class="text-h3 text-error">{{ loadingError?.message }}</h2>
+      </div>
+      <table v-else ref="pageTable" class="w-100">
         <tr>
           <th class="text-primary pa-2">
             Movie Title
@@ -79,6 +87,7 @@ import componentsConfig from '../../config/components.config.json';
 import ImportXLSX from './ImportXLSX.vue';
 import PrintTable from './PrintTable.vue';
 import ExportXLSX from './ExportXLSX.vue';
+import { HttpError } from '../../types/HttpError.type';
 
 const pageTable = ref<HTMLElement | null>(null);
 
@@ -96,6 +105,7 @@ const props = defineProps<{
   markableFields: string[];
   headers: TableHeader[];
   importTemplateHeaders: string[];
+  loadingError: HttpError | null;
 }>();
 
 const paginationLenght = computed(() => Math.ceil(props.dataLength / props.itemsPerPage));

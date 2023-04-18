@@ -5,11 +5,17 @@ export default {
 </script>
 
 <template>
-    <v-btn :disabled="!pageTable" class="d-inline mx-2" color="primary" @click="exportXLSX">export</v-btn>
+    <v-btn density="compact" :disabled="!pageTable" class="d-inline mx-2" color="primary" @click="exportXLSX">
+        <v-icon>mdi-download</v-icon>
+        {{ t('components.DataTable.export') }}
+    </v-btn>
 </template>
 
 <script setup lang="ts">
 import XLSX from "xlsx";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
 
 const props = defineProps<{
     pageTable: HTMLElement | null,

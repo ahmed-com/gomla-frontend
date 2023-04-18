@@ -13,7 +13,10 @@
     "DataTable":{
       "search": "Search",
       "typeHere": "Type here to search",
-      "itemsPerPage": "Items per page:"
+      "itemsPerPage": "Items per page:",
+      "import": "Import",
+      "export": "Export",
+      "print": "Print"
     }
   }
 }

@@ -17,6 +17,7 @@ export default {
         :markable-fields="['name']"
         :import-template-headers="headers.map(header => header.text)"
         title="Deserts"
+        :loading-error="null"
         :headers="headers"
         @import="importData"
     >
@@ -58,6 +59,7 @@ const pageData = computed<TableRow[]>(()=> data.value.map((desert: Desert) => {
         handle: (id: string) => console.log(id + ' Delete'),
       },
     ],
+    view : (id: string | number) => console.log(id + ' View')
   }
 }));
 

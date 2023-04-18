@@ -5,10 +5,17 @@ export default {
 </script>
 
 <template>
-  <v-btn :disabled="!pageTable" class="d-inline mx-2" color="primary" @click="printTable">print</v-btn>
+  <v-btn density="compact" :disabled="!pageTable" class="d-inline mx-2" color="primary" @click="printTable">
+    <v-icon>mdi-printer</v-icon>
+    {{ t('components.DataTable.print') }}
+  </v-btn>
 </template>
 
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
+
 const props = defineProps<{
   pageTable: HTMLElement | null,
 }>();

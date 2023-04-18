@@ -5,10 +5,17 @@ export default {
 </script>
 
 <template>
-  <v-btn class="d-inline mx-2" color="primary">import</v-btn>
+  <v-btn density="compact" class="d-inline mx-2" color="primary">
+    <v-icon>mdi-upload</v-icon>
+    {{ t('components.DataTable.import') }}
+  </v-btn>
 </template>
 
 <script setup lang="ts">
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
+
 const props = defineProps<{
   importTemplateHeaders: string[],
 }>()
