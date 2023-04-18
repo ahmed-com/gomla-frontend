@@ -49,13 +49,18 @@ export default {
             <v-icon v-else color="secondary" size="small">mdi-sort-alphabetical-descending</v-icon>
           </th>
         </tr>
-        <TransitionGroup name="list">
+        <TransitionGroup v-if="!!pageData.length" name="list">
           <tr v-for="record in pageData" :key="record.id" class="pa-2">
             <td v-for="(field, i) in record.textData" class="pa-2" :key="i">
               {{ field }}
             </td>
           </tr>
         </TransitionGroup>
+        <tr v-else>
+          <td class="pa-2" colspan="100%">
+            <h2 class="text-h3 text-center">{{ t('components.DataTable.noData') }}</h2>
+          </td>
+        </tr>
       </table>
     <div class="pa-4 d-flex justify-start">
       <label for="items-per-page" class="d-inline mt-4 text-primary-darken-1 font-weight-bold">

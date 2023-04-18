@@ -16,7 +16,8 @@
       "itemsPerPage": "Items per page:",
       "import": "Import",
       "export": "Export",
-      "print": "Print"
+      "print": "Print",
+      "noData": "No data available"
     }
   }
 }
