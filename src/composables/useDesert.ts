@@ -14,14 +14,18 @@ export const useDeserts = (
     sortBy: Ref<SortBy[]>,
     useFetchOptions: UseFetchOptions
 ) => {
-    const { last } = useDebouncedRefHistory(searchTerm, {
+    const { last: lastTerm } = useDebouncedRefHistory(searchTerm, {
         capacity: 1,
         debounce: 300,
     });
+    const { last: lastLimit } = useDebouncedRefHistory(limit, {
+        capacity: 1,
+        debounce: 1000,
+    });
     const url = computed<string>(() => {
         const query = new URLSearchParams({
-            q: last.value.snapshot,
-            _limit: limit.value.toString(),
+            q: lastTerm.value.snapshot,
+            _limit: lastLimit.value.snapshot.toString(),
             _start: offset.value.toString(),
             _sort: sortBy.value.map((s) => s.field).join(","),
             _order: sortBy.value.map((s) => s.direction).join(",")

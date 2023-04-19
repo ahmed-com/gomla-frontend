@@ -24,7 +24,7 @@
 		</v-list-item>
 	</v-list>
 	<v-divider></v-divider>
-	<v-list class="bg-trasnsparent" nav dense>
+	<v-list class="bg-trasnsparent h-100" nav dense>
 		<v-list-item
 			v-for="(item, i) in items"
 			:key="i"

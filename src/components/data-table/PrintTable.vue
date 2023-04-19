@@ -7,7 +7,7 @@ export default {
 <template>
   <v-tooltip location="bottom">
     <template #activator="{ props }">
-      <v-btn v-bind="props" icon="mdi-printer" class="d-inline mx-2" color="primary" @click="printTable" :disabled="!pageTable || disabled">
+      <v-btn v-bind="props" icon="mdi-printer" class="d-inline mx-2" color="primary" @click="printTable" :loading="loading" :disabled="!pageTable || disabled || loading">
       </v-btn>
     </template>
     <span>{{ t('components.DataTable.print') }}</span>
@@ -16,9 +16,11 @@ export default {
 
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
-import { defineProps, onUnmounted } from 'vue';
+import { defineProps, onUnmounted, ref } from 'vue';
 
 const { t } = useI18n();
+
+const loading = ref(false);
 
 const props = defineProps<{
   pageTable: HTMLElement | null,
@@ -27,6 +29,7 @@ const props = defineProps<{
 
 function printTable(){
   if(!props.pageTable) return;
+  loading.value = true;
   const printContents = props.pageTable.outerHTML;
   const originalHead = document.head.innerHTML;
   const srcDoc = `
@@ -64,6 +67,7 @@ function printTable(){
   hiddenFrame.style.height = "0";
   hiddenFrame.style.border = "none";
   document.body.appendChild(hiddenFrame);
+  loading.value = false;
 
   onUnmounted(() => {
     document.body.removeChild(hiddenFrame);

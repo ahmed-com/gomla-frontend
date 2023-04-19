@@ -50,14 +50,14 @@ export default {
           </th>
         </tr>
         <TransitionGroup v-if="!!pageData.length" name="list">
-          <tr v-for="record in pageData" :key="record.id" class="pa-2">
+          <tr v-for="record in pageData" :key="record.id" class="pa-2" :class="{'cursor-pointer': !!record.view}" @click="!!record.view ? record.view(record.id) : undefined">
             <td v-for="(field, i) in record.textData" class="pa-2" :key="i">
               {{ field }}
             </td>
           </tr>
         </TransitionGroup>
         <tr v-else>
-          <td class="pa-2" colspan="100%">
+          <td class="pa-2 text-secondary no-pointer-events no-user-select" colspan="100%">
             <h2 class="text-h3 text-center">{{ t('components.DataTable.noData') }}</h2>
           </td>
         </tr>
@@ -159,7 +159,7 @@ const paginationLenght = computed(() => Math.ceil(refProps.dataLength.value / re
 </script>
 
 <style scoped>
-.list-move, /* apply transition to moving elements */
+.list-move, 
 .list-enter-active,
 .list-leave-active {
   transition: all 0.5s ease;
@@ -171,14 +171,17 @@ const paginationLenght = computed(() => Math.ceil(refProps.dataLength.value / re
   transform: translateX(30px);
 }
 
-/* ensure leaving items are taken out of layout flow so that moving
-   animations can be calculated correctly. */
 .list-leave-active {
   position: absolute;
 }
-tr:nth-child(even) {
+
+tr:hover:not(:first-child) {
   background-color: rgb(var(--v-theme-secondary-lighten-3));
   color: rgb(var(--v-theme-surface));
+}
+
+td{
+  border: 1px solid rgb(var(--v-theme-primary));
 }
 
 th, td {
