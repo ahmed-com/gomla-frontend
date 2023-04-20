@@ -17,7 +17,11 @@
       "import": "Import",
       "export": "Export",
       "print": "Print",
-      "noData": "No data available"
+      "noData": "No data available",
+      "cancelImport": "Cancel",
+      "importCardTitle": "Import Excel File",
+      "dragAndDrop": "Drag and drop your file here or click",
+      "downloadTemplate": "Download Template"
     }
   }
 }
