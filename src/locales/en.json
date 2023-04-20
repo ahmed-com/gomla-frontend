@@ -19,9 +19,11 @@
       "print": "Print",
       "noData": "No data available",
       "cancelImport": "Cancel",
-      "importCardTitle": "Import Excel File",
+      "importCardTitle": "Import Data From Excel File",
       "dragAndDrop": "Drag and drop your file here or click",
-      "downloadTemplate": "Download Template"
+      "downloadTemplate": "Download Template",
+      "selectFile": "Select File",
+      "importTemplateSheetName": "template"
     }
   }
 }

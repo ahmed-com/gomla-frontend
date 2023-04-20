@@ -15,10 +15,11 @@ export default {
         :is-loading="isFetching"
         :data-length="data ? data.total : 0"
         :markable-fields="['name']"
-        :import-template-headers="headers.map(header => header.text)"
+        :import-template-headers="headers"
         title="Deserts"
         :loading-error="error"
         :headers="headers"
+        :isImporting="isImporting"
         @import="importData"
     >
         <template #create-btn="props">
@@ -51,6 +52,7 @@ import { useDeserts } from '../composables/useDesert';
 const itemsPerPage = ref(5);
 const currentPage = ref(1);
 const searchTerm = ref('');
+const isImporting = ref(false);
 const sortBy = ref<SortBy[]>([]);
 
 const { data, error, isFetching } = useDeserts(
@@ -82,6 +84,10 @@ const pageData = computed<TableRow[]>(()=> data.value ? data.value.map((desert: 
 }) : []);
 
 const importData = (data: Desert[]) => {
+  isImporting.value = true;
+  setTimeout(() => {
+    isImporting.value = false;
+  }, 2000);
   console.log(data);
 }
 const headers: TableHeader[] = [

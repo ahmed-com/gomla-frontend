@@ -12,7 +12,7 @@ export default {
         <div>
           <slot class="d-inline mx-2" color="primary" name="create-btn">
           </slot>
-          <import-x-l-s-x :import-template-headers="props.importTemplateHeaders" :disabled="props.isLoading"></import-x-l-s-x>
+          <import-x-l-s-x :is-importing="props.isImporting" @import="emit('import', $event)" :import-template-headers="props.importTemplateHeaders" :disabled="props.isLoading"></import-x-l-s-x>
         </div>
       </div>
       <div class="d-flex justify-space-between">
@@ -99,7 +99,8 @@ type Props = {
   dataLength: number;
   markableFields: string[];
   headers: TableHeader[];
-  importTemplateHeaders: string[];
+  importTemplateHeaders: TableHeader[];
+  isImporting: boolean;
   loadingError: HttpError | null;
 };
 
@@ -119,6 +120,7 @@ const props: Props = withDefaults(defineProps<Props>(), {
   isLoading: false,
   dataLength: 0,
   loadingError: null,
+  isImporting: false,
   sortBy: () => [],
   pageData: () => [],
   markableFields: () => [],

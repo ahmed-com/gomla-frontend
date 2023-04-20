@@ -106,6 +106,170 @@
     cursor: pointer;
 }
 
+.cursor-grab{
+    cursor: grab;
+}
+
+.cursor-grabbing{
+    cursor: grabbing;
+}
+
+.cursor-default{
+    cursor: default;
+}
+
+.cursor-not-allowed{
+    cursor: not-allowed;
+}
+
+.cursor-move{
+    cursor: move;
+}
+
+.cursor-help{
+    cursor: help;
+}
+
+.cursor-wait{
+    cursor: wait;
+}
+
+.cursor-progress{
+    cursor: progress;
+}
+
+.cursor-text{
+    cursor: text;
+}
+
+.cursor-copy{
+    cursor: copy;
+}
+
+.cursor-crosshair{
+    cursor: crosshair;
+}
+
+.cursor-e-resize{
+    cursor: e-resize;
+}
+
+.cursor-ne-resize{
+    cursor: ne-resize;
+}
+
+.cursor-nw-resize{
+    cursor: nw-resize;
+}
+
+.cursor-n-resize{
+    cursor: n-resize;
+}
+
+.cursor-se-resize{
+    cursor: se-resize;
+}
+
+.cursor-sw-resize{
+    cursor: sw-resize;
+}
+
+.cursor-s-resize{
+    cursor: s-resize;
+}
+
+.cursor-w-resize{
+    cursor: w-resize;
+}
+
+.cursor-ns-resize{
+    cursor: ns-resize;
+}
+
+.cursor-ew-resize{
+    cursor: ew-resize;
+}
+
+.cursor-nesw-resize{
+    cursor: nesw-resize;
+}
+
+.cursor-nwse-resize{
+    cursor: nwse-resize;
+}
+
+.cursor-all-scroll{
+    cursor: all-scroll;
+}
+
+.cursor-col-resize{
+    cursor: col-resize;
+}
+
+.cursor-row-resize{
+    cursor: row-resize;
+}
+
+.cursor-no-drop{
+    cursor: no-drop;
+}
+
+.cursor-zoom-in{
+    cursor: zoom-in;
+}
+
+.cursor-zoom-out{
+    cursor: zoom-out;
+}
+
+.cursor-not-allowed{
+    cursor: not-allowed;
+}
+
+.cursor-none{
+    cursor: none;
+}
+
+.cursor-context-menu{
+    cursor: context-menu;
+}
+
+.cursor-cell{
+    cursor: cell;
+}
+
+.cursor-vertical-text{
+    cursor: vertical-text;
+}
+
+.cursor-alias{
+    cursor: alias;
+}
+
+.cursor-progress{
+    cursor: progress;
+}
+
+.cursor-webkit-grab{
+    cursor: -webkit-grab;
+}
+
+.cursor-webkit-grabbing{
+    cursor: -webkit-grabbing;
+}
+
+.cursor-webkit-zoom-in{
+    cursor: -webkit-zoom-in;
+}
+
+.cursor-webkit-zoom-out{
+    cursor: -webkit-zoom-out;
+}
+
+.cursor-webkit-zoom-in{
+    cursor: -webkit-zoom-in;
+}
+
 .no-user-select{
     user-select: none !important;
 }
