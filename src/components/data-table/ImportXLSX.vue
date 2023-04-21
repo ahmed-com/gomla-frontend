@@ -25,7 +25,10 @@ export default {
             </div>
             <div v-else class="d-flex flex-column align-center justify-center text-h5 text-primary-darken-1 rounded-lg pa-4">
               <v-progress-circular v-if="isLoading" indeterminate color="primary" size="300" width="10"></v-progress-circular>
-              <h1 class="text-h1 text-error" v-else-if="error !== null">{{ error.message }}</h1>
+              <div class="d-flex flex-column align-center bg-texture pa-2 w-75 max-width-50"  v-else-if="error !== null">
+                <h1 class="text-h2 text-error">{{ error.message }}</h1>
+                <h2 class="text-info no-pointer-events no-user-select text-h6">Please consider using the template</h2>
+              </div>
               <v-icon v-else color="primary-darken-1" size="300">mdi-file-excel-outline</v-icon>
               {{ fileDescription }}
             </div>
@@ -44,7 +47,7 @@ export default {
             <v-btn color="primary-darken-1" :disabled="isImporting" text @click="isDialogOpen = false">
               {{ t('components.DataTable.cancelImport') }}
             </v-btn>
-            <v-btn color="primary-darken-1" :disabled="!isFileSelected" :loading="isImporting" text @click="importFile">
+            <v-btn color="primary-darken-1" :disabled="!isFileSelected || isLoading || error !== null" :loading="isImporting" text @click="importFile">
               {{ t('components.DataTable.import') }}
             </v-btn>
           </v-card-actions>
@@ -142,13 +145,14 @@ const handleDrop = async (e: DragEvent) => {
     const tableData = pipe(
       map((row: Array<string | number>) => {
         const obj: any = {};
-        fileHeaders.forEach((headerText: string, index: number) => {
-          props.importTemplateHeaders.forEach((header: TableHeader) => {
-            if (header.text === headerText) {
-              obj[header.key] = row[index];
-            }
-          });
-        });
+        props.importTemplateHeaders.forEach((header: TableHeader)=>{
+          const index = fileHeaders.indexOf(header.text);
+          if (index !== -1) {
+            obj[header.key] = row[index];
+          }else{
+            throw new Error(`Header "${header.text}" not found in file`);
+          }
+        })
         return obj;
       })
     )(rows);
