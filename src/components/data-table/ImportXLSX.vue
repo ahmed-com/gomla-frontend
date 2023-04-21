@@ -9,8 +9,8 @@ export default {
     <template #activator="{ props: tooltipProps }">
       <v-dialog v-model="isDialogOpen">
         <template #activator="{ props: dialogProps }">
-          <v-btn v-bind="{ ...dialogProps, ...tooltipProps }" icon="mdi-upload" class="d-inline mx-2" color="primary"
-            :disabled="disabled">
+          <v-btn :loading="isImporting" v-bind="{ ...dialogProps, ...tooltipProps }" icon="mdi-upload" class="d-inline mx-2" color="primary"
+            :disabled="disabled || isImporting">
           </v-btn>
         </template>
         <v-card class="">
@@ -26,7 +26,7 @@ export default {
             <div v-else class="d-flex flex-column align-center justify-center text-h5 text-primary-darken-1 rounded-lg pa-4">
               <v-progress-circular v-if="isLoading" indeterminate color="primary" size="300" width="10"></v-progress-circular>
               <h1 class="text-h1 text-error" v-else-if="error !== null">{{ error.message }}</h1>
-              <v-icon v-else color="#ccc" size="300">mdi-file-excel-outline</v-icon>
+              <v-icon v-else color="primary-darken-1" size="300">mdi-file-excel-outline</v-icon>
               {{ fileDescription }}
             </div>
             <v-divider class="mt-2"></v-divider>
@@ -41,7 +41,7 @@ export default {
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="primary-darken-1" text @click="isDialogOpen = false">
+            <v-btn color="primary-darken-1" :disabled="isImporting" text @click="isDialogOpen = false">
               {{ t('components.DataTable.cancelImport') }}
             </v-btn>
             <v-btn color="primary-darken-1" :disabled="!isFileSelected" :loading="isImporting" text @click="importFile">
