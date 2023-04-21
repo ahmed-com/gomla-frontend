@@ -44,10 +44,10 @@ export default {
       </div>
       <table v-else ref="pageTable" class="w-100">
         <tr>
-          <th v-for="header in props.headers" class="text-primary pa-2">
+          <th v-for="header in props.headers" class="text-primary pa-2" :key="header.key" @click="header.sortable ? sortByHeader(header.key) : undefined" :class="{'cursor-pointer': header.sortable}">
             {{ header.text }}
-            <v-icon v-if="header.sortable" color="secondary" size="small">mdi-sort-alphabetical-ascending</v-icon>
-            <v-icon v-else color="secondary" size="small">mdi-sort-alphabetical-descending</v-icon>
+            <v-icon v-if="isSortedBy(header.key) == 'asc'" color="secondary" size="small">mdi-sort-alphabetical-ascending</v-icon>
+            <v-icon v-if="isSortedBy(header.key) == 'desc'" color="secondary" size="small">mdi-sort-alphabetical-descending</v-icon>
           </th>
         </tr>
         <TransitionGroup v-if="!!pageData.length" name="list">
@@ -159,6 +159,28 @@ watchDebounced(refProps.isLoading, (value) => {
 }, { debounce: 500 });
 
 const paginationLenght = computed(() => Math.ceil(refProps.dataLength.value / refProps.itemsPerPage.value));
+
+const sortByHeader = (key: string) => {
+  const index = sortBy.value.findIndex((sort) => sort.field === key);
+  if (index === -1) {
+    sortBy.value.push({ field: key, direction: 'asc' });
+  } else {
+    if (sortBy.value[index].direction === 'asc') {
+      sortBy.value[index].direction = 'desc';
+    } else {
+      sortBy.value.splice(index, 1);
+    }
+  }
+};
+
+const isSortedBy = (key: string) => {
+  const index = sortBy.value.findIndex((sort) => sort.field === key);
+  if (index === -1) {
+    return '';
+  } else {
+    return sortBy.value[index].direction;
+  }
+};
 
 </script>
 
