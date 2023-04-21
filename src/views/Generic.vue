@@ -21,6 +21,7 @@ export default {
         :headers="headers"
         :isImporting="isImporting"
         @import="importData"
+        @refresh="refresh"
     >
         <template #create-btn="props">
           <v-tooltip location="top">
@@ -55,13 +56,15 @@ const searchTerm = ref('');
 const isImporting = ref(false);
 const sortBy = ref<SortBy[]>([]);
 
-const { data, error, isFetching } = useDeserts(
+const { data, error, isFetching, execute } = useDeserts(
   searchTerm,
   itemsPerPage,
   computed(() => (currentPage.value - 1) * itemsPerPage.value),
   sortBy,
   { immediate: true, refetch: true}
 );
+
+const refresh = () => execute();
 
 const pageData = computed<TableRow[]>(()=> data.value ? data.value.map((desert: Desert) => {
   return {

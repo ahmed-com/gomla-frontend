@@ -27,7 +27,7 @@ export default {
               <v-progress-circular v-if="isLoading" indeterminate color="primary" size="300" width="10"></v-progress-circular>
               <div class="d-flex flex-column align-center bg-texture pa-2 w-75 max-width-50"  v-else-if="error !== null">
                 <h1 class="text-h2 text-error">{{ error.message }}</h1>
-                <h2 class="text-info no-pointer-events no-user-select text-h6">Please consider using the template</h2>
+                <h2 class="text-info no-pointer-events no-user-select text-h6">{{ t('components.DataTable.useTemplateSuggestion') }}</h2>
               </div>
               <v-icon v-else color="primary-darken-1" size="300">mdi-file-excel-outline</v-icon>
               {{ fileDescription }}
@@ -119,7 +119,7 @@ const disabled = computed(() => {
   return props.disabled || isLoading.value || isFileSelected.value || isDragOver.value || error.value;
 })
 
-const handleDrop = async (e: DragEvent) => {
+const handleDrop = (e: DragEvent) => {
   e.stopPropagation();
 
   isLoading.value = true;
@@ -128,41 +128,14 @@ const handleDrop = async (e: DragEvent) => {
   if (file) {
     isFileSelected.value = true;
     isDragOver.value = false;
-    fileDescription.value = `${file.name} (${numberToByteSize(file.size)} bytes)`
+    fileDescription.value = `${file.name} (${numberToByteSize(file.size)})`
   } else {
     isFileSelected.value = false;
     isDragOver.value = true;
     return
   }
 
-  try {
-    const buffer = await file.arrayBuffer();
-    const wb = XLSX.read(buffer, { type: 'buffer' });
-    const ws = wb.Sheets[wb.SheetNames[0]];
-    const data: Array<Array<string>> = XLSX.utils.sheet_to_json(ws, { header: 1 });
-    const fileHeaders = data[0];
-    const rows = data.slice(1);
-    const tableData = pipe(
-      map((row: Array<string | number>) => {
-        const obj: any = {};
-        props.importTemplateHeaders.forEach((header: TableHeader)=>{
-          const index = fileHeaders.indexOf(header.text);
-          if (index !== -1) {
-            obj[header.key] = row[index];
-          }else{
-            throw new Error(`Header "${header.text}" not found in file`);
-          }
-        })
-        return obj;
-      })
-    )(rows);
-    fileData.value = tableData;
-  } catch (e: any) {
-    error.value = e;
-  } finally {
-    isLoading.value = false;
-  }
-
+  convertFileToFileData(file);
 }
 
 const importFile = () => {
@@ -178,14 +151,18 @@ const handleFileChange = (event: any) => {
 
   if (file) {
     isFileSelected.value = true;
-    fileDescription.value = `${file.name} (${numberToByteSize(file.size)} bytes)`
+    fileDescription.value = `${file.name} (${numberToByteSize(file.size)})`
   } else {
     isFileSelected.value = false;
     return
   }
 
+  convertFileToFileData(file);
+}
+
+async function convertFileToFileData(file: File) {
   try {
-    const buffer = file.arrayBuffer();
+    const buffer = await file.arrayBuffer();
     const wb = XLSX.read(buffer, { type: 'buffer' });
     const ws = wb.Sheets[wb.SheetNames[0]];
     const data: Array<Array<string>> = XLSX.utils.sheet_to_json(ws, { header: 1 });
@@ -194,13 +171,14 @@ const handleFileChange = (event: any) => {
     const tableData = pipe(
       map((row: Array<string | number>) => {
         const obj: any = {};
-        fileHeaders.forEach((headerText: string, index: number) => {
-          props.importTemplateHeaders.forEach((header: TableHeader) => {
-            if (header.text === headerText) {
-              obj[header.key] = row[index];
-            }
-          });
-        });
+        props.importTemplateHeaders.forEach((header: TableHeader)=>{
+          const index = fileHeaders.indexOf(header.text);
+          if (index !== -1) {
+            obj[header.key] = row[index];
+          }else{
+            throw new Error(t('components.DataTable.errors.missingHeader', { header: header.text}));
+          }
+        })
         return obj;
       })
     )(rows);

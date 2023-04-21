@@ -23,7 +23,11 @@
       "dragAndDrop": "Drag and drop your file here or click",
       "downloadTemplate": "Download Template",
       "selectFile": "Select File",
-      "importTemplateSheetName": "template"
+      "importTemplateSheetName": "template",
+      "useTemplateSuggestion": "Please conider using the template.",
+      "errors":{
+        "missingHeader": "Header \"{header}\" is missing"
+      }
     }
   }
 }

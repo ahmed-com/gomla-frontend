@@ -22,6 +22,7 @@ export default {
             type="text">
         </div>
         <div>
+          <v-btn class="d-inline bg-primary mx-2" :loading="props.isLoading" icon="mdi-refresh" @click="emit('refresh')"></v-btn>
           <export-x-l-s-x :page-table="pageTable" :filename="props.title" :disabled="!!props.loadingError || props.isLoading"></export-x-l-s-x>
           <print-table :page-table="pageTable" :disabled="!!props.loadingError || props.isLoading"></print-table>
           <slot class="d-inline mx-2" color="primary" name="filter-btn"></slot>
@@ -110,6 +111,7 @@ const emit = defineEmits<{
   (event: 'update:itemsPerPage', value: number): void;
   (event: 'update:sortBy', value: SortBy[]): void;
   (event: 'import', value: Array<any>): void;
+  (event: 'refresh', value: void): void;
 }>();
 
 const props: Props = withDefaults(defineProps<Props>(), {
