@@ -127,7 +127,7 @@ const headers: TableHeader[] = [
   {
     text: 'Iron',
     key: 'iron',
-    sortable: true,
+    sortable: false,
   }
 ]
 
