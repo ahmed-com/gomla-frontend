@@ -162,7 +162,7 @@ watchDebounced(refProps.isLoading, (value) => {
 const paginationLength = computed(() => Math.ceil(refProps.dataLength.value / refProps.itemsPerPage.value));
 
 const startItem = computed(() => ((refProps.currentPage.value - 1) * refProps.itemsPerPage.value) + 1);
-const endItem = computed(() => Math.min(refProps.currentPage.value * refProps.itemsPerPage.value, refProps.dataLength.value) + 1);
+const endItem = computed(() => Math.min(refProps.currentPage.value * refProps.itemsPerPage.value, refProps.dataLength.value));
 
 const sortByHeader = (key: string) => {
   const index = sortBy.value.findIndex((sort) => sort.field === key);
