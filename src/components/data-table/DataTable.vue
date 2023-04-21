@@ -66,9 +66,10 @@ export default {
     <div class="pa-4 d-flex justify-start">
       <label for="items-per-page" class="d-inline mt-4 text-primary-darken-1 font-weight-bold">
         {{ t('components.DataTable.itemsPerPage') }}
-        <input class="width-50" type="number" id="items-per-page" v-model="itemsPerPage">
+        <input class="width-50" type="number" :min="1" :max="props.dataLength" id="items-per-page" v-model="itemsPerPage">
       </label>
-        <v-pagination rounded="circle" v-model="currentPage" :length="paginationLenght" :total-visible="componentsConfig.paginationTotalVisible"></v-pagination>
+        <v-pagination rounded="circle" v-model="currentPage" :length="paginationLength" :total-visible="componentsConfig.paginationTotalVisible"></v-pagination>
+        <h3 class="text-subtitle-1 d-inline mt-4 text-secondary-lighten-3 font-italic"> {{ t('components.DataTable.paginationMessage', {from: startItem, to: endItem, total: dataLength}) }} </h3>
     </div>
   </div>
 </div>
@@ -158,7 +159,10 @@ watchDebounced(refProps.isLoading, (value) => {
   showLoader.value = value;
 }, { debounce: 500 });
 
-const paginationLenght = computed(() => Math.ceil(refProps.dataLength.value / refProps.itemsPerPage.value));
+const paginationLength = computed(() => Math.ceil(refProps.dataLength.value / refProps.itemsPerPage.value));
+
+const startItem = computed(() => ((refProps.currentPage.value - 1) * refProps.itemsPerPage.value) + 1);
+const endItem = computed(() => Math.min(refProps.currentPage.value * refProps.itemsPerPage.value, refProps.dataLength.value) + 1);
 
 const sortByHeader = (key: string) => {
   const index = sortBy.value.findIndex((sort) => sort.field === key);
