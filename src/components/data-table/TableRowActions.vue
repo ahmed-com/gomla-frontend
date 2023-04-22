@@ -16,10 +16,14 @@ export default {
 
     <div
       v-show="visible"
-      class="top-0 position-absolute right-0 mt-2 elevation-4 bg-surface rounded-lg z-index-2"
+      class="position-absolute mt-2 elevation-4 bg-surface rounded-lg z-index-2"
       role="menu"
       aria-orientation="vertical"
       aria-labelledby="options-menu"
+      :class="{
+        'position-left-0': isRtl,
+        'position-right-0': !isRtl
+      }"
     >
       <div class="py-1" role="none">
         <v-btn
@@ -38,6 +42,9 @@ export default {
 import { onClickOutside } from '@vueuse/core'
 import { defineProps, defineEmits, ref } from 'vue'
 import { TableRowAction } from '../../types/TableData.type'
+import { useRtl } from 'vuetify/lib/framework.mjs'
+
+const { isRtl } = useRtl();
 
 const target = ref<HTMLElement | null>()
 
