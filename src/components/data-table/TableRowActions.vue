@@ -1,0 +1,63 @@
+<script lang="ts">
+export default {
+  name: 'TableRowActions'
+}
+</script>
+
+<template>
+  <div ref="target" class="position-relative d-inline-block text-left">
+    <div>
+      <v-btn
+        class="d-inline bg-transparent mx-2 elevation-0 z-index-1"
+        icon="mdi-dots-vertical"
+        @click.stop="toggleVisible"
+      ></v-btn>
+    </div>
+
+    <div
+      v-show="visible"
+      class="top-0 position-absolute right-0 mt-2 elevation-4 bg-surface rounded-lg z-index-2"
+      role="menu"
+      aria-orientation="vertical"
+      aria-labelledby="options-menu"
+    >
+      <div class="py-1" role="none">
+        <v-btn
+          v-for="action in actions"
+          :key="action.key"
+          class="w-100 elevation-0"
+          @click.stop="emit('action', action)"
+          >{{ action.text }} <v-icon :color="action.color">{{ action.icon }}</v-icon></v-btn
+        >
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { onClickOutside } from '@vueuse/core'
+import { defineProps, defineEmits, ref } from 'vue'
+import { TableRowAction } from '../../types/TableData.type'
+
+const target = ref<HTMLElement | null>()
+
+onClickOutside(target, () => {
+  visible.value = false
+})
+
+const props = defineProps<{
+  actions: TableRowAction[]
+}>()
+
+const emit = defineEmits<{
+  (event: 'action', value: TableRowAction): void
+  (event: 'showActions'): void
+}>()
+
+const visible = ref(false)
+
+const toggleVisible = () => {
+  visible.value = !visible.value
+  emit('showActions')
+}
+</script>

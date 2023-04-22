@@ -2,25 +2,26 @@ export type TableHeader = {
     text: string,
     sortable: boolean,
     key: string,
+    type: 'text' | 'number' | 'date' | 'datetime' | 'markableText' | 'avatar' | 'img' | 'state' | 'geolocation' | 'ipAddress' | 'entity',
+    filterable: boolean,
+    states?: TableRowState[], // Only for type 'state'
 }
 
 export type TableRow = {
     id: string | number,
-    view?: Function,
-    avatar?: string,
-    img?: string,
-    textData: (string | number)[],
-    state?: TableRowState,
-    actions?: TableRowAction[],
+    [key: string]: any,
 }
 
-type TableRowState = {
+export type TableRowState = {
     text: string,
     color: string,
+    icon: string,
+    key: string,
 }
 
-type TableRowAction = {
+export type TableRowAction = {
     icon: string,
     text: string,
-    handle: Function,
+    color: string,
+    key: string,
 }

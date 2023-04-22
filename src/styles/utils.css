@@ -38,6 +38,14 @@
     bottom: 100px !important;
 }
 
+.z-index-1{
+    z-index: 1 !important;
+}
+
+.z-index-2{
+    z-index: 2 !important;
+}
+
 .flex-basis-100 {
     flex-basis: 100%;
 }

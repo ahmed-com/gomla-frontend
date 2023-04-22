@@ -25,7 +25,7 @@ export default {
           <v-btn class="d-inline bg-primary mx-2" :loading="props.isLoading" icon="mdi-refresh" @click="emit('refresh')"></v-btn>
           <export-x-l-s-x :page-table="pageTable" :filename="props.title" :disabled="!!props.loadingError || props.isLoading"></export-x-l-s-x>
           <print-table :page-table="pageTable" :disabled="!!props.loadingError || props.isLoading"></print-table>
-          <slot class="d-inline mx-2" color="primary" name="filter-btn"></slot>
+          <table-filter :headers="props.headers" v-model:filter-by="filterBy"></table-filter>
         </div>
       </div>
     </div>
@@ -51,10 +51,11 @@ export default {
           </th>
         </tr>
         <TransitionGroup v-if="!!pageData.length" name="list">
-          <tr v-for="record in pageData" :key="record.id" class="pa-2" :class="{'cursor-pointer': !!record.view}" @click="!!record.view ? record.view(record.id) : undefined">
-            <td v-for="(field, i) in record.textData" class="pa-2" :key="i">
-              {{ field }}
+          <tr v-for="row in pageData" :key="row.id" class="pa-2 cursor-pointer" @click="emit('view', row)" v-element-hover="state=> emit('hover', state ? row : null)">
+            <td v-for="header in props.headers" class="pa-2" :key="header.key">
+              {{ row[header.key] }}
             </td>
+            <table-row-actions :actions="props.actions" @show-actions="emit('showActions', row)" @action="action=> emit('action', {action, row})"></table-row-actions>
           </tr>
         </TransitionGroup>
         <tr v-else>
@@ -79,13 +80,17 @@ export default {
 import { useI18n } from 'vue-i18n';
 import { ref, computed, onBeforeMount, toRefs } from 'vue';
 import { SortBy } from '../../types/SortBy.type';
-import { TableHeader, TableRow } from '../../types/TableData.type';
+import { FilterBy } from '../../types/FilterBy.type';
+import { TableHeader, TableRow, TableRowAction } from '../../types/TableData.type';
 import componentsConfig from '../../config/components.config.json';
 import ImportXLSX from './ImportXLSX.vue';
 import PrintTable from './PrintTable.vue';
 import ExportXLSX from './ExportXLSX.vue';
 import { HttpError } from '../../types/HttpError.type';
 import { watchDebounced } from '@vueuse/shared';
+import TableFilter from './TableFilter.vue';
+import { vElementHover } from '@vueuse/components';
+import TableRowActions from './TableRowActions.vue';
 
 const pageTable = ref<HTMLElement | null>(null);
 const { t } = useI18n();
@@ -98,12 +103,14 @@ type Props = {
   currentPage: number;
   isLoading: boolean;
   sortBy: SortBy[];
+  filterBy: FilterBy[];
   dataLength: number;
   markableFields: string[];
   headers: TableHeader[];
   importTemplateHeaders: TableHeader[];
   isImporting: boolean;
   loadingError: HttpError | null;
+  actions: TableRowAction[];
 };
 
 const emit = defineEmits<{
@@ -111,8 +118,13 @@ const emit = defineEmits<{
   (event: 'update:currentPage', value: number): void;
   (event: 'update:itemsPerPage', value: number): void;
   (event: 'update:sortBy', value: SortBy[]): void;
+  (event: 'update:filterBy', value: FilterBy[]): void;
   (event: 'import', value: Array<any>): void;
   (event: 'refresh', value: void): void;
+  (event: 'view', value: TableRow): void;
+  (event: 'showActions', value: TableRow): void;
+  (event: 'action', value: { row: TableRow, action: TableRowAction }): void;
+  (event: 'hover', value: TableRow | null): void;
 }>();
 
 const props: Props = withDefaults(defineProps<Props>(), {
@@ -125,6 +137,7 @@ const props: Props = withDefaults(defineProps<Props>(), {
   loadingError: null,
   isImporting: false,
   sortBy: () => [],
+  filterBy: () => [],
   pageData: () => [],
   markableFields: () => [],
   headers: () => [],
@@ -153,6 +166,11 @@ const itemsPerPage = computed({
 const sortBy = computed({
   get: () => refProps.sortBy.value,
   set: (value: SortBy[]) => emit('update:sortBy', value),
+});
+
+const filterBy = computed({
+  get: () => refProps.filterBy.value,
+  set: (value: FilterBy[]) => emit('update:filterBy', value),
 });
 
 watchDebounced(refProps.isLoading, (value) => {
