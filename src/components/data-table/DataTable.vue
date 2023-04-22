@@ -59,6 +59,7 @@ export default {
               <span v-else-if="header.type == 'img' "> <img :src="row[header.key]" :alt="row[header.key]" class="img-fluid" ></span>
               <span v-else-if="header.type == 'avatar'"> <v-avatar :image="row[header.key]"></v-avatar> </span>
               <span v-else-if="header.type == 'entity'"> {{ row[header.key][header.value!] }} </span>
+              <span v-else-if="header.type == 'state'"> <v-chip :color="row[header.key]['color']" :prepend-icon="row[header.key]['icon']" >{{ row[header.key]['text'] }}</v-chip> </span>
               <span v-else >{{ row[header.key] }}</span>
             </td>
             <table-row-actions :actions="props.actions" @show-actions="emit('showActions', row)" @action="action=> emit('action', {action, row})"></table-row-actions>
