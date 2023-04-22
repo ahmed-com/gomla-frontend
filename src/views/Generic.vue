@@ -16,7 +16,6 @@ export default {
         :page-data="data ? data : []"
         :is-loading="isFetching"
         :data-length="data ? data.total : 0"
-        :markable-fields="['name']"
         :import-template-headers="headers"
         title="Deserts"
         :loading-error="error"

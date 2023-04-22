@@ -2,6 +2,7 @@ export type TableHeader = {
     text: string,
     sortable: boolean,
     key: string,
+    value?: string, // Only for type 'entity'
     type: 'text' | 'number' | 'date' | 'datetime' | 'markableText' | 'avatar' | 'img' | 'state' | 'geolocation' | 'ipAddress' | 'entity',
     filterable: boolean,
     states?: TableRowState[], // Only for type 'state'

@@ -54,8 +54,12 @@ export default {
           <tr v-for="row in pageData" :key="row.id" class="pa-2 cursor-pointer" @click="emit('view', row)" v-element-hover="state=> emit('hover', state ? row : null)">
             <td v-for="header in props.headers" class="pa-2" :key="header.key">
               <markable-text ignore-case v-if="header.type == 'markableText'" :match="searchTerm" :text="row[header.key]"></markable-text>
-              <span v-else-if="header.type == 'text'">{{ row[header.key] }}</span>
-              <span v-else-if="header.type == 'number'">{{ row[header.key] }}</span>
+              <span v-else-if="header.type == 'date'">{{ formatDate(row[header.key]) }}</span>
+              <span v-else-if="header.type == 'datetime'">{{ formatDatetime(row[header.key]) }}</span>
+              <span v-else-if="header.type == 'img' "> <img :src="row[header.key]" :alt="row[header.key]" class="img-fluid" ></span>
+              <span v-else-if="header.type == 'avatar'"> <v-avatar :image="row[header.key]"></v-avatar> </span>
+              <span v-else-if="header.type == 'entity'"> {{ row[header.key][header.value!] }} </span>
+              <span v-else >{{ row[header.key] }}</span>
             </td>
             <table-row-actions :actions="props.actions" @show-actions="emit('showActions', row)" @action="action=> emit('action', {action, row})"></table-row-actions>
           </tr>
@@ -94,6 +98,8 @@ import TableFilter from './TableFilter.vue';
 import { vElementHover } from '@vueuse/components';
 import TableRowActions from './TableRowActions.vue';
 import MarkableText from '../MarkableText.vue';
+import { format as formatDate } from '../../filters/date.filter';
+import { format as formatDatetime } from '../../filters/datetime.filter';
 
 const pageTable = ref<HTMLElement | null>(null);
 const { t } = useI18n();
@@ -108,7 +114,6 @@ type Props = {
   sortBy: SortBy[];
   filterBy: FilterBy[];
   dataLength: number;
-  markableFields: string[];
   headers: TableHeader[];
   importTemplateHeaders: TableHeader[];
   isImporting: boolean;
@@ -142,7 +147,6 @@ const props: Props = withDefaults(defineProps<Props>(), {
   sortBy: () => [],
   filterBy: () => [],
   pageData: () => [],
-  markableFields: () => [],
   headers: () => [],
   importTemplateHeaders: () => [],
 });
