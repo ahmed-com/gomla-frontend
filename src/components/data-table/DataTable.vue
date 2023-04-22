@@ -53,7 +53,9 @@ export default {
         <TransitionGroup v-if="!!pageData.length" name="list">
           <tr v-for="row in pageData" :key="row.id" class="pa-2 cursor-pointer" @click="emit('view', row)" v-element-hover="state=> emit('hover', state ? row : null)">
             <td v-for="header in props.headers" class="pa-2" :key="header.key">
-              {{ row[header.key] }}
+              <markable-text ignore-case v-if="header.type == 'markableText'" :match="searchTerm" :text="row[header.key]"></markable-text>
+              <span v-else-if="header.type == 'text'">{{ row[header.key] }}</span>
+              <span v-else-if="header.type == 'number'">{{ row[header.key] }}</span>
             </td>
             <table-row-actions :actions="props.actions" @show-actions="emit('showActions', row)" @action="action=> emit('action', {action, row})"></table-row-actions>
           </tr>
@@ -91,6 +93,7 @@ import { watchDebounced } from '@vueuse/shared';
 import TableFilter from './TableFilter.vue';
 import { vElementHover } from '@vueuse/components';
 import TableRowActions from './TableRowActions.vue';
+import MarkableText from '../MarkableText.vue';
 
 const pageTable = ref<HTMLElement | null>(null);
 const { t } = useI18n();

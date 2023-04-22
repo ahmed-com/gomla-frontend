@@ -23,14 +23,16 @@
 		end?: number;
 		match?: string;
 		unmark?: boolean;
+		ignoreCase: boolean;
 	};
 
 	const props: Props = defineProps<Props>();
-	const { text, start, end, match, unmark } = toRefs<Props>(props);
+	const { text, start, end, match, unmark, ignoreCase } = toRefs<Props>(props);
 
 	const startIndex = computed<number>(() => {
 		if (start?.value !== undefined) return start?.value;
 		if (match?.value === undefined) return 0;
+		if (ignoreCase?.value) return text.value.toLowerCase().indexOf(match?.value.toLowerCase());
 		return text.value.indexOf(match?.value);
 	});
 

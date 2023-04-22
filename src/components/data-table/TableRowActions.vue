@@ -5,7 +5,7 @@ export default {
 </script>
 
 <template>
-  <div ref="target" class="position-relative d-inline-block text-left">
+  <div ref="target" class="position-relative d-inline-block text-center">
     <div>
       <v-btn
         class="d-inline bg-transparent mx-2 elevation-0 z-index-1"
