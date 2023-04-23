@@ -29,6 +29,8 @@
       "cancelFilter": "Cancel",
       "applyFilters": "Apply",
       "filter": "Filter",
+      "filterFrom": "{headerText} From :",
+      "filterTo": "{headerText} To :",
       "errors":{
         "missingHeader": "Header \"{header}\" is missing"
       }

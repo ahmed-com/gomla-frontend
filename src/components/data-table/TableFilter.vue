@@ -15,13 +15,32 @@ export default {
         <v-card min-width="750">
           <v-card-title>{{ t('components.DataTable.filter') }}</v-card-title>
           <v-card-text>
-            <v-text-field v-for="header in props.headers.filter(h => h.filterable && (h.type === 'text' || h.type === 'markableText'))" :key="header.key" :label="header.text"
-              outlined dense :model-value="localFilters.find(f => f.field === header.key)?.value"
-              @update:model-value="x => addFilter({ field: header.key, value: x, operator: 'eq' })"></v-text-field>
+            <div v-for="header in props.headers.filter(h => h.filterable)" :key="header.key">
+              
+              <v-text-field v-if="header.type === 'text' || header.type === 'markableText'" :label="header.text" outlined
+                dense :model-value="localFilters.find(f => f.field === header.key && f.operator === 'eq')?.value"
+                @update:model-value="x => addFilter({ field: header.key, value: x, operator: 'eq' })"></v-text-field>
+
+              <div v-if="header.type === 'number'" class="d-flex align-center">
+
+                <label class="mb-6 mx-6" :for="'TableFilter' + header.key + 'from'">{{ t('components.DataTable.filterFrom', {headerText: header.text}) }}</label>
+                <v-text-field :id="'TableFilter' + header.key + 'from'" :label="header.text" outlined dense
+                  :model-value="localFilters.find(f => f.field === header.key && f.operator === 'gte')?.value"
+                  @update:model-value="(x: string) => addFilter({ field: header.key, value: +x, operator: 'gte' })"></v-text-field>
+
+                <label class="mb-6 mx-6" :for="'TableFilter' + header.key + 'to'">{{ t('components.DataTable.filterTo', {headerText: header.text}) }}</label>
+                <v-text-field :id="'TableFilter' + header.key + 'to'" :label="header.text" outlined dense
+                  :model-value="localFilters.find(f => f.field === header.key && f.operator === 'lte')?.value"
+                  @update:model-value="(x: string) => addFilter({ field: header.key, value: +x, operator: 'lte' })"></v-text-field>
+
+              </div>
+
+            </div>
           </v-card-text>
           <v-card-actions>
             <v-btn @click="dialog = false">{{ t('components.DataTable.cancelFilter') }}</v-btn>
-            <v-btn @click="applyFilters" :disabled="!hasFiltersChanged">{{ t('components.DataTable.applyFilters') }}</v-btn>
+            <v-btn @click="applyFilters" :disabled="!hasFiltersChanged">{{ t('components.DataTable.applyFilters')
+            }}</v-btn>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -57,7 +76,7 @@ const emit = defineEmits<{
 const localFilters = ref<FilterBy[]>(refProps.filterBy.value);
 
 const hasFiltersChanged = computed(() => {
-  return localFilters.value.length !== refProps.filterBy.value.length || localFilters.value.some(f => !refProps.filterBy.value.find(f2 => f2.field === f.field && f2.value === f.value))
+  return localFilters.value.length !== refProps.filterBy.value.length || localFilters.value.some(f => !refProps.filterBy.value.find(f2 => f2.field === f.field && f2.value === f.value && f2.operator === f.operator))
 })
 
 const filterBy = computed({
@@ -66,12 +85,12 @@ const filterBy = computed({
 })
 
 const addFilter = (filter: FilterBy) => {
-  if (localFilters.value.find(f => f.field === filter.field)) {
-    if (filter.value === '') {
-      localFilters.value = localFilters.value.filter(f => f.field !== filter.field)
+  if (localFilters.value.find(f => f.field === filter.field && f.operator === filter.operator)) {
+    if (!filter.value) {
+      localFilters.value = localFilters.value.filter(f => f.field !== filter.field || f.operator !== filter.operator)
       return
     }
-    localFilters.value = localFilters.value.map(f => f.field === filter.field ? filter : f)
+    localFilters.value = localFilters.value.map(f => f.field === filter.field && f.operator === filter.operator ? filter : f)
   } else {
     localFilters.value = [...localFilters.value, filter]
   }

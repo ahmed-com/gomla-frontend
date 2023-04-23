@@ -26,6 +26,7 @@ export default {
       }"
     >
       <div class="py-1" role="none">
+        <span v-if="!actions.length" class="pa-6 no-user-select text-info"> N/A </span>
         <v-btn
           v-for="action in actions"
           :key="action.key"
