@@ -25,7 +25,7 @@ export default {
           <v-btn class="d-inline bg-primary mx-2" :loading="props.isLoading" icon="mdi-refresh" @click="emit('refresh')"></v-btn>
           <export-x-l-s-x :page-table="pageTable" :filename="props.title" :disabled="!!props.loadingError || props.isLoading"></export-x-l-s-x>
           <print-table :page-table="pageTable" :disabled="!!props.loadingError || props.isLoading"></print-table>
-          <table-filter :disabled="!!props.loadingError || props.isLoading" :is-loading="props.isLoading" :headers="props.headers" v-model:filter-by="filterBy" @apply-filters="emit('applyFilters')"></table-filter>
+          <table-filter :disabled="!!props.loadingError || props.isLoading" :is-loading="props.isLoading" :headers="props.headers" v-model:filter-by="filterBy"></table-filter>
         </div>
       </div>
     </div>
@@ -134,7 +134,6 @@ const emit = defineEmits<{
   (event: 'showActions', value: TableRow): void;
   (event: 'action', value: { row: TableRow, action: TableRowAction }): void;
   (event: 'hover', value: TableRow | null): void;
-  (event: 'applyFilters'): void;
 }>();
 
 const props: Props = withDefaults(defineProps<Props>(), {
@@ -238,6 +237,15 @@ tr:hover:not(:first-child) {
 }
 
 td{
+  border: 1px solid rgb(var(--v-theme-primary));
+}
+
+td:last-of-type {
+  border-right: none;
+  border-left: none;
+}
+
+tr:not(:first-child){
   border: 1px solid rgb(var(--v-theme-primary));
 }
 

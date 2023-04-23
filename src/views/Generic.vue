@@ -27,7 +27,6 @@ export default {
         @showActions="showActions"
         @action="handleAction"
         @hover="hover"
-        @apply-filters="applyFilters"
     >
         <template #create-btn="props">
           <v-tooltip location="top">
@@ -56,25 +55,24 @@ const isImporting = ref(false);
 const sortBy = ref<SortBy[]>([]);
 const filterBy = ref<FilterBy[]>([]);
 const actions = ref<TableRowAction[]>([]);
-const filters = ref<Map<string, string>>(new Map());
 
 const view = (row: TableRow) => console.log(row.id + ' View');
 const showActions = (row: TableRow) => {
-  console.log(row.id + ' Show Actions');
-  actions.value = [
-    {
-      icon: 'mdi-pencil',
-      text: 'Edit',
-      color: 'primary',
-      key: 'edit',
-    },
-    {
-      icon: 'mdi-delete',
-      text: 'Delete',
-      color: 'error',
-      key: 'delete',
-    },
-  ]
+  // console.log(row.id + ' Show Actions');
+  // actions.value = [
+  //   {
+  //     icon: 'mdi-pencil',
+  //     text: 'Edit',
+  //     color: 'primary',
+  //     key: 'edit',
+  //   },
+  //   {
+  //     icon: 'mdi-delete',
+  //     text: 'Delete',
+  //     color: 'error',
+  //     key: 'delete',
+  //   },
+  // ]
 }
 const handleAction = (event: {row: TableRow, action: TableRowAction}) => {
   console.log(event.row.id + ' ' + event.action.key);
@@ -87,15 +85,16 @@ const hover = (row: TableRow | null) => {
   }
 }
 
-const applyFilters = () => {
-  filters.value = new Map();
+const filters = computed<Map<string,string>>(()=>{
+  const filters = new Map<string,string>();
   filterBy.value.forEach((filter) => {
     const value: string = filter.value as string;
     if (value === '') return;
     const key: string = filter.operator === 'eq' ? filter.field : filter.field + '_' + filter.operator;
-    filters.value.set(key, value);
+    filters.set(key, value);
   });
-}
+  return filters;
+})
 
 const { data, error, isFetching, execute } = useDeserts(
   searchTerm,
