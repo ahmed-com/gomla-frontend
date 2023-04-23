@@ -154,11 +154,11 @@
 
 <script lang="ts" setup>
 	import { computed, ref, toRefs } from 'vue';
-	import searchIcon from '../assets/magnifying.svg';
-	import { Address } from '../types/Address.type';
-	import MarkableText from './MarkableText.vue';
-	import { scrollIntoView } from '../utils/scrollIntoView';
-	import componentsConfig from '../config/components.config.json';
+	import searchIcon from '../../assets/magnifying.svg';
+	import { Address } from '../../types/Address.type';
+	import MarkableText from '../MarkableText.vue';
+	import { scrollIntoView } from '../../utils/scrollIntoView';
+	import componentsConfig from '../../config/components.config.json';
 
 	type Props = {
 		searchTerm: string;
@@ -312,7 +312,7 @@
 </script>
 
 <style scoped lang="scss">
-	@import '../styles/_variables.scss';
+	@import '../../styles/_variables.scss';
 	.main-grid {
 		display: inline-grid;
 		grid-template-columns: 1fr 1px 1fr auto;

@@ -47,7 +47,7 @@
 <script setup lang="ts">
 	import { computed, ref, watch, watchEffect } from 'vue';
 	import { Address } from '../../types/Address.type';
-	import MainDesktopSearchBar from '../MainDesktopSearchBar.vue';
+	import MainDesktopSearchBar from '../inputs/MainDesktopSearchBar.vue';
 	import { autoCompleteAddress } from '../../utils/autoCompleteAddress';
 	import { locationToAddress } from '../../utils/locationToAddress';
 	import { any, propEq } from 'ramda';

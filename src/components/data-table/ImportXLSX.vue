@@ -25,7 +25,7 @@ export default {
             </div>
             <div v-else class="d-flex flex-column align-center justify-center text-h5 text-primary-darken-1 rounded-lg pa-4">
               <v-progress-circular v-if="isLoading" indeterminate color="primary" size="300" width="10"></v-progress-circular>
-              <div class="d-flex flex-column align-center bg-texture pa-2 w-75 max-width-50"  v-else-if="error !== null">
+              <div class="d-flex flex-column align-center bg-texture pa-2 w-75 max-width-50-vw"  v-else-if="error !== null">
                 <h1 class="text-h2 text-error">{{ error.message }}</h1>
                 <h2 class="text-info no-pointer-events no-user-select text-h6">{{ t('components.DataTable.useTemplateSuggestion') }}</h2>
               </div>

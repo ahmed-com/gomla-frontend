@@ -23,7 +23,7 @@
 		end?: number;
 		match?: string;
 		unmark?: boolean;
-		ignoreCase: boolean;
+		ignoreCase?: boolean;
 	};
 
 	const props: Props = defineProps<Props>();

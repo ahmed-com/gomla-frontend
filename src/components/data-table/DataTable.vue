@@ -5,14 +5,14 @@ export default {
 </script>
 
 <template>
-  <div class="rounded-lg elevation-4 bg-surface max-width-75">
+  <div class="rounded-lg elevation-4 bg-surface max-width-75-vw">
     <div class="bg-secondary rounded-t-lg pa-4">
       <div class="d-flex justify-space-between">
         <h1>{{ props.title }}</h1>
         <div>
           <slot class="d-inline mx-2" color="primary" name="create-btn">
           </slot>
-          <import-x-l-s-x :is-importing="props.isImporting" @import="emit('import', $event)" :import-template-headers="props.importTemplateHeaders" :disabled="props.isLoading"></import-x-l-s-x>
+          <import-x-l-s-x :is-importing="props.isImporting" @import="emit('import', $event)" :import-template-headers="props.importTemplateHeaders" :disabled="props.isImporting"></import-x-l-s-x>
         </div>
       </div>
       <div class="d-flex justify-space-between">
@@ -25,7 +25,7 @@ export default {
           <v-btn class="d-inline bg-primary mx-2" :loading="props.isLoading" icon="mdi-refresh" @click="emit('refresh')"></v-btn>
           <export-x-l-s-x :page-table="pageTable" :filename="props.title" :disabled="!!props.loadingError || props.isLoading"></export-x-l-s-x>
           <print-table :page-table="pageTable" :disabled="!!props.loadingError || props.isLoading"></print-table>
-          <table-filter :headers="props.headers" v-model:filter-by="filterBy"></table-filter>
+          <table-filter :disabled="!!props.loadingError || props.isLoading" :is-loading="props.isLoading" :headers="props.headers" v-model:filter-by="filterBy" @apply-filters="emit('applyFilters')"></table-filter>
         </div>
       </div>
     </div>
@@ -134,6 +134,7 @@ const emit = defineEmits<{
   (event: 'showActions', value: TableRow): void;
   (event: 'action', value: { row: TableRow, action: TableRowAction }): void;
   (event: 'hover', value: TableRow | null): void;
+  (event: 'applyFilters'): void;
 }>();
 
 const props: Props = withDefaults(defineProps<Props>(), {

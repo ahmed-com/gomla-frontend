@@ -12,6 +12,7 @@ export const useDeserts = (
     limit: Ref<number>,
     offset: Ref<number>,
     sortBy: Ref<SortBy[]>,
+    filters: Ref<Map<string, string>>,
     useFetchOptions: UseFetchOptions
 ) => {
     const { last: lastTerm } = useDebouncedRefHistory(searchTerm, {
@@ -28,7 +29,8 @@ export const useDeserts = (
             _limit: lastLimit.value.snapshot.toString(),
             _start: offset.value.toString(),
             _sort: sortBy.value.map((s) => s.field).join(","),
-            _order: sortBy.value.map((s) => s.direction).join(",")
+            _order: sortBy.value.map((s) => s.direction).join(","),
+            ...Object.fromEntries(filters.value),
         });
         return `deserts?${query.toString()}`;
     });
