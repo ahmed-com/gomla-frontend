@@ -58,21 +58,21 @@ const actions = ref<TableRowAction[]>([]);
 
 const view = (row: TableRow) => console.log(row.id + ' View');
 const showActions = (row: TableRow) => {
-  // console.log(row.id + ' Show Actions');
-  // actions.value = [
-  //   {
-  //     icon: 'mdi-pencil',
-  //     text: 'Edit',
-  //     color: 'primary',
-  //     key: 'edit',
-  //   },
-  //   {
-  //     icon: 'mdi-delete',
-  //     text: 'Delete',
-  //     color: 'error',
-  //     key: 'delete',
-  //   },
-  // ]
+  console.log(row.id + ' Show Actions');
+  actions.value = [
+    {
+      icon: 'mdi-pencil',
+      text: 'Edit',
+      color: 'primary',
+      key: 'edit',
+    },
+    {
+      icon: 'mdi-delete',
+      text: 'Delete',
+      color: 'error',
+      key: 'delete',
+    },
+  ]
 }
 const handleAction = (event: {row: TableRow, action: TableRowAction}) => {
   console.log(event.row.id + ' ' + event.action.key);
