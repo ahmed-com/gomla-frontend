@@ -19,7 +19,7 @@ export const useAPI = createFetch({
         afterFetch(ctx) {
             ctx.data = JSON.parse(ctx.data);
             const { headers } = ctx.response;
-            headers.has("X-Total-Count") && (ctx.data.total = headers.get("X-Total-Count"));
+            headers.has("X-Total-Count") && (ctx.data.total = +headers.get("X-Total-Count")!);
             return ctx;
         }
     }

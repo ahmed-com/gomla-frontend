@@ -17,7 +17,7 @@ export default {
         :is-loading="isFetching"
         :data-length="data ? data.total : 0"
         :import-template-headers="headers"
-        title="Deserts"
+        title="Users"
         :loading-error="error"
         :headers="headers"
         :isImporting="isImporting"
@@ -40,13 +40,16 @@ export default {
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, watchEffect } from 'vue'
 import DataTable from '../components/data-table/DataTable.vue';
 import { Desert } from '../types/Desert.type';
 import { SortBy } from '../types/SortBy.type';
 import { TableHeader, TableRow, TableRowAction, TableRowState } from '../types/TableData.type';
-import { useDeserts } from '../composables/useDesert';
+import { useUsers } from '../composables/useUser';
 import { FilterBy } from '../types/FilterBy.type';
+import { MapMarker } from '../types/MapMarker.type';
+import { GeoPoint } from '../types/GeoPoint.type';
+import { useSearchMapStore } from '../stores/searchMapStore';
 
 const itemsPerPage = ref(5);
 const currentPage = ref(1);
@@ -77,31 +80,13 @@ const showActions = (row: TableRow) => {
 const handleAction = (event: {row: TableRow, action: TableRowAction}) => {
   console.log(event.row.id + ' ' + event.action.key);
 }
-const hover = (row: TableRow | null) => {
-  if (row) {
-    console.log(row.id + ' Hover');
-  }else{
-    console.log('romove hover');
-  }
-}
 
-const filters = computed<Map<string,string>>(()=>{
-  const filters = new Map<string,string>();
-  filterBy.value.forEach((filter) => {
-    const value: string = filter.value as string;
-    if (value === '') return;
-    const key: string = filter.operator === 'eq' ? filter.field : filter.field + '_' + filter.operator;
-    filters.set(key, value);
-  });
-  return filters;
-})
-
-const { data, error, isFetching, execute } = useDeserts(
+const { data, error, isFetching, execute } = useUsers(
   searchTerm,
   itemsPerPage,
   computed(() => (currentPage.value - 1) * itemsPerPage.value),
   sortBy,
-  filters,
+  filterBy,
   { immediate: true, refetch: true}
 );
 
@@ -124,45 +109,85 @@ const headers: TableHeader[] = [
   },
 
   {
-    text: 'Calories',
-    key: 'calories',
+    text: 'User Name',
+    key: 'username',
     sortable: true,
     filterable: true,
-    type: 'number',
+    type: 'markableText',
   },
 
   {
-    text: 'Fat',
-    key: 'fat',
-    sortable: true,
+    text: 'Email',
+    key: 'email',
+    sortable: false,
     filterable: true,
-    type: 'number',
+    type: 'markableText',
   },
 
   {
-    text: 'Carbs',
-    key: 'carbs',
-    sortable: true,
+    text: 'Phone',
+    key: 'phone',
+    sortable: false,
     filterable: true,
-    type: 'number',
+    type: 'markableText',
   },
 
   {
-    text: 'Protein',
-    key: 'protein',
-    sortable: true,
-    filterable: true,
-    type: 'number',
+    text: 'Address',
+    key: 'address',
+    sortable: false,
+    filterable: false,
+    type: 'entity',
+    value: 'street',
   },
 
   {
-    text: 'Iron',
-    key: 'iron',
+    text: 'Website',
+    key: 'website',
     sortable: false,
     filterable: false,
     type: 'text',
-  }
+  },
+
+  {
+    text: 'Company',
+    key: 'company',
+    sortable: false,
+    filterable: false,
+    type: 'entity',
+    value: 'name',
+  },
+
 ]
+
+const { setMarkers, setView } = useSearchMapStore();
+watchEffect(()=>{
+  setView({
+    lat: 31,
+    lng: 31
+  });
+
+  setMarkers(data.value ? data.value.map(user=>({
+    description: user.username,
+    position: {
+      lat: parseFloat(user.address.geo.lat),
+      lng: parseFloat(user.address.geo.lng)
+    },
+    isHighlighted: false,
+  })) : [])
+})
+
+const hover = (row: TableRow | null)=>{
+  setMarkers(data.value ? data.value.map(user=>({
+    description: user.username,
+    position: {
+      lat: parseFloat(user.address.geo.lat),
+      lng: parseFloat(user.address.geo.lng)
+    },
+    isHighlighted: row ? row.id === user.id : false,
+  })) : [])
+  }
+
 
 </script>
 

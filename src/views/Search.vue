@@ -28,8 +28,8 @@
 	});
 
 	const startingPoint: GeoPoint = {
-		lat: 51.505,
-		lng: -0.09
+		lat: 31,
+		lng: 31
 	}
 
 	const orderStore = useOrderStore()

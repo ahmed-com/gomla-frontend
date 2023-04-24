@@ -1,9 +1,10 @@
 import { UseFetchOptions } from "@vueuse/core";
-import { computed, Ref } from "vue";
+import { Ref } from "vue";
 import { useAPI } from "../composables/useAPI";
 import { Desert } from "../types/Desert.type";
 import { SortBy } from "../types/SortBy.type";
-import { useDebouncedRefHistory } from "@vueuse/core";
+import { useResourceUrl } from "../composables/useResourceUrl";
+import { FilterBy } from "../types/FilterBy.type";
 
 type Response = Array<Desert> & { total: number };
 
@@ -12,27 +13,9 @@ export const useDeserts = (
     limit: Ref<number>,
     offset: Ref<number>,
     sortBy: Ref<SortBy[]>,
-    filters: Ref<Map<string, string>>,
+    filters: Ref<FilterBy[]>,
     useFetchOptions: UseFetchOptions
 ) => {
-    const { last: lastTerm } = useDebouncedRefHistory(searchTerm, {
-        capacity: 1,
-        debounce: 300,
-    });
-    const { last: lastLimit } = useDebouncedRefHistory(limit, {
-        capacity: 1,
-        debounce: 1000,
-    });
-    const url = computed<string>(() => {
-        const query = new URLSearchParams({
-            q: lastTerm.value.snapshot,
-            _limit: lastLimit.value.snapshot.toString(),
-            _start: offset.value.toString(),
-            _sort: sortBy.value.map((s) => s.field).join(","),
-            _order: sortBy.value.map((s) => s.direction).join(","),
-            ...Object.fromEntries(filters.value),
-        });
-        return `deserts?${query.toString()}`;
-    });
+    const url = useResourceUrl("deserts", searchTerm, limit, offset, sortBy, filters);
     return useAPI<Response>(url, useFetchOptions);
 };
