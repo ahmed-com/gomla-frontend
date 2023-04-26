@@ -50,6 +50,9 @@ import { FilterBy } from '../types/FilterBy.type';
 import { MapMarker } from '../types/MapMarker.type';
 import { GeoPoint } from '../types/GeoPoint.type';
 import { useSearchMapStore } from '../stores/searchMapStore';
+import { useRightSidebarStore } from '../stores/rightSidebarStore';
+
+const { toggle, setRow } = useRightSidebarStore();
 
 const itemsPerPage = ref(5);
 const currentPage = ref(1);
@@ -59,7 +62,11 @@ const sortBy = ref<SortBy[]>([]);
 const filterBy = ref<FilterBy[]>([]);
 const actions = ref<TableRowAction[]>([]);
 
-const view = (row: TableRow) => console.log(row.id + ' View');
+const view = (row: TableRow) => {
+  console.log(row.id + ' View');
+  setRow(row);
+};
+
 const showActions = (row: TableRow) => {
   console.log(row.id + ' Show Actions');
   actions.value = [

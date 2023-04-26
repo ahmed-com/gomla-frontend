@@ -6,6 +6,7 @@ import HomeHeader from '../layout/HomeHeader.vue';
 import MainFooter from '../layout/MainFooter.vue';
 import MainLeftSidebar from '../layout/MainLeftSidebar.vue';
 import MapRightSidebar from '../layout/MapRightSidebar.vue';
+import MainRightSidebar from '../layout/MainRightSidebar.vue';
 import PlainHeader from '../layout/PlainHeader.vue';
 
 import Home from '../views/Home.vue';
@@ -208,7 +209,7 @@ const routes: RouteRecordRaw[] = [
 			header: MainHeader,
 			footer: MainFooter,
 			leftDrawer: MainLeftSidebar,
-			rightDrawer: MapRightSidebar,
+			rightDrawer: MainRightSidebar,
 			main: ()=> import('../views/Generic.vue')
 		},
 		beforeEnter: ifAuth,
