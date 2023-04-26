@@ -31,7 +31,7 @@ export default {
           <v-btn
             v-for="action in actions"
             :key="action.key"
-            class="w-100 elevation-0"
+            class="w-100 elevation-0 text-start"
             @click.stop="handleAction(action)"
             >{{ action.text }} <v-icon :color="action.color">{{ action.icon }}</v-icon></v-btn
           >

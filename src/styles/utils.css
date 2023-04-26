@@ -416,3 +416,7 @@
 .max-widht-100-vw {
   max-width: 100vw !important;
 }
+
+.overflow-y-scroll {
+  overflow-y: scroll !important;
+}

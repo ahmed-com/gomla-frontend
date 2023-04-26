@@ -7,7 +7,7 @@ export default {
 <template>
   <v-card :height="desktopDrawerStyle.height" color="secondary">
       <div v-show="toggleMap" id="map-id" class="h-100 bg-surface"></div>
-      <div v-show="!toggleMap"> 
+      <div class="overflow-y-scroll scrollbar-hidden h-100" v-show="!toggleMap"> 
         <v-btn @click="rightSidebarStore.toggle" size="x-large" density="compact" icon="mdi-arrow-left" class="bg-secondary text-primary"></v-btn>
         <v-card>
           <v-card-title> Manage {{ row?.id }} </v-card-title>
