@@ -17,4 +17,4 @@
 1. the special filter of status will be a list of checkboxes, each checkbox will have a value of the status key and a text of the status text.
 1. however the special filter of the entity should make use of a composable of the entity to fetch the list of entities and show them in a list of checkboxes.
 1. write a custom computed property that will return a URL for the searching, sorting and filtering.
-1. write a function at the backend that will accept the searching, sorting and filtering and return the data using elasticsearch.
+1. write a function at the backend that will accept the searching, sorting and filtering and builds a query out of them.
