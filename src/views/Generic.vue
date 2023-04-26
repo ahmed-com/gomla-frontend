@@ -52,7 +52,7 @@ import { GeoPoint } from '../types/GeoPoint.type';
 import { useSearchMapStore } from '../stores/searchMapStore';
 import { useRightSidebarStore } from '../stores/rightSidebarStore';
 
-const { toggle, setRow } = useRightSidebarStore();
+const { setRow } = useRightSidebarStore();
 
 const itemsPerPage = ref(5);
 const currentPage = ref(1);
@@ -62,14 +62,17 @@ const sortBy = ref<SortBy[]>([]);
 const filterBy = ref<FilterBy[]>([]);
 const actions = ref<TableRowAction[]>([]);
 
-const view = (row: TableRow) => {
-  console.log(row.id + ' View');
-  setRow(row);
-};
+const view = (row: TableRow) => console.log(row.id + ' View');
 
 const showActions = (row: TableRow) => {
   console.log(row.id + ' Show Actions');
   actions.value = [
+    {
+      text: 'Manage',
+      key: 'manage',
+      color: 'primary',
+      icon: 'mdi-cog',
+    },
     {
       icon: 'mdi-pencil',
       text: 'Edit',
@@ -86,6 +89,9 @@ const showActions = (row: TableRow) => {
 }
 const handleAction = (event: {row: TableRow, action: TableRowAction}) => {
   console.log(event.row.id + ' ' + event.action.key);
+  if (event.action.key === 'manage') {
+    setRow(event.row);
+  }
 }
 
 const { data, error, isFetching, execute } = useUsers(

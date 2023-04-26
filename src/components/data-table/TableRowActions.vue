@@ -32,7 +32,7 @@ export default {
             v-for="action in actions"
             :key="action.key"
             class="w-100 elevation-0"
-            @click.stop="emit('action', action)"
+            @click.stop="handleAction(action)"
             >{{ action.text }} <v-icon :color="action.color">{{ action.icon }}</v-icon></v-btn
           >
         </div>
@@ -69,6 +69,11 @@ const visible = ref(false)
 const toggleVisible = () => {
   visible.value = !visible.value
   emit('showActions')
+}
+
+const handleAction = (action: TableRowAction) => {
+  emit('action', action)
+  visible.value = false
 }
 </script>
 
