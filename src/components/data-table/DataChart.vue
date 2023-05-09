@@ -48,8 +48,11 @@ export default {
       
       <svg ref="pageGraph"  width="100%" height="50vh" >
         <g >
+            <g class="tick">
+                <line :y2="innerHeight" />
+            </g>
             <g
-                v-for="tick in xTicks"
+                v-for="tick in scaleX.ticks()"
                 class="tick"
                 :key="+tick"
                 :transform="getBottomTickPosition(tick)"
@@ -60,7 +63,7 @@ export default {
                     dy=".71em"
                     :y="bottomLabelPosition"
                 >
-                    {{tick}}
+                    {{pageData[tick -1]?.name}}
                 </text>
             </g>
             <text
@@ -71,7 +74,7 @@ export default {
                 {{selectedYVariable}}
             </text>
             <g 
-                v-for="tick in yTicks"
+                v-for="tick in scaleY.ticks()"
                 :key="+tick"
                 class="tick"
                 :transform="getLeftTickPosition(tick)"
@@ -85,17 +88,28 @@ export default {
                     {{tick}}
                 </text>
             </g>
-            <g class="char-plot">
+            <g class="chart-plot">
               <TransitionGroup v-if="!!pageData.length" name="list">
-                <rect
+                <template
                     v-if="selectedChartType === 'bar'"
                     v-for="(row, index) in pageData"
                     :key="row.id"
+                >
+                <rect
                     :x="scaleX(index + 1)"
                     :y="scaleY(row[selectedYVariable])"
                     :width="dampenBarWidth"
                     :height="innerHeight - scaleY(row[selectedYVariable])"
                 />
+                <text
+                  :x="scaleX(index + 1) + dampenBarWidth / 2"
+                  :y="scaleY(row[selectedYVariable]) - 5"
+                  text-anchor="middle"
+                  font-size="12"
+                >
+                  {{row[selectedYVariable]}}
+              </text>
+            </template>
                 <path
                     v-if="selectedChartType === 'line'"
                     fill="none"
@@ -275,22 +289,18 @@ const tickOffset = 10;
 const innerWidth = computed(() => pageGraph.value ? pageGraph.value.clientWidth - margin.left - margin.right : 0);
 const innerHeight = computed(() => pageGraph.value ? pageGraph.value.clientHeight - margin.top - margin.bottom : 0);
 
+const barWidth = computed(() => innerWidth.value / refProps.pageData.value.length);
+const dampenBarWidth = computed<number>(()=> Math.min(barWidth.value * 0.8, innerWidth.value / 2))
+
 const scaleX = computed(() => scaleLinear()
   .domain([1, refProps.pageData.value.length + 1])
-  .range([0, innerWidth.value])
+  .range([barWidth.value - dampenBarWidth.value, innerWidth.value])
   .nice());
 
 const scaleY = computed(() => scaleLinear()
   .domain(extent(refProps.pageData.value, extractYValue) as [number, number])
   .range([innerHeight.value, 0])
   .nice());
-
-  
-const barWidth = computed(() => innerWidth.value / refProps.pageData.value.length);
-const dampenBarWidth = computed<number>(()=> barWidth.value * 0.8)
-
-const xTicks = computed(() => scaleX.value.ticks())
-const yTicks = computed(() => scaleY.value.ticks());
 
 const getBottomTickPosition = (tick: number) => `translate(${scaleX.value(tick)},0)`;
 const getLeftTickPosition = (tick: number) => `translate(0,${scaleY.value(tick)})`;
@@ -332,17 +342,33 @@ const linePath = computed<string>(()=> line<TableRow>()
   font-size: 50%;
 }
 
-.char-plot rect {
+rect {
   transition: all 0.5s ease;
 }
 
-.char-plot path {
+rect:hover {
+  fill: #F2F2F2;
+}
+
+rect:hover + text {
+  display: unset;
+}
+
+rect:not(:hover) + text {
+  display: none;
+}
+
+path {
   transition: all 0.5s ease;
   stroke: steelblue;
   transition: all 0.5s ease;
   stroke-width: 1;
   stroke-linejoin: round;
   stroke-linecap: round;
+}
+
+.chart-plot g{
+  transition: all 0.5s ease;
 }
 
 .axis-label {
