@@ -217,6 +217,19 @@ const routes: RouteRecordRaw[] = [
 	},
 
 	{
+		path: '/generic-chart',
+		name: 'Chart',
+		components: {
+			header: MainHeader,
+			footer: MainFooter,
+			leftDrawer: MainLeftSidebar,
+			main: ()=> import('../views/GenericChart.vue')
+		},
+			beforeEnter: ifAuth,
+			props: {main:true}
+	},
+
+	{
 		path: '/:pathMatch(.*)*',
 		name: 'NotFound',
 		components: {
