@@ -16,6 +16,7 @@ export default {
       :is-loading="isFetching"
       :data-length="data ? data.total : 0"
       title="Deserts"
+      row-title="name"
       :loading-error="error"
       :headers="headers"
       @refresh="refresh"

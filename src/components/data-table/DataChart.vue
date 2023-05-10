@@ -46,47 +46,52 @@ export default {
         <option v-for="variable in yVariables" :value="variable.key">{{ variable.text }}</option>
       </select>
       
-      <svg ref="pageGraph"  width="100%" height="50vh" >
-        <g >
-            <g class="tick">
-                <line :y2="innerHeight" />
+      <svg ref="pageGraph"  width="100%" height="50vh" class="bg-texture" >
+        <g :transform="`translate(${margin.top}, ${margin.left})`">
+            <g >
+                <line stroke="rgb(var(--v-theme-primary))" :y2="innerHeight" />
             </g>
             <g
-                v-for="tick in scaleX.ticks()"
-                class="tick"
+                v-for="(tick, i) in scaleX.ticks((pageData.length * 2) - 2)"
                 :key="+tick"
-                :transform="getBottomTickPosition(tick)"
+                :transform="`translate(${scaleX(tick)},0)`"
             >
-                <line :y2="innerHeight" />
-                <text
-                    textAnchor="middle"
-                    dy=".71em"
-                    :y="bottomLabelPosition"
+                <line stroke="rgb(var(--v-theme-primary))" :y2="innerHeight" />
+                <g
+                  :transform="`translate(${dampenBarWidth / 2}, ${innerHeight + tickOffset})`"
                 >
-                    {{pageData[tick -1]?.name}}
-                </text>
+                  <text
+                      text-anchor="end"
+                      transform="rotate(-45)"
+                      lengthAdjust="spacingAndGlyphs"
+                      :textLength="margin.bottom"
+                  >
+                      {{pageData.length < chartMaxLabels ? pageData[tick -1]?.[rowTitle ? rowTitle : 'id'] : ''}}
+                  </text>
+                </g>
             </g>
-            <text
-                class="axis-label"
-                textAnchor="middle"
-                :transform="bottomTextPosition"
-            >
-                {{selectedYVariable}}
-            </text>
+            <g >
+                <line stroke="rgb(var(--v-theme-primary))" :y2="innerHeight" :x1="innerWidth" :x2="innerWidth"/>
+            </g>
+            <g>
+                <line stroke="rgb(var(--v-theme-primary))" :x2="innerWidth" :y1="innerHeight" :y2="innerHeight"/>
+            </g>
             <g 
                 v-for="tick in scaleY.ticks()"
                 :key="+tick"
-                class="tick"
-                :transform="getLeftTickPosition(tick)"
+                :transform="`translate(0,${scaleY(tick)})`"
             >
-                <line :x2="innerWidth" />
+                <line stroke="rgb(var(--v-theme-primary))" :x2="innerWidth" />
                 <text
-                    textAnchor="end"
+                    text-anchor="end"
                     dy=".32em"
-                    :x="leftLabelPosition"
+                    :x="-tickOffset"
                 >
                     {{tick}}
                 </text>
+            </g>
+            <g>
+              <line stroke="rgb(var(--v-theme-primary))" :x2="innerWidth"/>
             </g>
             <g class="chart-plot">
               <TransitionGroup v-if="!!pageData.length" name="list">
@@ -100,12 +105,16 @@ export default {
                     :y="scaleY(row[selectedYVariable])"
                     :width="dampenBarWidth"
                     :height="innerHeight - scaleY(row[selectedYVariable])"
+                    class="cursor-pointer"
+                    @click="emit('view', row)"
+                    fill="rgb(var(--v-theme-secondary))"
                 />
                 <text
                   :x="scaleX(index + 1) + dampenBarWidth / 2"
                   :y="scaleY(row[selectedYVariable]) - 5"
                   text-anchor="middle"
                   font-size="12"
+                  fill="rgb(var(--v-theme-secondary))"
                 >
                   {{row[selectedYVariable]}}
               </text>
@@ -113,8 +122,9 @@ export default {
                 <path
                     v-if="selectedChartType === 'line'"
                     fill="none"
-                    stroke="steelblue"
+                    stroke="rgb(var(--v-theme-secondary))"
                     :d="linePath"
+                    :transform="`translate(${dampenBarWidth / 2}, 0)`"
                     ></path>
             </TransitionGroup>
             </g>
@@ -139,21 +149,20 @@ export default {
   // [TODO] [x] Copy the generic crud view and use deserts as an example
   // [TODO] [] Extract the table data container as a seperate component
   // [TODO] [] Make the export button of the container accepts the data instead of the table element
-  // [TODO] [] Make the print component more generic
   // [TODO] [] Make the import component optional
   // [TODO] [] Make the container accepts a slot for either the table or chart
   // [TODO] [x] Define the props of the chart component
-  // [TODO] [] Write the markaup of a bar chart component (bar, axis, labels, grid, etc.)
-  // [TODO] [] Make the data in the chart component computed with d3.js
-  // [TODO] [] Add transitions to the bars and the axis
-  // [TODO] [] Add group transitions to the bars
-  // [TODO] [] Add the ability to change the chart type
-  // [TODO] [] Add a select input for the variable to be plotted
+  // [TODO] [x] Write the markaup of a bar chart component (bar, axis, labels, grid, etc.)
+  // [TODO] [x] Make the data in the chart component computed with d3.js
+  // [TODO] [x] Add transitions to the bars and the axis
+  // [TODO] [x] Add group transitions to the bars
+  // [TODO] [x] Add the ability to change the chart type
+  // [TODO] [x] Add a select input for the variable to be plotted
   // [TODO] [] Add a select input for sorting the data
-  // [TODO] [] Add debounced loading state to the chart
   // [TODO] [] Add a button to copy the chart as an image
-  // [TODO] [] Add a tooltip to the bars
-  // [TODO] [] Somehow add a tooltip to the line chart
+  // [TODO] [x] Add a tooltip to the bars
+  // [TODO] [] emite view when a bar is clicked
+  // [TODO] [] 
 import { useI18n } from 'vue-i18n';
 import { ref, computed, toRefs } from 'vue';
 import { SortBy } from '../../types/SortBy.type';
@@ -166,12 +175,14 @@ import { HttpError } from '../../types/HttpError.type';
 import { watchDebounced } from '@vueuse/shared';
 import TableFilter from './TableFilter.vue';
 import { scaleLinear, extent, line } from 'd3';
+import { chartMaxLabels } from '../../config/components.config.json'
 
 const pageGraph = ref<HTMLElement | null>(null);
 const { t } = useI18n();
 
 type Props = {
   title: string;
+  rowTitle: string;
   pageData: TableRow[];
   itemsPerPage: number;
   searchTerm: string;
@@ -196,6 +207,7 @@ const emit = defineEmits<{
 
 const props: Props = withDefaults(defineProps<Props>(), {
   title: '',
+  rowTitle: '',
   itemsPerPage: 10,
   searchTerm: '',
   currentPage: 1,
@@ -280,10 +292,7 @@ const extractYValue = (row: TableRow) => {
     return 0;
   }
 };
-
-const xAxisLabelOffset = 50;
-const yAxisLabelOffset = 50;
-const margin = { top: 20, right: 20, bottom: 100, left: 100 };
+const margin = { top: 50, right: 50, bottom: 50, left: 50 };
 const tickOffset = 10;
 
 const innerWidth = computed(() => pageGraph.value ? pageGraph.value.clientWidth - margin.left - margin.right : 0);
@@ -301,14 +310,6 @@ const scaleY = computed(() => scaleLinear()
   .domain(extent(refProps.pageData.value, extractYValue) as [number, number])
   .range([innerHeight.value, 0])
   .nice());
-
-const getBottomTickPosition = (tick: number) => `translate(${scaleX.value(tick)},0)`;
-const getLeftTickPosition = (tick: number) => `translate(0,${scaleY.value(tick)})`;
-
-const bottomLabelPosition = computed<number>(() => innerHeight.value + tickOffset);
-const leftLabelPosition = computed<number>(() => -tickOffset);
-
-const bottomTextPosition = computed<string>(()=> `translate(${-yAxisLabelOffset}, ${innerHeight.value}) rotate(-90)`);
 
 const linePath = computed<string>(()=> line<TableRow>()
   .x((row, index) => scaleX.value(index + 1))
@@ -333,21 +334,12 @@ const linePath = computed<string>(()=> line<TableRow>()
   position: absolute;
 }
 
-.tick line {
-  stroke: #C0C0BB;
-}
-
-.tick text {
-  fill: #635F5D;
-  font-size: 50%;
-}
-
 rect {
   transition: all 0.5s ease;
 }
 
 rect:hover {
-  fill: #F2F2F2;
+  fill: rgb(var(--v-theme-primary));
 }
 
 rect:hover + text {
@@ -371,8 +363,5 @@ path {
   transition: all 0.5s ease;
 }
 
-.axis-label {
-  font-size: 130%;
-  fill: #635F5D;
-}
+
 </style>
