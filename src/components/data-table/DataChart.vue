@@ -62,7 +62,7 @@ export default {
                 >
                   <text
                       text-anchor="end"
-                      transform="rotate(-45)"
+                      :transform="`rotate(${isRtl ? 45 : -45})`"
                       lengthAdjust="spacingAndGlyphs"
                       :textLength="margin.bottom"
                   >
@@ -83,7 +83,7 @@ export default {
             >
                 <line stroke="rgb(var(--v-theme-primary))" :x2="innerWidth" />
                 <text
-                    text-anchor="end"
+                    :text-anchor="isRtl ? 'start' : 'end'"
                     dy=".32em"
                     :x="-tickOffset"
                 >
@@ -161,7 +161,7 @@ export default {
   // [TODO] [] Add a select input for sorting the data
   // [TODO] [] Add a button to copy the chart as an image
   // [TODO] [x] Add a tooltip to the bars
-  // [TODO] [] emite view when a bar is clicked
+  // [TODO] [x] emit view when a bar is clicked
   // [TODO] [] 
 import { useI18n } from 'vue-i18n';
 import { ref, computed, toRefs } from 'vue';
@@ -176,9 +176,11 @@ import { watchDebounced } from '@vueuse/shared';
 import TableFilter from './TableFilter.vue';
 import { scaleLinear, extent, line } from 'd3';
 import { chartMaxLabels } from '../../config/components.config.json'
+import { useRtl } from 'vuetify/lib/framework.mjs';
 
 const pageGraph = ref<HTMLElement | null>(null);
 const { t } = useI18n();
+const { isRtl } = useRtl();
 
 type Props = {
   title: string;
