@@ -34,6 +34,13 @@
       "errors":{
         "missingHeader": "Header \"{header}\" is missing"
       }
+    },
+    "MultiStepForm":{
+      "next": "Next",
+      "back": "Back",
+      "submit": "Submit",
+      "cancel": "Cancel",
+      "requiredField": "[{field}] required field"
     }
   }
 }

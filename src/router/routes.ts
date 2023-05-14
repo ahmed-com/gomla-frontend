@@ -230,6 +230,19 @@ const routes: RouteRecordRaw[] = [
 	},
 
 	{
+		path: '/generic-form',
+		name: 'Form',
+		components: {
+			header: MainHeader,
+			footer: MainFooter,
+			leftDrawer: MainLeftSidebar,
+			main: ()=> import('../views/GenericForm.vue')
+		},
+		beforeEnter: ifAuth,
+		props: {main:true}
+	},
+
+	{
 		path: '/:pathMatch(.*)*',
 		name: 'NotFound',
 		components: {

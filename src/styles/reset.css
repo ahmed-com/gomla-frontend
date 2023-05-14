@@ -37,7 +37,7 @@
     font-family: 'Ubuntu', sans-serif;
 }
 
-input[type='text']:focus-visible {
+input:not([type='number']):focus-visible{
     outline: none;
 }
 

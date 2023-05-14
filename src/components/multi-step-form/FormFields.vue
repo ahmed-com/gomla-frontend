@@ -1,0 +1,73 @@
+<script lang="ts">
+export default {
+  name: 'FormFields',
+}
+</script>
+
+<template>
+  <div>
+    <div class="py-10 fields-grid">
+      <label v-for="field in fields" :key="field.key" class="d-flex pa-2 rounded-lg position-relative" :class="{'border-error': field.hasError}">
+        <small class="bg-info pa-1 rounded-sm position-absolute tooltip">{{ field.helpText }}</small>
+        <span class="px-2 font-weight-bold">
+          {{ field.label }}
+          <sup v-if="field.required" class="text-error">*</sup>
+          :
+        </span>
+        <FormInput
+          :field="field"
+          @updateField="(update) => emit('updateField', update)"
+          ></FormInput>
+          <v-spacer></v-spacer>
+          <v-icon v-if="field.hasError" color="error">mdi-alert-circle-outline</v-icon>
+      </label>
+    </div>
+
+    <v-expand-transition>
+      <ul v-if="!!errors?.length" class="bg-error pa-4 my-4 rounded-lg">
+        <TransitionGroup name="list">
+          <li v-for="error in errors" :key="error" class="mx-4">{{ error }}</li>
+        </TransitionGroup>
+      </ul>
+    </v-expand-transition>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref, toRefs } from 'vue'
+import { InputField } from '../../types/InputField.type'
+import FormInput from './FormInput.vue'
+
+type Props = {
+  fields: InputField[],
+  errors: string[]
+}
+
+const props = defineProps<Props>()
+
+const emit = defineEmits<{
+  (event: 'updateField', update: { key: string; value: any }): void
+}>()
+
+</script>
+
+<style scoped>
+.tooltip{
+  top: 0;
+  left: 0;
+  opacity: 0;
+  transform: translate(0, -50%);
+  transition: transform 0.2s ease-in-out;
+}
+
+label:hover .tooltip{
+  opacity: 0.8;
+  transform: translate(0, -120%);
+}
+
+.fields-grid{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 1rem;
+}
+</style>

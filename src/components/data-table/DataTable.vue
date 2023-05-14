@@ -226,22 +226,6 @@ const isSortedBy = (key: string) => {
 </script>
 
 <style scoped>
-.list-move,
-.list-enter-active,
-.list-leave-active {
-  transition: all 0.5s ease;
-}
-
-.list-enter-from,
-.list-leave-to {
-  opacity: 0;
-  transform: translateX(30px);
-}
-
-.list-leave-active {
-  position: absolute;
-}
-
 tr:hover:not(:first-child) {
   background-color: rgb(var(--v-theme-secondary-lighten-3));
   color: rgb(var(--v-theme-surface));

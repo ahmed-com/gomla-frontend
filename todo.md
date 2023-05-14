@@ -18,3 +18,42 @@
 1. however the special filter of the entity should make use of a composable of the entity to fetch the list of entities and show them in a list of checkboxes.
 1. write a custom computed property that will return a URL for the searching, sorting and filtering.
 1. write a function at the backend that will accept the searching, sorting and filtering and builds a query out of them.
+
+# Generic Form:
+1. the form will accept a prop called `fields` which is an array of {key, type, label, value, required, disabled, options, placeholder, helpText, validation}
+1. you can v-model the form to get the form data
+1. the form will emit a `submit` event whose value is the form data
+1. the form will emit a `reset` event whose value is the form data
+1. the form will emit a `cancel` event whose value is the form data
+1. the form will take a prop called `loading` which will disable the submit button and show a loading spinner
+1. the form will take a prop called `submitText` which will be the text of the submit button
+1. the form will take a prop called `cancelText` which will be the text of the cancel button
+1. the form will take a prop called `resetText` which will be the text of the reset button
+1. some inputs might depend on other inputs, for example if you have a select input that has a value of 'other' then you might want to show a text input to enter the other value, this can be done by adding a `dependsOn` field to the input object, this field will be an array of {key, value} objects, if the value of the key is equal to the value of the input then the input will be shown, otherwise it will be hidden.
+1. the form will take a prop called `errors` which will be an object of {key, value} where the key is the key of the input and the value is the error message
+1. the form will take a prop called `success` which will be a boolean, if true then the form will show a success message
+1. the form will take a prop called `successMessage` which will be the success message
+1. the form might be a mutistep form, in this case you can use the `step` prop to specify the current step, the `steps` prop to specify the steps and the `next` and `previous` events to move between steps.
+1. the form will take a prop called `steps` which will be an array of {key, label, fields} objects, the key will be the key of the step, the label will be the label of the step and the fields will be the fields of the step
+1. the form will take a prop called `step` which will be the key of the current step
+1. the form will emit a `next` event whose value is the key of the next step
+1. the form will emit a `previous` event whose value is the key of the previous step
+1. the form will take a prop called `stepText` which will be the text of the step button
+1. the form will take a prop called `nextText` which will be the text of the next button
+1. the form will take a prop called `previousText` which will be the text of the previous button
+1. the form will take a prop called `finishText` which will be the text of the finish button
+
+# Generic Input:
+1. the input will accept a prop called `type` which will be one of the supported types \['text', 'number', 'textarea', 'select', 'checkbox', 'radio', 'switch', 'date', 'dateTime', 'time', 'geolocation', 'ipAddress', 'password', 'email', 'url', 'file', 'image', 'video', 'audio', 'color', 'entity', 'status', 'markableText', 'avatar', 'hidden'\]
+1. the input will accept a prop called `label` which will be the label of the input
+1. the input will accept a prop called `value` which will be the value of the input
+1. the input will accept a prop called `required` which will be a boolean, if true then the input will be required
+1. the input will accept a prop called `disabled` which will be a boolean, if true then the input will be disabled
+1. the input will accept a prop called `options` which will be an array of {key, value} objects, this will be used for select, checkbox, radio and switch inputs
+1. the input will accept a prop called `placeholder` which will be the placeholder of the input
+1. the input will accept a prop called `helpText` which will be the help text of the input
+1. the input will accept a prop called `validation` which will be an array of {type, message} objects, this will be used for text, number, textarea, date, dateTime, time, geolocation, ipAddress, password, email, url, file, image, video, audio, color, entity, status, markableText, avatar and hidden inputs
+1. the input will accept a prop called `errors` which will be an array of {type, message} objects, this will be used for text, number, textarea, date, dateTime, time, geolocation, ipAddress, password, email, url, file, image, video, audio, color, entity, status, markableText, avatar and hidden inputs
+1. the input will accept a prop called `success` which will be a boolean, if true then the input will show a success message
+1. the input will accept a prop called `successMessage` which will be the success message
+1. the input will accept a prop called `loading` which will be a boolean, if true then the input will show a loading spinner
