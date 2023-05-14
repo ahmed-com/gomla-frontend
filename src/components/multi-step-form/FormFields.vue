@@ -7,25 +7,27 @@ export default {
 <template>
   <div>
     <div class="py-10 fields-grid">
-      <label 
-        v-for="field in fields" 
-        :key="field.key" 
-        class="d-flex pa-2 rounded-lg position-relative" 
-        :class="{'border-error': field.hasError}"
-        >
-        <small class="bg-info pa-1 rounded-sm position-absolute tooltip">{{ field.helpText }}</small>
-        <span class="px-2 font-weight-bold">
-          {{ field.label }}
-          <sup v-if="field.required" class="text-error">*</sup>
-          :
-        </span>
-        <FormInput
-          :field="field"
-          @updateField="(update) => emit('updateField', update)"
-          ></FormInput>
-          <v-spacer></v-spacer>
-          <v-icon v-if="field.hasError" color="error">mdi-alert-circle-outline</v-icon>
-      </label>
+      <TransitionGroup name="uplist">
+        <label 
+          v-for="field in fields" 
+          :key="field.key" 
+          class="d-flex pa-2 rounded-lg position-relative" 
+          :class="{'border-error': field.hasError}"
+          >
+          <small class="bg-info pa-1 rounded-sm position-absolute tooltip">{{ field.helpText }}</small>
+          <span class="px-2 font-weight-bold">
+            {{ field.label }}
+            <sup v-if="field.required" class="text-error">*</sup>
+            :
+          </span>
+          <FormInput
+            :field="field"
+            @updateField="(update) => emit('updateField', update)"
+            ></FormInput>
+            <v-spacer></v-spacer>
+            <v-icon v-if="field.hasError" color="error">mdi-alert-circle-outline</v-icon>
+        </label>
+      </TransitionGroup> 
     </div>
 
     <div class="my-10 py-10"></div>

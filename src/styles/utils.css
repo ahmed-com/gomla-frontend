@@ -503,6 +503,22 @@
   position: absolute;
 }
 
+.uplist-move,
+.uplist-enter-active,
+.uplist-leave-active {
+  transition: all 0.5s ease;
+}
+
+.uplist-enter-from,
+.uplist-leave-to {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.uplist-leave-active {
+  position: absolute;
+}
+
 .border-error {
   border: 1px solid rgb(var(--v-theme-error)) !important;
 }
