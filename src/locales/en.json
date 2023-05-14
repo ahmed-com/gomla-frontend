@@ -40,7 +40,8 @@
       "back": "Back",
       "submit": "Submit",
       "cancel": "Cancel",
-      "requiredField": "[{field}] required field"
+      "requiredField": "[{field}] required field",
+      "invalidValue": "[{field}] {rule}"
     }
   }
 }

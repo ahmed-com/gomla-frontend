@@ -49,8 +49,8 @@ const steps = ref<Array<{
     key: 'step2',
     fields: [
       { key: 'address', value: '', label: 'Address', type: 'text', required: true, placeholder: 'Enter your address', helpText: 'Enter your address', rules:{ 'rule': (x: string) => x.length > 0 }},
-      { key: 'city', value: '', label: 'City', type: 'text', required: true, placeholder: 'Enter your city', helpText: 'Enter your city', rules:{ 'rule': (x: string) => x.length > 0 }},
       { key: 'state', value: '', label: 'State', type: 'text', required: true, placeholder: 'Enter your state', helpText: 'Enter your state', rules:{ 'rule': (x: string) => x.length > 0 }},
+      { key: 'city', value: '', label: 'City', type: 'text', required: true, placeholder: 'Enter your city', helpText: 'Enter your city', rules:{ 'rule': (x: string) => x.length > 0 }, dependsOn: [{ key: 'state', value: 'Lagos', operator: 'eq'}]},
     ]
   },
   {

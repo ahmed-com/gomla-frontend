@@ -9,7 +9,7 @@ export const lightTheme: ThemeDefinition = {
         'primary-darken-1': '#028090',
         secondary: '#003459',
         // 'secondary-darken-1': '#018786',
-        error: '#d80020',
+        error: '#e80020',
         info: '#2196F3',
         success: '#4CAF50',
         warning: '#FB8C00',

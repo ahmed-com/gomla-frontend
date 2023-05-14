@@ -7,7 +7,12 @@ export default {
 <template>
   <div>
     <div class="py-10 fields-grid">
-      <label v-for="field in fields" :key="field.key" class="d-flex pa-2 rounded-lg position-relative" :class="{'border-error': field.hasError}">
+      <label 
+        v-for="field in fields" 
+        :key="field.key" 
+        class="d-flex pa-2 rounded-lg position-relative" 
+        :class="{'border-error': field.hasError}"
+        >
         <small class="bg-info pa-1 rounded-sm position-absolute tooltip">{{ field.helpText }}</small>
         <span class="px-2 font-weight-bold">
           {{ field.label }}
@@ -23,18 +28,22 @@ export default {
       </label>
     </div>
 
+    <div class="my-10 py-10"></div>
+
     <v-expand-transition>
-      <ul v-if="!!errors?.length" class="bg-error pa-4 my-4 rounded-lg">
+      <ol v-if="!!errors?.length" class="bg-error pa-4 my-4 rounded-lg elevation-4">
+        <h3 class="no-user-select no-pointer-events">Errors: </h3>
+        <hr class="mb-1">
         <TransitionGroup name="list">
           <li v-for="error in errors" :key="error" class="mx-4">{{ error }}</li>
         </TransitionGroup>
-      </ul>
+      </ol>
     </v-expand-transition>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, toRefs } from 'vue'
+import { toRefs} from 'vue'
 import { InputField } from '../../types/InputField.type'
 import FormInput from './FormInput.vue'
 
@@ -44,6 +53,8 @@ type Props = {
 }
 
 const props = defineProps<Props>()
+
+const { fields, errors } = toRefs(props)
 
 const emit = defineEmits<{
   (event: 'updateField', update: { key: string; value: any }): void

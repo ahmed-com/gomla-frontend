@@ -14,9 +14,9 @@ export default {
           @click="activeStep = i"
         >
           <div class="width-25 height-25">
-            <v-icon size="30" v-if="errors[step.key] &&  errors[step.key].length > 0" color="error">mdi-alert-circle</v-icon>
-            <v-icon size="30" v-else-if="isSuccessful || (i < activeStep) && (!errors[step.key] || errors[step.key].length == 0)" color="success">mdi-check</v-icon>
-            <span v-else-if="i == activeStep && (!errors[step.key] || errors[step.key].length == 0)" class="bg-primary rounded-circle text-h6 font-weight-bold d-flex justify-center align-center width-25 height-25">{{ i + 1 }}</span>
+            <v-icon size="30" v-if="isStepHasErrors(step) && activeStep > i" color="error">mdi-alert-circle</v-icon>
+            <v-icon size="30" v-else-if="isSuccessful || (!isStepHasErrors(step) && activeStep > i)" color="success">mdi-check</v-icon>
+            <span v-else-if="i == activeStep" class="bg-primary rounded-circle text-h6 font-weight-bold d-flex justify-center align-center width-25 height-25">{{ i + 1 }}</span>
             <span v-else class="bg-surface rounded-circle text-h6 font-weight-bold d-flex justify-center align-center width-25 height-25">{{ i + 1 }}</span>
         </div>
           <div class="text-h6 font-weight-bold ml-2">{{ step.text }}</div>
@@ -43,7 +43,7 @@ export default {
         </v-overlay>
   
         <Transition :name="transitionName" mode="default">
-              <FormFields class="pa-4" :key="steps[activeStep].key" :fields="steps[activeStep].fields" :errors="errors[steps[activeStep].key]" @updateField="updateField"></FormFields>
+              <FormFields class="pa-4" :key="steps[activeStep].key" :fields="steps[activeStep].fields.filter(isFieldResolved)" :errors="errors[steps[activeStep].key]?.filter(isErrorResolved(steps[activeStep]))" @updateField="updateField"></FormFields>
         </Transition>
   
         <div class="position-absolute position-bottom-0 d-flex pa-4 w-100">
@@ -71,6 +71,7 @@ import { InputField } from '../../types/InputField.type';
 import FormFields from './FormFields.vue';
 import { useI18n } from 'vue-i18n';
 import { RouteLocationRaw } from 'vue-router';
+import { assertCondition } from '../../utils/assertCondition';
 
 type Props = {
   steps: Array<{
@@ -114,22 +115,33 @@ const errors = computed<{ [key: string]: string[] }>({
   set: (value: { [key: string]: string[] }) => emit('update:errors', value)
 });
 
+const isFieldResolved = (field: InputField): boolean => {
+  const allFields = props.steps.reduce((acc, step) => {
+    return [...acc, ...step.fields];
+  }, [] as InputField[]);
+
+  return !field.dependsOn || field.dependsOn.every(({ key, operator, value }) => assertCondition(allFields.find(f => f.key == key)?.value, operator, value))
+}
+
+const isStepHasErrors = (step: { key: string; fields: InputField[] }) => {
+  return step.fields.some(field => isFieldResolved(field) && (field.hasError || (field.required && !field.value)));
+};
+
 const isSubmitDisabled = computed<boolean>(()=> {
-  const isRequiredFieldsSubmitted = props.steps.reduce((acc, step) => {
-    const isStepRequiredFieldsSubmitted = step.fields.reduce((acc, field) => {
-      if (field.required && !field.value) {
-        return false;
-      }
-      return acc;
-    }, true);
-    return acc && isStepRequiredFieldsSubmitted;
-  }, true);
-  const hasErrors = Object.values(errors.value).reduce((acc, errors) => {
-    return acc || errors.length > 0;
-  }, false);
-  
-  return !isRequiredFieldsSubmitted || hasErrors;
+  return !props.steps.every(step => !isStepHasErrors(step));
 });
+
+const isErrorResolved = (step: {fields: InputField[]}) => (error: string) => {
+  const getAllErrorsOfField = (field: InputField): string[] => [
+    t('components.MultiStepForm.requiredField', { field: field.label }),
+    ...Object.keys(field.rules || {}).map(rule => t('components.MultiStepForm.invalidValue', { field: field.label, rule }))
+  ]
+
+  return step
+    .fields
+    .filter(isFieldResolved)
+    .some(field => getAllErrorsOfField(field).includes(error));
+}
 
 const { t } = useI18n();
 const {isRtl} = useRtl();
@@ -148,30 +160,27 @@ const updateField = (update: {key: string, value: any}) => {
   }
 
   if (field.required) {
-    const errorMsg = t('components.MultiStepForm.requiredField', { field: field.label });
     if(!value){
-      if (!errors.value[step.key].includes(errorMsg)) {
-        errors.value[step.key].push(errorMsg);
+      if (!errors.value[step.key].includes(t('components.MultiStepForm.requiredField', { field: field.label }))) {
+        errors.value[step.key].push(t('components.MultiStepForm.requiredField', { field: field.label }));
       }
       field.hasError = true;
     } else {
       if (errors.value[step.key]) {
-        errors.value[step.key] = errors.value[step.key].filter(x => x !== errorMsg);
+        errors.value[step.key] = errors.value[step.key].filter(x => x !== t('components.MultiStepForm.requiredField', { field: field.label }));
       }
     }
   }
 
   Object.keys(field.rules || {}).forEach(rule => {
-    const errorMsg = `[${field.label}] ${rule}`;
-
     if (field.rules && !field.rules[rule](value)) {
-      if (!errors.value[step.key].includes(errorMsg)) {
-        errors.value[step.key].push(errorMsg);
+      if (!errors.value[step.key].includes(t('components.MultiStepForm.invalidValue', {field: field.label, rule}))) {
+        errors.value[step.key].push(t('components.MultiStepForm.invalidValue', {field: field.label, rule}));
       }
       field.hasError = true;
     } else {
       if (errors.value[step.key]) {
-        errors.value[step.key] = errors.value[step.key].filter(x => x !== errorMsg);
+        errors.value[step.key] = errors.value[step.key].filter(x => x !== t('components.MultiStepForm.invalidValue', {field: field.label, rule}));
       }
     }
   }
@@ -179,10 +188,6 @@ const updateField = (update: {key: string, value: any}) => {
 }
 
 watch(activeStep, (to, from) => {
-  const step = refProps.steps.value[from];
-  const fields = step.fields;
-  fields.forEach((field) => updateField({ key: field.key, value: field.value }));
-
   const isLeft = isRtl.value ? to < from : to > from;
   transitionName.value = isLeft ? 'slide-left' : 'slide-right';
 });
